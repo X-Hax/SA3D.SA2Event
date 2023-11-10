@@ -1,0 +1,13 @@
+name: 'Setup Dotnet SDKs and Components'
+description: 'Installs all required SDKs and components needed for CI runs.'
+runs:
+  using: "composite"
+  steps:
+    - name: Setup .NET Core SDK (7.0.x)
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 7.0.x
+
+    - name: Get Dotnet Info
+      shell: pwsh
+      run: dotnet --info

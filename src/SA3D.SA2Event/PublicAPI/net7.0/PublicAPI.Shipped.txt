@@ -1,0 +1,588 @@
+﻿#nullable enable
+const SA3D.SA2Event.Animation.CameraData.StructSize = 64 -> uint
+const SA3D.SA2Event.Animation.SurfaceAnimationBlock.StructSize = 12 -> uint
+const SA3D.SA2Event.Animation.SurfaceAnimationData.StructSize = 12 -> uint
+const SA3D.SA2Event.Animation.TextureAnimSequence.StructSize = 8 -> uint
+const SA3D.SA2Event.Effects.BlareEffect.StructSize = 64 -> uint
+const SA3D.SA2Event.Effects.ObjectLighting.StructSize = 68 -> uint
+const SA3D.SA2Event.Effects.ParticleEmitterEffect.StructSize = 64 -> uint
+const SA3D.SA2Event.Effects.ScreenEffect.StructSize = 64 -> uint
+const SA3D.SA2Event.Effects.SimpleParticleEffect.StructSize = 56 -> uint
+const SA3D.SA2Event.Effects.VideoOverlayEffect.StructSize = 64 -> uint
+const SA3D.SA2Event.Language.AudioTimestamp.StructSize = 72 -> uint
+const SA3D.SA2Event.Language.SubtitleTimestamp.StructSize = 8 -> uint
+const SA3D.SA2Event.Model.EventEntry.StructSizeDC = 32 -> uint
+const SA3D.SA2Event.Model.EventEntry.StructSizeGC = 44 -> uint
+const SA3D.SA2Event.Model.OverlayUpgrade.StructSize = 20 -> uint
+const SA3D.SA2Event.Model.ReflectionData.StructSize = 136 -> uint
+const SA3D.SA2Event.Model.Scene.StructSize = 32 -> int
+override SA3D.SA2Event.Animation.EventMotion.Equals(object? obj) -> bool
+override SA3D.SA2Event.Animation.EventMotion.GetHashCode() -> int
+override SA3D.SA2Event.Animation.EventMotion.ToString() -> string!
+override SA3D.SA2Event.Animation.TexcoordFrame.Equals(object? obj) -> bool
+override SA3D.SA2Event.Animation.TexcoordFrame.GetHashCode() -> int
+override SA3D.SA2Event.Animation.TexcoordFrame.ToString() -> string!
+override SA3D.SA2Event.Animation.TextureAnimSequence.Equals(object? obj) -> bool
+override SA3D.SA2Event.Animation.TextureAnimSequence.GetHashCode() -> int
+override SA3D.SA2Event.Animation.TextureAnimSequence.ToString() -> string!
+override SA3D.SA2Event.Effects.BlareEffect.Equals(object? obj) -> bool
+override SA3D.SA2Event.Effects.BlareEffect.GetHashCode() -> int
+override SA3D.SA2Event.Effects.BlareEffect.ToString() -> string!
+override SA3D.SA2Event.Effects.ObjectLighting.Equals(object? obj) -> bool
+override SA3D.SA2Event.Effects.ObjectLighting.GetHashCode() -> int
+override SA3D.SA2Event.Effects.ObjectLighting.ToString() -> string!
+override SA3D.SA2Event.Effects.ParticleEmitterEffect.Equals(object? obj) -> bool
+override SA3D.SA2Event.Effects.ParticleEmitterEffect.GetHashCode() -> int
+override SA3D.SA2Event.Effects.ParticleEmitterEffect.ToString() -> string!
+override SA3D.SA2Event.Effects.ScreenEffect.Equals(object? obj) -> bool
+override SA3D.SA2Event.Effects.ScreenEffect.GetHashCode() -> int
+override SA3D.SA2Event.Effects.ScreenEffect.ToString() -> string!
+override SA3D.SA2Event.Effects.SimpleParticleEffect.Equals(object? obj) -> bool
+override SA3D.SA2Event.Effects.SimpleParticleEffect.GetHashCode() -> int
+override SA3D.SA2Event.Effects.SimpleParticleEffect.ToString() -> string!
+override SA3D.SA2Event.Effects.VideoOverlayEffect.Equals(object? obj) -> bool
+override SA3D.SA2Event.Effects.VideoOverlayEffect.GetHashCode() -> int
+override SA3D.SA2Event.Effects.VideoOverlayEffect.ToString() -> string!
+override SA3D.SA2Event.Language.AudioTimestamp.Equals(object? obj) -> bool
+override SA3D.SA2Event.Language.AudioTimestamp.GetHashCode() -> int
+override SA3D.SA2Event.Language.AudioTimestamp.ToString() -> string!
+override SA3D.SA2Event.Language.SubtitleText.Equals(object? obj) -> bool
+override SA3D.SA2Event.Language.SubtitleText.GetHashCode() -> int
+override SA3D.SA2Event.Language.SubtitleText.ToString() -> string!
+override SA3D.SA2Event.Language.SubtitleTimestamp.Equals(object? obj) -> bool
+override SA3D.SA2Event.Language.SubtitleTimestamp.GetHashCode() -> int
+override SA3D.SA2Event.Language.SubtitleTimestamp.ToString() -> string!
+override SA3D.SA2Event.Model.EventEntry.ToString() -> string!
+override SA3D.SA2Event.Model.OverlayUpgrade.Equals(object? obj) -> bool
+override SA3D.SA2Event.Model.OverlayUpgrade.GetHashCode() -> int
+override SA3D.SA2Event.Model.OverlayUpgrade.ToString() -> string!
+override SA3D.SA2Event.Model.Reflection.Equals(object? obj) -> bool
+override SA3D.SA2Event.Model.Reflection.GetHashCode() -> int
+override SA3D.SA2Event.Model.Reflection.ToString() -> string!
+SA3D.SA2Event.Animation.CameraData
+SA3D.SA2Event.Animation.CameraData.CameraData(System.Numerics.Vector3 position, float roll, float fieldOfView, float nearClip, float farClip, System.Numerics.Vector3 dirX, System.Numerics.Vector3 dirY, System.Numerics.Vector3 dirZ) -> void
+SA3D.SA2Event.Animation.CameraData.DirX.get -> System.Numerics.Vector3
+SA3D.SA2Event.Animation.CameraData.DirX.set -> void
+SA3D.SA2Event.Animation.CameraData.DirY.get -> System.Numerics.Vector3
+SA3D.SA2Event.Animation.CameraData.DirY.set -> void
+SA3D.SA2Event.Animation.CameraData.DirZ.get -> System.Numerics.Vector3
+SA3D.SA2Event.Animation.CameraData.DirZ.set -> void
+SA3D.SA2Event.Animation.CameraData.FarClip.get -> float
+SA3D.SA2Event.Animation.CameraData.FarClip.set -> void
+SA3D.SA2Event.Animation.CameraData.FieldOfView.get -> float
+SA3D.SA2Event.Animation.CameraData.FieldOfView.set -> void
+SA3D.SA2Event.Animation.CameraData.NearClip.get -> float
+SA3D.SA2Event.Animation.CameraData.NearClip.set -> void
+SA3D.SA2Event.Animation.CameraData.Position.get -> System.Numerics.Vector3
+SA3D.SA2Event.Animation.CameraData.Position.set -> void
+SA3D.SA2Event.Animation.CameraData.Roll.get -> float
+SA3D.SA2Event.Animation.CameraData.Roll.set -> void
+SA3D.SA2Event.Animation.CameraData.Write(SA3D.Common.IO.EndianStackWriter! writer, SA3D.Modeling.Structs.PointerLUT! lut) -> uint
+SA3D.SA2Event.Animation.EventMotion
+SA3D.SA2Event.Animation.EventMotion.Animation.get -> SA3D.Modeling.Animation.Motion?
+SA3D.SA2Event.Animation.EventMotion.Animation.set -> void
+SA3D.SA2Event.Animation.EventMotion.Camera.get -> SA3D.SA2Event.Animation.CameraData?
+SA3D.SA2Event.Animation.EventMotion.Camera.set -> void
+SA3D.SA2Event.Animation.EventMotion.EventMotion() -> void
+SA3D.SA2Event.Animation.EventMotion.EventMotion(SA3D.Modeling.Animation.Motion? animation, SA3D.SA2Event.Animation.CameraData? camera) -> void
+SA3D.SA2Event.Animation.SurfaceAnimation
+SA3D.SA2Event.Animation.SurfaceAnimation.StripChunk.get -> SA3D.Modeling.Mesh.Chunk.PolyChunks.StripChunk?
+SA3D.SA2Event.Animation.SurfaceAnimation.StripChunk.set -> void
+SA3D.SA2Event.Animation.SurfaceAnimation.SurfaceAnimation(int textureID, SA3D.Modeling.Mesh.Chunk.PolyChunks.TextureChunk! textureChunk, SA3D.Modeling.Mesh.Chunk.PolyChunks.StripChunk? polygonChunk) -> void
+SA3D.SA2Event.Animation.SurfaceAnimation.TexcoordFrames.get -> System.Collections.Generic.Dictionary<int, System.Collections.Generic.List<SA3D.SA2Event.Animation.TexcoordFrame>!>!
+SA3D.SA2Event.Animation.SurfaceAnimation.TextureChunk.get -> SA3D.Modeling.Mesh.Chunk.PolyChunks.TextureChunk!
+SA3D.SA2Event.Animation.SurfaceAnimation.TextureChunk.set -> void
+SA3D.SA2Event.Animation.SurfaceAnimation.TextureID.get -> int
+SA3D.SA2Event.Animation.SurfaceAnimation.TextureID.set -> void
+SA3D.SA2Event.Animation.SurfaceAnimation.Write(SA3D.Common.IO.EndianStackWriter! writer, SA3D.Modeling.Structs.PointerLUT! lut) -> uint
+SA3D.SA2Event.Animation.SurfaceAnimationBlock
+SA3D.SA2Event.Animation.SurfaceAnimationBlock.Animations.get -> System.Collections.Generic.List<SA3D.SA2Event.Animation.SurfaceAnimation?>!
+SA3D.SA2Event.Animation.SurfaceAnimationBlock.Model.get -> SA3D.Modeling.ObjectData.Node!
+SA3D.SA2Event.Animation.SurfaceAnimationBlock.Model.set -> void
+SA3D.SA2Event.Animation.SurfaceAnimationBlock.SurfaceAnimationBlock(SA3D.Modeling.ObjectData.Node! model) -> void
+SA3D.SA2Event.Animation.SurfaceAnimationBlock.WriteAnimationList(SA3D.Common.IO.EndianStackWriter! writer, SA3D.Modeling.Structs.PointerLUT! lut) -> uint
+SA3D.SA2Event.Animation.SurfaceAnimationBlock.WriteAnimations(SA3D.Common.IO.EndianStackWriter! writer, SA3D.Modeling.Structs.PointerLUT! lut) -> void
+SA3D.SA2Event.Animation.SurfaceAnimationBlock.WriteBlock(SA3D.Common.IO.EndianStackWriter! writer, SA3D.Modeling.Structs.PointerLUT! lut) -> void
+SA3D.SA2Event.Animation.SurfaceAnimationData
+SA3D.SA2Event.Animation.SurfaceAnimationData.AnimationBlocks.get -> System.Collections.Generic.List<SA3D.SA2Event.Animation.SurfaceAnimationBlock!>!
+SA3D.SA2Event.Animation.SurfaceAnimationData.SurfaceAnimationData() -> void
+SA3D.SA2Event.Animation.SurfaceAnimationData.TextureSequences.get -> System.Collections.Generic.List<SA3D.SA2Event.Animation.TextureAnimSequence>!
+SA3D.SA2Event.Animation.SurfaceAnimationData.Write(SA3D.Common.IO.EndianStackWriter! writer, SA3D.Modeling.Structs.PointerLUT! lut) -> uint
+SA3D.SA2Event.Animation.TexcoordFrame
+SA3D.SA2Event.Animation.TexcoordFrame.CornerIndex.get -> int
+SA3D.SA2Event.Animation.TexcoordFrame.CornerIndex.set -> void
+SA3D.SA2Event.Animation.TexcoordFrame.TexCoord.get -> System.Numerics.Vector2
+SA3D.SA2Event.Animation.TexcoordFrame.TexCoord.set -> void
+SA3D.SA2Event.Animation.TexcoordFrame.TexcoordFrame() -> void
+SA3D.SA2Event.Animation.TexcoordFrame.TexcoordFrame(int polyIndex, System.Numerics.Vector2 texCoord) -> void
+SA3D.SA2Event.Animation.TextureAnimSequence
+SA3D.SA2Event.Animation.TextureAnimSequence.TextureAnimSequence() -> void
+SA3D.SA2Event.Animation.TextureAnimSequence.TextureAnimSequence(int textureID, int textureCount) -> void
+SA3D.SA2Event.Animation.TextureAnimSequence.TextureCount.get -> int
+SA3D.SA2Event.Animation.TextureAnimSequence.TextureCount.set -> void
+SA3D.SA2Event.Animation.TextureAnimSequence.TextureID.get -> int
+SA3D.SA2Event.Animation.TextureAnimSequence.TextureID.set -> void
+SA3D.SA2Event.Animation.TextureAnimSequence.Write(SA3D.Common.IO.EndianStackWriter! writer) -> void
+SA3D.SA2Event.Effects.BlareEffect
+SA3D.SA2Event.Effects.BlareEffect.BlareEffect() -> void
+SA3D.SA2Event.Effects.BlareEffect.BlareEffect(uint frame, int duration, byte modelIndex1, byte modelIndex2, byte modelIndex3, byte modelIndex4, byte modelIndex5, byte modelIndex6, int ghostLifeSpan) -> void
+SA3D.SA2Event.Effects.BlareEffect.BlareEffect(uint frame, int duration, int ghostLifeSpan) -> void
+SA3D.SA2Event.Effects.BlareEffect.Duration.get -> int
+SA3D.SA2Event.Effects.BlareEffect.Duration.set -> void
+SA3D.SA2Event.Effects.BlareEffect.Frame.get -> uint
+SA3D.SA2Event.Effects.BlareEffect.Frame.set -> void
+SA3D.SA2Event.Effects.BlareEffect.GhostLifeSpan.get -> int
+SA3D.SA2Event.Effects.BlareEffect.GhostLifeSpan.set -> void
+SA3D.SA2Event.Effects.BlareEffect.ModelIndex1.get -> byte
+SA3D.SA2Event.Effects.BlareEffect.ModelIndex1.set -> void
+SA3D.SA2Event.Effects.BlareEffect.ModelIndex2.get -> byte
+SA3D.SA2Event.Effects.BlareEffect.ModelIndex2.set -> void
+SA3D.SA2Event.Effects.BlareEffect.ModelIndex3.get -> byte
+SA3D.SA2Event.Effects.BlareEffect.ModelIndex3.set -> void
+SA3D.SA2Event.Effects.BlareEffect.ModelIndex4.get -> byte
+SA3D.SA2Event.Effects.BlareEffect.ModelIndex4.set -> void
+SA3D.SA2Event.Effects.BlareEffect.ModelIndex5.get -> byte
+SA3D.SA2Event.Effects.BlareEffect.ModelIndex5.set -> void
+SA3D.SA2Event.Effects.BlareEffect.ModelIndex6.get -> byte
+SA3D.SA2Event.Effects.BlareEffect.ModelIndex6.set -> void
+SA3D.SA2Event.Effects.BlareEffect.Write(SA3D.Common.IO.EndianStackWriter! writer) -> void
+SA3D.SA2Event.Effects.Enums.LightFadeMode
+SA3D.SA2Event.Effects.Enums.LightFadeMode.Cut = 1 -> SA3D.SA2Event.Effects.Enums.LightFadeMode
+SA3D.SA2Event.Effects.Enums.LightFadeMode.FadeIn = 2 -> SA3D.SA2Event.Effects.Enums.LightFadeMode
+SA3D.SA2Event.Effects.Enums.LightFadeMode.None = 0 -> SA3D.SA2Event.Effects.Enums.LightFadeMode
+SA3D.SA2Event.Effects.Enums.ScreenEffectType
+SA3D.SA2Event.Effects.Enums.ScreenEffectType.BackgroundCutIn = 6 -> SA3D.SA2Event.Effects.Enums.ScreenEffectType
+SA3D.SA2Event.Effects.Enums.ScreenEffectType.BackgroundFadeIn = 5 -> SA3D.SA2Event.Effects.Enums.ScreenEffectType
+SA3D.SA2Event.Effects.Enums.ScreenEffectType.ForegroundCutIn = 2 -> SA3D.SA2Event.Effects.Enums.ScreenEffectType
+SA3D.SA2Event.Effects.Enums.ScreenEffectType.ForegroundFadeIn = 1 -> SA3D.SA2Event.Effects.Enums.ScreenEffectType
+SA3D.SA2Event.Effects.Enums.ScreenEffectType.None = 0 -> SA3D.SA2Event.Effects.Enums.ScreenEffectType
+SA3D.SA2Event.Effects.Enums.ScreenEffectType.TextureCutIn = 4 -> SA3D.SA2Event.Effects.Enums.ScreenEffectType
+SA3D.SA2Event.Effects.Enums.ScreenEffectType.TextureFadeIn = 3 -> SA3D.SA2Event.Effects.Enums.ScreenEffectType
+SA3D.SA2Event.Effects.Enums.SimpleParticleType
+SA3D.SA2Event.Effects.Enums.SimpleParticleType.DirtPath = 4 -> SA3D.SA2Event.Effects.Enums.SimpleParticleType
+SA3D.SA2Event.Effects.Enums.SimpleParticleType.DisableSun = 9 -> SA3D.SA2Event.Effects.Enums.SimpleParticleType
+SA3D.SA2Event.Effects.Enums.SimpleParticleType.DustPuff = 1 -> SA3D.SA2Event.Effects.Enums.SimpleParticleType
+SA3D.SA2Event.Effects.Enums.SimpleParticleType.EnableSun = 8 -> SA3D.SA2Event.Effects.Enums.SimpleParticleType
+SA3D.SA2Event.Effects.Enums.SimpleParticleType.FireBlast = 5 -> SA3D.SA2Event.Effects.Enums.SimpleParticleType
+SA3D.SA2Event.Effects.Enums.SimpleParticleType.FlamePuff = 14 -> SA3D.SA2Event.Effects.Enums.SimpleParticleType
+SA3D.SA2Event.Effects.Enums.SimpleParticleType.None = 0 -> SA3D.SA2Event.Effects.Enums.SimpleParticleType
+SA3D.SA2Event.Effects.Enums.SimpleParticleType.PulseEnd = 18 -> SA3D.SA2Event.Effects.Enums.SimpleParticleType
+SA3D.SA2Event.Effects.Enums.SimpleParticleType.PulseStart = 17 -> SA3D.SA2Event.Effects.Enums.SimpleParticleType
+SA3D.SA2Event.Effects.Enums.SimpleParticleType.RocketSteamPuff = 13 -> SA3D.SA2Event.Effects.Enums.SimpleParticleType
+SA3D.SA2Event.Effects.Enums.SimpleParticleType.SmokeCloud = 11 -> SA3D.SA2Event.Effects.Enums.SimpleParticleType
+SA3D.SA2Event.Effects.Enums.SimpleParticleType.SnowBlast = 7 -> SA3D.SA2Event.Effects.Enums.SimpleParticleType
+SA3D.SA2Event.Effects.Enums.SimpleParticleType.Sparkle1 = 2 -> SA3D.SA2Event.Effects.Enums.SimpleParticleType
+SA3D.SA2Event.Effects.Enums.SimpleParticleType.Sparkle2 = 3 -> SA3D.SA2Event.Effects.Enums.SimpleParticleType
+SA3D.SA2Event.Effects.Enums.SimpleParticleType.Steam = 6 -> SA3D.SA2Event.Effects.Enums.SimpleParticleType
+SA3D.SA2Event.Effects.Enums.SimpleParticleType.SteamPuff = 12 -> SA3D.SA2Event.Effects.Enums.SimpleParticleType
+SA3D.SA2Event.Effects.Enums.SimpleParticleType.Unknown = 15 -> SA3D.SA2Event.Effects.Enums.SimpleParticleType
+SA3D.SA2Event.Effects.Enums.SimpleParticleType.WaterSplash = 10 -> SA3D.SA2Event.Effects.Enums.SimpleParticleType
+SA3D.SA2Event.Effects.Enums.VideoOverlayType
+SA3D.SA2Event.Effects.Enums.VideoOverlayType.Mesh = 2 -> SA3D.SA2Event.Effects.Enums.VideoOverlayType
+SA3D.SA2Event.Effects.Enums.VideoOverlayType.None = 0 -> SA3D.SA2Event.Effects.Enums.VideoOverlayType
+SA3D.SA2Event.Effects.Enums.VideoOverlayType.Overlay = 1 -> SA3D.SA2Event.Effects.Enums.VideoOverlayType
+SA3D.SA2Event.Effects.Enums.VideoOverlayType.Overlay1 = 3 -> SA3D.SA2Event.Effects.Enums.VideoOverlayType
+SA3D.SA2Event.Effects.Enums.VideoOverlayType.Overlay2 = 4 -> SA3D.SA2Event.Effects.Enums.VideoOverlayType
+SA3D.SA2Event.Effects.Enums.VideoOverlayType.Pause = 5 -> SA3D.SA2Event.Effects.Enums.VideoOverlayType
+SA3D.SA2Event.Effects.Enums.VideoOverlayType.Resume = 6 -> SA3D.SA2Event.Effects.Enums.VideoOverlayType
+SA3D.SA2Event.Effects.EventEffects
+SA3D.SA2Event.Effects.EventEffects.BaseLanguageTimestamps.get -> SA3D.SA2Event.Language.EventLanguageTimestamps!
+SA3D.SA2Event.Effects.EventEffects.BaseLanguageTimestamps.set -> void
+SA3D.SA2Event.Effects.EventEffects.BlareEffects.get -> SA3D.SA2Event.Effects.BlareEffect[]!
+SA3D.SA2Event.Effects.EventEffects.EventEffects() -> void
+SA3D.SA2Event.Effects.EventEffects.Lighting.get -> System.Collections.ObjectModel.ReadOnlyCollection<SA3D.SA2Event.Effects.ObjectLighting[]!>!
+SA3D.SA2Event.Effects.EventEffects.ParticleEmitterEffects.get -> SA3D.SA2Event.Effects.ParticleEmitterEffect[]!
+SA3D.SA2Event.Effects.EventEffects.Particles.get -> SA3D.SA2Event.Effects.SimpleParticleEffect[]!
+SA3D.SA2Event.Effects.EventEffects.ScreenEffects.get -> SA3D.SA2Event.Effects.ScreenEffect[]!
+SA3D.SA2Event.Effects.EventEffects.VideoOverlayEffects.get -> SA3D.SA2Event.Effects.VideoOverlayEffect[]!
+SA3D.SA2Event.Effects.EventEffects.Write(SA3D.Common.IO.EndianStackWriter! writer) -> void
+SA3D.SA2Event.Effects.EventEffects.WriteToData(bool bigEndian) -> byte[]!
+SA3D.SA2Event.Effects.ObjectLighting
+SA3D.SA2Event.Effects.ObjectLighting.Ambient.get -> SA3D.Modeling.Structs.Color
+SA3D.SA2Event.Effects.ObjectLighting.Ambient.set -> void
+SA3D.SA2Event.Effects.ObjectLighting.Diffuse.get -> SA3D.Modeling.Structs.Color
+SA3D.SA2Event.Effects.ObjectLighting.Diffuse.set -> void
+SA3D.SA2Event.Effects.ObjectLighting.Direction.get -> System.Numerics.Vector3
+SA3D.SA2Event.Effects.ObjectLighting.Direction.set -> void
+SA3D.SA2Event.Effects.ObjectLighting.Fade.get -> SA3D.SA2Event.Effects.Enums.LightFadeMode
+SA3D.SA2Event.Effects.ObjectLighting.Fade.set -> void
+SA3D.SA2Event.Effects.ObjectLighting.Frame.get -> uint
+SA3D.SA2Event.Effects.ObjectLighting.Frame.set -> void
+SA3D.SA2Event.Effects.ObjectLighting.Intensity.get -> float
+SA3D.SA2Event.Effects.ObjectLighting.Intensity.set -> void
+SA3D.SA2Event.Effects.ObjectLighting.ObjectLighting() -> void
+SA3D.SA2Event.Effects.ObjectLighting.ObjectLighting(uint frame, SA3D.SA2Event.Effects.Enums.LightFadeMode fade, System.Numerics.Vector3 direction, SA3D.Modeling.Structs.Color diffuse, float intensity, SA3D.Modeling.Structs.Color ambient) -> void
+SA3D.SA2Event.Effects.ObjectLighting.Write(SA3D.Common.IO.EndianStackWriter! writer) -> void
+SA3D.SA2Event.Effects.ParticleEmitterEffect
+SA3D.SA2Event.Effects.ParticleEmitterEffect.Count.get -> int
+SA3D.SA2Event.Effects.ParticleEmitterEffect.Count.set -> void
+SA3D.SA2Event.Effects.ParticleEmitterEffect.Frame.get -> uint
+SA3D.SA2Event.Effects.ParticleEmitterEffect.Frame.set -> void
+SA3D.SA2Event.Effects.ParticleEmitterEffect.ParticleEmitterEffect() -> void
+SA3D.SA2Event.Effects.ParticleEmitterEffect.ParticleEmitterEffect(System.Numerics.Vector3 position, System.Numerics.Vector3 unknown2, ushort unknown3, ushort unknown4, ushort unknown5, ushort unknown6, uint frame, System.Numerics.Vector3 spread, int count, int unknown9, int type, int unknown11) -> void
+SA3D.SA2Event.Effects.ParticleEmitterEffect.Position.get -> System.Numerics.Vector3
+SA3D.SA2Event.Effects.ParticleEmitterEffect.Position.set -> void
+SA3D.SA2Event.Effects.ParticleEmitterEffect.Spread.get -> System.Numerics.Vector3
+SA3D.SA2Event.Effects.ParticleEmitterEffect.Spread.set -> void
+SA3D.SA2Event.Effects.ParticleEmitterEffect.Type.get -> int
+SA3D.SA2Event.Effects.ParticleEmitterEffect.Type.set -> void
+SA3D.SA2Event.Effects.ParticleEmitterEffect.Unknown11.get -> int
+SA3D.SA2Event.Effects.ParticleEmitterEffect.Unknown11.set -> void
+SA3D.SA2Event.Effects.ParticleEmitterEffect.Unknown2.get -> System.Numerics.Vector3
+SA3D.SA2Event.Effects.ParticleEmitterEffect.Unknown2.set -> void
+SA3D.SA2Event.Effects.ParticleEmitterEffect.Unknown3.get -> ushort
+SA3D.SA2Event.Effects.ParticleEmitterEffect.Unknown3.set -> void
+SA3D.SA2Event.Effects.ParticleEmitterEffect.Unknown4.get -> ushort
+SA3D.SA2Event.Effects.ParticleEmitterEffect.Unknown4.set -> void
+SA3D.SA2Event.Effects.ParticleEmitterEffect.Unknown5.get -> ushort
+SA3D.SA2Event.Effects.ParticleEmitterEffect.Unknown5.set -> void
+SA3D.SA2Event.Effects.ParticleEmitterEffect.Unknown6.get -> ushort
+SA3D.SA2Event.Effects.ParticleEmitterEffect.Unknown6.set -> void
+SA3D.SA2Event.Effects.ParticleEmitterEffect.Unknown9.get -> int
+SA3D.SA2Event.Effects.ParticleEmitterEffect.Unknown9.set -> void
+SA3D.SA2Event.Effects.ParticleEmitterEffect.Write(SA3D.Common.IO.EndianStackWriter! writer) -> void
+SA3D.SA2Event.Effects.ScreenEffect
+SA3D.SA2Event.Effects.ScreenEffect.Color.get -> SA3D.Modeling.Structs.Color
+SA3D.SA2Event.Effects.ScreenEffect.Color.set -> void
+SA3D.SA2Event.Effects.ScreenEffect.FadeOut.get -> bool
+SA3D.SA2Event.Effects.ScreenEffect.FadeOut.set -> void
+SA3D.SA2Event.Effects.ScreenEffect.Frame.get -> uint
+SA3D.SA2Event.Effects.ScreenEffect.Frame.set -> void
+SA3D.SA2Event.Effects.ScreenEffect.FrameTime.get -> uint
+SA3D.SA2Event.Effects.ScreenEffect.FrameTime.set -> void
+SA3D.SA2Event.Effects.ScreenEffect.Height.get -> float
+SA3D.SA2Event.Effects.ScreenEffect.Height.set -> void
+SA3D.SA2Event.Effects.ScreenEffect.PositionX.get -> short
+SA3D.SA2Event.Effects.ScreenEffect.PositionX.set -> void
+SA3D.SA2Event.Effects.ScreenEffect.PositionY.get -> short
+SA3D.SA2Event.Effects.ScreenEffect.PositionY.set -> void
+SA3D.SA2Event.Effects.ScreenEffect.ScreenEffect() -> void
+SA3D.SA2Event.Effects.ScreenEffect.ScreenEffect(uint frame, SA3D.SA2Event.Effects.Enums.ScreenEffectType type, SA3D.Modeling.Structs.Color color, bool fadeOut, ushort textureID, uint frameTime, short positionX, short positionY, float width, float height) -> void
+SA3D.SA2Event.Effects.ScreenEffect.TextureID.get -> ushort
+SA3D.SA2Event.Effects.ScreenEffect.TextureID.set -> void
+SA3D.SA2Event.Effects.ScreenEffect.Type.get -> SA3D.SA2Event.Effects.Enums.ScreenEffectType
+SA3D.SA2Event.Effects.ScreenEffect.Type.set -> void
+SA3D.SA2Event.Effects.ScreenEffect.Width.get -> float
+SA3D.SA2Event.Effects.ScreenEffect.Width.set -> void
+SA3D.SA2Event.Effects.ScreenEffect.Write(SA3D.Common.IO.EndianStackWriter! writer) -> void
+SA3D.SA2Event.Effects.SimpleParticleEffect
+SA3D.SA2Event.Effects.SimpleParticleEffect.Frame.get -> uint
+SA3D.SA2Event.Effects.SimpleParticleEffect.Frame.set -> void
+SA3D.SA2Event.Effects.SimpleParticleEffect.MotionID.get -> byte
+SA3D.SA2Event.Effects.SimpleParticleEffect.MotionID.set -> void
+SA3D.SA2Event.Effects.SimpleParticleEffect.PulseControl.get -> float
+SA3D.SA2Event.Effects.SimpleParticleEffect.PulseControl.set -> void
+SA3D.SA2Event.Effects.SimpleParticleEffect.Scale.get -> float
+SA3D.SA2Event.Effects.SimpleParticleEffect.Scale.set -> void
+SA3D.SA2Event.Effects.SimpleParticleEffect.SimpleParticleEffect() -> void
+SA3D.SA2Event.Effects.SimpleParticleEffect.SimpleParticleEffect(uint frame, SA3D.SA2Event.Effects.Enums.SimpleParticleType type, byte motionID, float textureID, float pulseControl, float unknown, float scale) -> void
+SA3D.SA2Event.Effects.SimpleParticleEffect.TextureID.get -> float
+SA3D.SA2Event.Effects.SimpleParticleEffect.TextureID.set -> void
+SA3D.SA2Event.Effects.SimpleParticleEffect.Type.get -> SA3D.SA2Event.Effects.Enums.SimpleParticleType
+SA3D.SA2Event.Effects.SimpleParticleEffect.Type.set -> void
+SA3D.SA2Event.Effects.SimpleParticleEffect.Unknown.get -> float
+SA3D.SA2Event.Effects.SimpleParticleEffect.Unknown.set -> void
+SA3D.SA2Event.Effects.SimpleParticleEffect.Write(SA3D.Common.IO.EndianStackWriter! writer) -> void
+SA3D.SA2Event.Effects.VideoOverlayEffect
+SA3D.SA2Event.Effects.VideoOverlayEffect.Depth.get -> float
+SA3D.SA2Event.Effects.VideoOverlayEffect.Depth.set -> void
+SA3D.SA2Event.Effects.VideoOverlayEffect.Filename.get -> string!
+SA3D.SA2Event.Effects.VideoOverlayEffect.Filename.set -> void
+SA3D.SA2Event.Effects.VideoOverlayEffect.Frame.get -> uint
+SA3D.SA2Event.Effects.VideoOverlayEffect.Frame.set -> void
+SA3D.SA2Event.Effects.VideoOverlayEffect.PositionX.get -> short
+SA3D.SA2Event.Effects.VideoOverlayEffect.PositionX.set -> void
+SA3D.SA2Event.Effects.VideoOverlayEffect.PositionY.get -> short
+SA3D.SA2Event.Effects.VideoOverlayEffect.PositionY.set -> void
+SA3D.SA2Event.Effects.VideoOverlayEffect.TargetTextureID.get -> byte
+SA3D.SA2Event.Effects.VideoOverlayEffect.TargetTextureID.set -> void
+SA3D.SA2Event.Effects.VideoOverlayEffect.Type.get -> SA3D.SA2Event.Effects.Enums.VideoOverlayType
+SA3D.SA2Event.Effects.VideoOverlayEffect.Type.set -> void
+SA3D.SA2Event.Effects.VideoOverlayEffect.VideoOverlayEffect() -> void
+SA3D.SA2Event.Effects.VideoOverlayEffect.VideoOverlayEffect(uint frame, short positionX, short positionY, float depth, SA3D.SA2Event.Effects.Enums.VideoOverlayType type, byte targetTextureID, string! filename) -> void
+SA3D.SA2Event.Effects.VideoOverlayEffect.Write(SA3D.Common.IO.EndianStackWriter! writer) -> void
+SA3D.SA2Event.Event
+SA3D.SA2Event.Event.Effects.get -> SA3D.SA2Event.Effects.EventEffects?
+SA3D.SA2Event.Event.Effects.set -> void
+SA3D.SA2Event.Event.Event(SA3D.SA2Event.Model.ModelData! modelData, SA3D.SA2Event.Effects.EventEffects? effects, SA3D.Archival.Archive? textureArchive, SA3D.Texturing.Texname.TextureNameList? externalTexList) -> void
+SA3D.SA2Event.Event.ExternalTexlist.get -> SA3D.Texturing.Texname.TextureNameList?
+SA3D.SA2Event.Event.ExternalTexlist.set -> void
+SA3D.SA2Event.Event.LanguageTimestamps.get -> System.Collections.Generic.Dictionary<SA3D.SA2Event.EventLanguage, SA3D.SA2Event.Language.EventLanguageTimestamps!>!
+SA3D.SA2Event.Event.ModelData.get -> SA3D.SA2Event.Model.ModelData!
+SA3D.SA2Event.Event.ModelData.set -> void
+SA3D.SA2Event.Event.TextureArchive.get -> SA3D.Archival.Archive?
+SA3D.SA2Event.Event.TextureArchive.set -> void
+SA3D.SA2Event.Event.Type.get -> SA3D.SA2Event.EventType
+SA3D.SA2Event.Event.WriteToFiles(string! filepath) -> void
+SA3D.SA2Event.Event.WriteToSource() -> SA3D.SA2Event.EventSource!
+SA3D.SA2Event.EventLanguage
+SA3D.SA2Event.EventLanguage.English = 49 -> SA3D.SA2Event.EventLanguage
+SA3D.SA2Event.EventLanguage.French = 50 -> SA3D.SA2Event.EventLanguage
+SA3D.SA2Event.EventLanguage.German = 52 -> SA3D.SA2Event.EventLanguage
+SA3D.SA2Event.EventLanguage.Italian = 53 -> SA3D.SA2Event.EventLanguage
+SA3D.SA2Event.EventLanguage.Japanese = 74 -> SA3D.SA2Event.EventLanguage
+SA3D.SA2Event.EventLanguage.Spanish = 51 -> SA3D.SA2Event.EventLanguage
+SA3D.SA2Event.EventSource
+SA3D.SA2Event.EventSource.BaseFilepath.get -> string?
+SA3D.SA2Event.EventSource.BaseFilepath.set -> void
+SA3D.SA2Event.EventSource.Effects.get -> byte[]?
+SA3D.SA2Event.EventSource.EventSource(string? baseFilePath, byte[]! model, byte[]? motion, byte[]? textures, byte[]? texlist, byte[]? effects, System.Collections.Generic.Dictionary<SA3D.SA2Event.EventLanguage, byte[]!>! languageTimestamps) -> void
+SA3D.SA2Event.EventSource.LanguageTimestamps.get -> System.Collections.Generic.Dictionary<SA3D.SA2Event.EventLanguage, byte[]!>!
+SA3D.SA2Event.EventSource.Model.get -> byte[]!
+SA3D.SA2Event.EventSource.Motion.get -> byte[]?
+SA3D.SA2Event.EventSource.Texlist.get -> byte[]?
+SA3D.SA2Event.EventSource.Textures.get -> byte[]?
+SA3D.SA2Event.EventSource.WriteToFiles(string? filepath = null, bool compress = true) -> void
+SA3D.SA2Event.EventType
+SA3D.SA2Event.EventType.dc = 1 -> SA3D.SA2Event.EventType
+SA3D.SA2Event.EventType.dcbeta = 0 -> SA3D.SA2Event.EventType
+SA3D.SA2Event.EventType.dcgc = 2 -> SA3D.SA2Event.EventType
+SA3D.SA2Event.EventType.gc = 3 -> SA3D.SA2Event.EventType
+SA3D.SA2Event.EventTypeExtensions
+SA3D.SA2Event.IFrame
+SA3D.SA2Event.IFrame.Frame.get -> uint
+SA3D.SA2Event.IFrame.Frame.set -> void
+SA3D.SA2Event.Language.AudioTimestamp
+SA3D.SA2Event.Language.AudioTimestamp.AFSVoiceIndex.get -> ushort
+SA3D.SA2Event.Language.AudioTimestamp.AFSVoiceIndex.set -> void
+SA3D.SA2Event.Language.AudioTimestamp.AudioTimestamp() -> void
+SA3D.SA2Event.Language.AudioTimestamp.AudioTimestamp(uint frame, ushort masterListVoiceIndex, ushort afsVoiceIndex, string! musicName) -> void
+SA3D.SA2Event.Language.AudioTimestamp.Frame.get -> uint
+SA3D.SA2Event.Language.AudioTimestamp.Frame.set -> void
+SA3D.SA2Event.Language.AudioTimestamp.MasterListVoiceIndex.get -> ushort
+SA3D.SA2Event.Language.AudioTimestamp.MasterListVoiceIndex.set -> void
+SA3D.SA2Event.Language.AudioTimestamp.MusicName.get -> string!
+SA3D.SA2Event.Language.AudioTimestamp.MusicName.set -> void
+SA3D.SA2Event.Language.AudioTimestamp.Write(SA3D.Common.IO.EndianStackWriter! writer) -> void
+SA3D.SA2Event.Language.EventLanguageTimestamps
+SA3D.SA2Event.Language.EventLanguageTimestamps.AudioTimestamps.get -> SA3D.SA2Event.Language.AudioTimestamp[]!
+SA3D.SA2Event.Language.EventLanguageTimestamps.EventLanguageTimestamps() -> void
+SA3D.SA2Event.Language.EventLanguageTimestamps.SubtitlesTimestamps.get -> SA3D.SA2Event.Language.SubtitleTimestamp[]!
+SA3D.SA2Event.Language.EventLanguageTimestamps.Write(SA3D.Common.IO.EndianStackWriter! writer) -> void
+SA3D.SA2Event.Language.EventLanguageTimestamps.WriteToData(bool bigEndian) -> byte[]!
+SA3D.SA2Event.Language.SubtitleFile
+SA3D.SA2Event.Language.SubtitleFile.SubtitleFile(System.Text.Encoding! encoding) -> void
+SA3D.SA2Event.Language.SubtitleFile.TextEncoding.get -> System.Text.Encoding!
+SA3D.SA2Event.Language.SubtitleFile.TextEncoding.set -> void
+SA3D.SA2Event.Language.SubtitleFile.Texts.get -> System.Collections.Generic.SortedDictionary<uint, System.Collections.Generic.List<SA3D.SA2Event.Language.SubtitleText>!>!
+SA3D.SA2Event.Language.SubtitleFile.Write(SA3D.Common.IO.EndianStackWriter! writer) -> void
+SA3D.SA2Event.Language.SubtitleFile.WriteToData(uint imageBase, bool bigEndian, bool compress = true) -> byte[]!
+SA3D.SA2Event.Language.SubtitleFile.WriteToFile(string! file, uint imageBase, bool bigEndian, bool compress = true) -> void
+SA3D.SA2Event.Language.SubtitleText
+SA3D.SA2Event.Language.SubtitleText.Centered.get -> bool
+SA3D.SA2Event.Language.SubtitleText.Centered.set -> void
+SA3D.SA2Event.Language.SubtitleText.Character.get -> int
+SA3D.SA2Event.Language.SubtitleText.Character.set -> void
+SA3D.SA2Event.Language.SubtitleText.SubtitleText() -> void
+SA3D.SA2Event.Language.SubtitleText.SubtitleText(int character, bool centered, string! text) -> void
+SA3D.SA2Event.Language.SubtitleText.Text.get -> string!
+SA3D.SA2Event.Language.SubtitleText.Text.set -> void
+SA3D.SA2Event.Language.SubtitleTimestamp
+SA3D.SA2Event.Language.SubtitleTimestamp.Duration.get -> uint
+SA3D.SA2Event.Language.SubtitleTimestamp.Duration.set -> void
+SA3D.SA2Event.Language.SubtitleTimestamp.Frame.get -> uint
+SA3D.SA2Event.Language.SubtitleTimestamp.Frame.set -> void
+SA3D.SA2Event.Language.SubtitleTimestamp.SubtitleTimestamp() -> void
+SA3D.SA2Event.Language.SubtitleTimestamp.SubtitleTimestamp(uint frame, uint duration) -> void
+SA3D.SA2Event.Language.SubtitleTimestamp.Write(SA3D.Common.IO.EndianStackWriter! writer) -> void
+SA3D.SA2Event.Model.BigTheCatEntry
+SA3D.SA2Event.Model.BigTheCatEntry.BigTheCatEntry(SA3D.Modeling.ObjectData.Node? model, int unknown) -> void
+SA3D.SA2Event.Model.BigTheCatEntry.Model.get -> SA3D.Modeling.ObjectData.Node?
+SA3D.SA2Event.Model.BigTheCatEntry.Model.set -> void
+SA3D.SA2Event.Model.BigTheCatEntry.Motions.get -> System.Collections.Generic.List<(SA3D.Modeling.Animation.Motion? nodeAnimation, SA3D.Modeling.Animation.Motion? shapeAnimation)>!
+SA3D.SA2Event.Model.BigTheCatEntry.Unknown.get -> int
+SA3D.SA2Event.Model.BigTheCatEntry.Unknown.set -> void
+SA3D.SA2Event.Model.BigTheCatEntry.Write(SA3D.Common.IO.EndianStackWriter! writer, SA3D.Modeling.Structs.PointerLUT! lut) -> void
+SA3D.SA2Event.Model.BigTheCatEntry.WriteMotionArray(SA3D.Common.IO.EndianStackWriter! writer, System.Collections.Generic.Dictionary<SA3D.SA2Event.Animation.EventMotion, uint>! motionLUT, SA3D.Modeling.Structs.PointerLUT! lut) -> uint
+SA3D.SA2Event.Model.EventEntry
+SA3D.SA2Event.Model.EventEntry.Animation.get -> SA3D.Modeling.Animation.Motion?
+SA3D.SA2Event.Model.EventEntry.Animation.set -> void
+SA3D.SA2Event.Model.EventEntry.Attributes.get -> uint
+SA3D.SA2Event.Model.EventEntry.Attributes.set -> void
+SA3D.SA2Event.Model.EventEntry.AutoGCAnimationAttributes() -> void
+SA3D.SA2Event.Model.EventEntry.DisplayModel.get -> SA3D.Modeling.ObjectData.Node!
+SA3D.SA2Event.Model.EventEntry.EventEntry() -> void
+SA3D.SA2Event.Model.EventEntry.GCAttributes.get -> SA3D.SA2Event.Model.GCEventEntryAttribute
+SA3D.SA2Event.Model.EventEntry.GCAttributes.set -> void
+SA3D.SA2Event.Model.EventEntry.GCModel.get -> SA3D.Modeling.ObjectData.Node?
+SA3D.SA2Event.Model.EventEntry.GCModel.set -> void
+SA3D.SA2Event.Model.EventEntry.Layer.get -> uint
+SA3D.SA2Event.Model.EventEntry.Layer.set -> void
+SA3D.SA2Event.Model.EventEntry.Model.get -> SA3D.Modeling.ObjectData.Node?
+SA3D.SA2Event.Model.EventEntry.Model.set -> void
+SA3D.SA2Event.Model.EventEntry.Position.get -> System.Numerics.Vector3
+SA3D.SA2Event.Model.EventEntry.Position.set -> void
+SA3D.SA2Event.Model.EventEntry.ShadowModel.get -> SA3D.Modeling.ObjectData.Node?
+SA3D.SA2Event.Model.EventEntry.ShadowModel.set -> void
+SA3D.SA2Event.Model.EventEntry.ShapeAnimation.get -> SA3D.Modeling.Animation.Motion?
+SA3D.SA2Event.Model.EventEntry.ShapeAnimation.set -> void
+SA3D.SA2Event.Model.EventEntry.Unknown.get -> uint
+SA3D.SA2Event.Model.EventEntry.Unknown.set -> void
+SA3D.SA2Event.Model.EventEntry.WriteDC(SA3D.Common.IO.EndianStackWriter! writer, SA3D.Modeling.Structs.PointerLUT! lut) -> void
+SA3D.SA2Event.Model.EventEntry.WriteGC(SA3D.Common.IO.EndianStackWriter! writer, System.Collections.Generic.Dictionary<SA3D.SA2Event.Animation.EventMotion, uint>! motionLUT, SA3D.Modeling.Structs.PointerLUT! lut) -> void
+SA3D.SA2Event.Model.GCEventEntryAttribute
+SA3D.SA2Event.Model.GCEventEntryAttribute.Blare = 256 -> SA3D.SA2Event.Model.GCEventEntryAttribute
+SA3D.SA2Event.Model.GCEventEntryAttribute.Reflection = 128 -> SA3D.SA2Event.Model.GCEventEntryAttribute
+SA3D.SA2Event.Model.GCEventEntryAttribute.Root_DisableShadows = 8 -> SA3D.SA2Event.Model.GCEventEntryAttribute
+SA3D.SA2Event.Model.GCEventEntryAttribute.Root_EnableLighting = 2 -> SA3D.SA2Event.Model.GCEventEntryAttribute
+SA3D.SA2Event.Model.GCEventEntryAttribute.Scene_NoNodeAnimation = 8 -> SA3D.SA2Event.Model.GCEventEntryAttribute
+SA3D.SA2Event.Model.GCEventEntryAttribute.Scene_NoShapeAnimation = 2 -> SA3D.SA2Event.Model.GCEventEntryAttribute
+SA3D.SA2Event.Model.GCEventEntryAttribute.Unk0 = 1 -> SA3D.SA2Event.Model.GCEventEntryAttribute
+SA3D.SA2Event.Model.GCEventEntryAttribute.Unk2 = 4 -> SA3D.SA2Event.Model.GCEventEntryAttribute
+SA3D.SA2Event.Model.GCEventEntryAttribute.Unk4 = 16 -> SA3D.SA2Event.Model.GCEventEntryAttribute
+SA3D.SA2Event.Model.GCEventEntryAttribute.Unk5 = 32 -> SA3D.SA2Event.Model.GCEventEntryAttribute
+SA3D.SA2Event.Model.GCEventEntryAttribute.Unk6 = 64 -> SA3D.SA2Event.Model.GCEventEntryAttribute
+SA3D.SA2Event.Model.GCEventEntryAttribute.Unk9 = 512 -> SA3D.SA2Event.Model.GCEventEntryAttribute
+SA3D.SA2Event.Model.ModelData
+SA3D.SA2Event.Model.ModelData.BlareModels.get -> SA3D.Modeling.ObjectData.Node?[]!
+SA3D.SA2Event.Model.ModelData.EnableDropShadows.get -> bool
+SA3D.SA2Event.Model.ModelData.EnableDropShadows.set -> void
+SA3D.SA2Event.Model.ModelData.GetEventMotions() -> SA3D.SA2Event.Animation.EventMotion[]!
+SA3D.SA2Event.Model.ModelData.GetModels(bool includeOverlayUpgrades) -> System.Collections.Generic.HashSet<SA3D.Modeling.ObjectData.Node!>!
+SA3D.SA2Event.Model.ModelData.GetNonAnimatedModels(bool includeOverlayUpgrades) -> System.Collections.Generic.HashSet<SA3D.Modeling.ObjectData.Node!>!
+SA3D.SA2Event.Model.ModelData.IntegratedUpgrades.get -> SA3D.Modeling.ObjectData.Node?[,]!
+SA3D.SA2Event.Model.ModelData.ModelData(SA3D.SA2Event.EventType type) -> void
+SA3D.SA2Event.Model.ModelData.ModelData(SA3D.SA2Event.EventType type, System.Collections.Generic.List<SA3D.SA2Event.Model.Scene!>! scenes, SA3D.SA2Event.Model.ReflectionData! reflections, SA3D.Texturing.Texname.TextureNameList! textureNameList, (short, short)[]! textureDimensions) -> void
+SA3D.SA2Event.Model.ModelData.OverlayUpgrades.get -> SA3D.SA2Event.Model.OverlayUpgrade[]!
+SA3D.SA2Event.Model.ModelData.OverlayUpgrades.set -> void
+SA3D.SA2Event.Model.ModelData.Reflections.get -> SA3D.SA2Event.Model.ReflectionData!
+SA3D.SA2Event.Model.ModelData.Reflections.set -> void
+SA3D.SA2Event.Model.ModelData.Scenes.get -> System.Collections.Generic.List<SA3D.SA2Event.Model.Scene!>!
+SA3D.SA2Event.Model.ModelData.Scenes.set -> void
+SA3D.SA2Event.Model.ModelData.SurfaceAnimations.get -> SA3D.SA2Event.Animation.SurfaceAnimationData?
+SA3D.SA2Event.Model.ModelData.SurfaceAnimations.set -> void
+SA3D.SA2Event.Model.ModelData.TailsTails.get -> SA3D.Modeling.ObjectData.Node?
+SA3D.SA2Event.Model.ModelData.TailsTails.set -> void
+SA3D.SA2Event.Model.ModelData.TextureDimensions.get -> (short, short)[]!
+SA3D.SA2Event.Model.ModelData.TextureDimensions.set -> void
+SA3D.SA2Event.Model.ModelData.TextureNameList.get -> SA3D.Texturing.Texname.TextureNameList!
+SA3D.SA2Event.Model.ModelData.TextureNameList.set -> void
+SA3D.SA2Event.Model.ModelData.Type.get -> SA3D.SA2Event.EventType
+SA3D.SA2Event.Model.ModelData.Type.set -> void
+SA3D.SA2Event.Model.ModelData.Write(SA3D.Common.IO.EndianStackWriter! writer, out SA3D.SA2Event.Animation.EventMotion[]! motions) -> void
+SA3D.SA2Event.Model.ModelData.WriteToData(out SA3D.SA2Event.Animation.EventMotion[]! motions) -> byte[]!
+SA3D.SA2Event.Model.ModelData.WriteToFiles(string! filepath) -> void
+SA3D.SA2Event.Model.OverlayUpgrade
+SA3D.SA2Event.Model.OverlayUpgrade.Model1.get -> SA3D.Modeling.ObjectData.Node?
+SA3D.SA2Event.Model.OverlayUpgrade.Model1.set -> void
+SA3D.SA2Event.Model.OverlayUpgrade.Model2.get -> SA3D.Modeling.ObjectData.Node?
+SA3D.SA2Event.Model.OverlayUpgrade.Model2.set -> void
+SA3D.SA2Event.Model.OverlayUpgrade.OverlayUpgrade() -> void
+SA3D.SA2Event.Model.OverlayUpgrade.OverlayUpgrade(SA3D.Modeling.ObjectData.Node? root, SA3D.Modeling.ObjectData.Node? target1, SA3D.Modeling.ObjectData.Node? model1, SA3D.Modeling.ObjectData.Node? target2, SA3D.Modeling.ObjectData.Node? model2) -> void
+SA3D.SA2Event.Model.OverlayUpgrade.Root.get -> SA3D.Modeling.ObjectData.Node?
+SA3D.SA2Event.Model.OverlayUpgrade.Root.set -> void
+SA3D.SA2Event.Model.OverlayUpgrade.Target1.get -> SA3D.Modeling.ObjectData.Node?
+SA3D.SA2Event.Model.OverlayUpgrade.Target1.set -> void
+SA3D.SA2Event.Model.OverlayUpgrade.Target2.get -> SA3D.Modeling.ObjectData.Node?
+SA3D.SA2Event.Model.OverlayUpgrade.Target2.set -> void
+SA3D.SA2Event.Model.OverlayUpgrade.Write(SA3D.Common.IO.EndianStackWriter! writer, SA3D.Modeling.Structs.PointerLUT! lut) -> void
+SA3D.SA2Event.Model.OverlayUpgrade.WriteModels(SA3D.Common.IO.EndianStackWriter! writer, SA3D.Modeling.Structs.PointerLUT! lut) -> void
+SA3D.SA2Event.Model.Reflection
+SA3D.SA2Event.Model.Reflection.Reflection() -> void
+SA3D.SA2Event.Model.Reflection.Reflection(int transparency, System.Numerics.Vector3 vertex1, System.Numerics.Vector3 vertex2, System.Numerics.Vector3 vertex3, System.Numerics.Vector3 vertex4) -> void
+SA3D.SA2Event.Model.Reflection.Transparency.get -> int
+SA3D.SA2Event.Model.Reflection.Transparency.set -> void
+SA3D.SA2Event.Model.Reflection.Vertex1.get -> System.Numerics.Vector3
+SA3D.SA2Event.Model.Reflection.Vertex1.set -> void
+SA3D.SA2Event.Model.Reflection.Vertex2.get -> System.Numerics.Vector3
+SA3D.SA2Event.Model.Reflection.Vertex2.set -> void
+SA3D.SA2Event.Model.Reflection.Vertex3.get -> System.Numerics.Vector3
+SA3D.SA2Event.Model.Reflection.Vertex3.set -> void
+SA3D.SA2Event.Model.Reflection.Vertex4.get -> System.Numerics.Vector3
+SA3D.SA2Event.Model.Reflection.Vertex4.set -> void
+SA3D.SA2Event.Model.ReflectionData
+SA3D.SA2Event.Model.ReflectionData.ReflectionData() -> void
+SA3D.SA2Event.Model.ReflectionData.Reflections.get -> System.Collections.Generic.List<SA3D.SA2Event.Model.Reflection>!
+SA3D.SA2Event.Model.ReflectionData.Reflections.set -> void
+SA3D.SA2Event.Model.ReflectionData.Write(SA3D.Common.IO.EndianStackWriter! writer) -> uint
+SA3D.SA2Event.Model.Scene
+SA3D.SA2Event.Model.Scene.BigTheCat.get -> SA3D.SA2Event.Model.BigTheCatEntry?
+SA3D.SA2Event.Model.Scene.BigTheCat.set -> void
+SA3D.SA2Event.Model.Scene.CameraAnimations.get -> System.Collections.Generic.List<SA3D.SA2Event.Animation.EventMotion>!
+SA3D.SA2Event.Model.Scene.Entries.get -> System.Collections.Generic.List<SA3D.SA2Event.Model.EventEntry!>!
+SA3D.SA2Event.Model.Scene.FrameCount.get -> int
+SA3D.SA2Event.Model.Scene.FrameCount.set -> void
+SA3D.SA2Event.Model.Scene.ParticleMotions.get -> System.Collections.Generic.List<SA3D.Modeling.Animation.Motion?>!
+SA3D.SA2Event.Model.Scene.Scene(int frameCount) -> void
+SA3D.SA2Event.Model.Scene.Write(SA3D.Common.IO.EndianStackWriter! writer, SA3D.Modeling.Structs.PointerLUT! lut) -> void
+SA3D.SA2Event.Model.Scene.WriteCameraMotionArray(SA3D.Common.IO.EndianStackWriter! writer, System.Collections.Generic.Dictionary<SA3D.SA2Event.Animation.EventMotion, uint>! motionLUT, SA3D.Modeling.Structs.PointerLUT! lut) -> uint
+SA3D.SA2Event.Model.Scene.WriteParticleMotionArray(SA3D.Common.IO.EndianStackWriter! writer, System.Collections.Generic.Dictionary<SA3D.SA2Event.Animation.EventMotion, uint>! motionLUT, SA3D.Modeling.Structs.PointerLUT! lut) -> uint
+static readonly SA3D.SA2Event.Effects.BlareEffect.Default -> SA3D.SA2Event.Effects.BlareEffect
+static readonly SA3D.SA2Event.Model.OverlayUpgrade.UpgradeEventLUT -> int[]!
+static SA3D.SA2Event.Animation.CameraData.Read(SA3D.Common.IO.EndianStackReader! reader, uint address, SA3D.Modeling.Structs.PointerLUT! lut) -> SA3D.SA2Event.Animation.CameraData!
+static SA3D.SA2Event.Animation.EventMotion.CreateFromMotion(SA3D.Modeling.Animation.Motion! motion) -> SA3D.SA2Event.Animation.EventMotion
+static SA3D.SA2Event.Animation.EventMotion.operator !=(SA3D.SA2Event.Animation.EventMotion left, SA3D.SA2Event.Animation.EventMotion right) -> bool
+static SA3D.SA2Event.Animation.EventMotion.operator ==(SA3D.SA2Event.Animation.EventMotion left, SA3D.SA2Event.Animation.EventMotion right) -> bool
+static SA3D.SA2Event.Animation.EventMotion.Read(SA3D.Common.IO.EndianStackReader! reader, uint address, SA3D.Modeling.Structs.PointerLUT! lut) -> SA3D.SA2Event.Animation.EventMotion
+static SA3D.SA2Event.Animation.EventMotion.ReadDCCameraMotion(SA3D.Common.IO.EndianStackReader! reader, uint address, SA3D.Modeling.Structs.PointerLUT! lut) -> SA3D.SA2Event.Animation.EventMotion
+static SA3D.SA2Event.Animation.EventMotion.ReadMotions(SA3D.Common.IO.EndianStackReader! reader, ref uint address, SA3D.Modeling.Structs.PointerLUT! lut) -> SA3D.SA2Event.Animation.EventMotion[]!
+static SA3D.SA2Event.Animation.EventMotion.WriteMotionContents(SA3D.Common.IO.EndianStackWriter! writer, SA3D.SA2Event.Animation.EventMotion[]! motions, SA3D.Modeling.Structs.PointerLUT! lut) -> System.Collections.Generic.Dictionary<SA3D.SA2Event.Animation.EventMotion, uint>!
+static SA3D.SA2Event.Animation.EventMotion.WriteMotions(SA3D.Common.IO.EndianStackWriter! writer, SA3D.SA2Event.Animation.EventMotion[]! motions) -> void
+static SA3D.SA2Event.Animation.EventMotion.WriteMotionsToData(SA3D.SA2Event.Animation.EventMotion[]! motions) -> byte[]!
+static SA3D.SA2Event.Animation.SurfaceAnimation.Read(SA3D.Common.IO.EndianStackReader! reader, uint address, SA3D.Modeling.Structs.PointerLUT! lut) -> SA3D.SA2Event.Animation.SurfaceAnimation!
+static SA3D.SA2Event.Animation.SurfaceAnimationBlock.Read(SA3D.Common.IO.EndianStackReader! reader, uint address, SA3D.Modeling.Structs.PointerLUT! lut) -> SA3D.SA2Event.Animation.SurfaceAnimationBlock?
+static SA3D.SA2Event.Animation.SurfaceAnimationBlock.ReadArray(SA3D.Common.IO.EndianStackReader! reader, uint address, SA3D.Modeling.Structs.PointerLUT! lut) -> System.Collections.Generic.List<SA3D.SA2Event.Animation.SurfaceAnimationBlock!>!
+static SA3D.SA2Event.Animation.SurfaceAnimationBlock.WriteBlockArray(SA3D.Common.IO.EndianStackWriter! writer, System.Collections.Generic.IEnumerable<SA3D.SA2Event.Animation.SurfaceAnimationBlock!>! blocks, SA3D.Modeling.Structs.PointerLUT! lut) -> uint
+static SA3D.SA2Event.Animation.SurfaceAnimationData.Read(SA3D.Common.IO.EndianStackReader! reader, uint address, SA3D.Modeling.Structs.PointerLUT! lut) -> SA3D.SA2Event.Animation.SurfaceAnimationData!
+static SA3D.SA2Event.Animation.TexcoordFrame.operator !=(SA3D.SA2Event.Animation.TexcoordFrame left, SA3D.SA2Event.Animation.TexcoordFrame right) -> bool
+static SA3D.SA2Event.Animation.TexcoordFrame.operator ==(SA3D.SA2Event.Animation.TexcoordFrame left, SA3D.SA2Event.Animation.TexcoordFrame right) -> bool
+static SA3D.SA2Event.Animation.TextureAnimSequence.operator !=(SA3D.SA2Event.Animation.TextureAnimSequence left, SA3D.SA2Event.Animation.TextureAnimSequence right) -> bool
+static SA3D.SA2Event.Animation.TextureAnimSequence.operator ==(SA3D.SA2Event.Animation.TextureAnimSequence left, SA3D.SA2Event.Animation.TextureAnimSequence right) -> bool
+static SA3D.SA2Event.Animation.TextureAnimSequence.Read(SA3D.Common.IO.EndianStackReader! reader, ref uint address) -> SA3D.SA2Event.Animation.TextureAnimSequence
+static SA3D.SA2Event.Effects.BlareEffect.operator !=(SA3D.SA2Event.Effects.BlareEffect left, SA3D.SA2Event.Effects.BlareEffect right) -> bool
+static SA3D.SA2Event.Effects.BlareEffect.operator ==(SA3D.SA2Event.Effects.BlareEffect left, SA3D.SA2Event.Effects.BlareEffect right) -> bool
+static SA3D.SA2Event.Effects.BlareEffect.Read(SA3D.Common.IO.EndianStackReader! reader, uint address) -> SA3D.SA2Event.Effects.BlareEffect
+static SA3D.SA2Event.Effects.EventEffects.Read(SA3D.Common.IO.EndianStackReader! reader) -> SA3D.SA2Event.Effects.EventEffects!
+static SA3D.SA2Event.Effects.EventEffects.ReadFromData(byte[]! data, bool bigEndian) -> SA3D.SA2Event.Effects.EventEffects!
+static SA3D.SA2Event.Effects.EventEffects.ReadFromEventSource(SA3D.SA2Event.EventSource! source, bool bigEndian) -> SA3D.SA2Event.Effects.EventEffects?
+static SA3D.SA2Event.Effects.ObjectLighting.operator !=(SA3D.SA2Event.Effects.ObjectLighting left, SA3D.SA2Event.Effects.ObjectLighting right) -> bool
+static SA3D.SA2Event.Effects.ObjectLighting.operator ==(SA3D.SA2Event.Effects.ObjectLighting left, SA3D.SA2Event.Effects.ObjectLighting right) -> bool
+static SA3D.SA2Event.Effects.ObjectLighting.Read(SA3D.Common.IO.EndianStackReader! reader, uint address) -> SA3D.SA2Event.Effects.ObjectLighting
+static SA3D.SA2Event.Effects.ParticleEmitterEffect.operator !=(SA3D.SA2Event.Effects.ParticleEmitterEffect left, SA3D.SA2Event.Effects.ParticleEmitterEffect right) -> bool
+static SA3D.SA2Event.Effects.ParticleEmitterEffect.operator ==(SA3D.SA2Event.Effects.ParticleEmitterEffect left, SA3D.SA2Event.Effects.ParticleEmitterEffect right) -> bool
+static SA3D.SA2Event.Effects.ParticleEmitterEffect.Read(SA3D.Common.IO.EndianStackReader! reader, uint address) -> SA3D.SA2Event.Effects.ParticleEmitterEffect
+static SA3D.SA2Event.Effects.ScreenEffect.operator !=(SA3D.SA2Event.Effects.ScreenEffect left, SA3D.SA2Event.Effects.ScreenEffect right) -> bool
+static SA3D.SA2Event.Effects.ScreenEffect.operator ==(SA3D.SA2Event.Effects.ScreenEffect left, SA3D.SA2Event.Effects.ScreenEffect right) -> bool
+static SA3D.SA2Event.Effects.ScreenEffect.Read(SA3D.Common.IO.EndianStackReader! reader, uint address) -> SA3D.SA2Event.Effects.ScreenEffect
+static SA3D.SA2Event.Effects.SimpleParticleEffect.operator !=(SA3D.SA2Event.Effects.SimpleParticleEffect left, SA3D.SA2Event.Effects.SimpleParticleEffect right) -> bool
+static SA3D.SA2Event.Effects.SimpleParticleEffect.operator ==(SA3D.SA2Event.Effects.SimpleParticleEffect left, SA3D.SA2Event.Effects.SimpleParticleEffect right) -> bool
+static SA3D.SA2Event.Effects.SimpleParticleEffect.Read(SA3D.Common.IO.EndianStackReader! reader, uint address) -> SA3D.SA2Event.Effects.SimpleParticleEffect
+static SA3D.SA2Event.Effects.VideoOverlayEffect.operator !=(SA3D.SA2Event.Effects.VideoOverlayEffect left, SA3D.SA2Event.Effects.VideoOverlayEffect right) -> bool
+static SA3D.SA2Event.Effects.VideoOverlayEffect.operator ==(SA3D.SA2Event.Effects.VideoOverlayEffect left, SA3D.SA2Event.Effects.VideoOverlayEffect right) -> bool
+static SA3D.SA2Event.Effects.VideoOverlayEffect.Read(SA3D.Common.IO.EndianStackReader! reader, uint address) -> SA3D.SA2Event.Effects.VideoOverlayEffect
+static SA3D.SA2Event.Event.ReadFromFiles(string! filepath) -> SA3D.SA2Event.Event!
+static SA3D.SA2Event.Event.ReadFromSource(SA3D.SA2Event.EventSource! source) -> SA3D.SA2Event.Event!
+static SA3D.SA2Event.EventSource.GetEventBaseFilepath(string! modelFilepath) -> string!
+static SA3D.SA2Event.EventSource.ReadFromFiles(string! filepath) -> SA3D.SA2Event.EventSource!
+static SA3D.SA2Event.EventTypeExtensions.GetBigEndian(this SA3D.SA2Event.EventType type) -> bool
+static SA3D.SA2Event.EventTypeExtensions.GetMainImageBase(this SA3D.SA2Event.EventType type) -> uint
+static SA3D.SA2Event.EventTypeExtensions.GetSubtitleImageBase(this SA3D.SA2Event.EventType type) -> uint
+static SA3D.SA2Event.EventTypeExtensions.GetTextureImageBase(this SA3D.SA2Event.EventType type) -> uint
+static SA3D.SA2Event.Language.AudioTimestamp.operator !=(SA3D.SA2Event.Language.AudioTimestamp left, SA3D.SA2Event.Language.AudioTimestamp right) -> bool
+static SA3D.SA2Event.Language.AudioTimestamp.operator ==(SA3D.SA2Event.Language.AudioTimestamp left, SA3D.SA2Event.Language.AudioTimestamp right) -> bool
+static SA3D.SA2Event.Language.AudioTimestamp.Read(SA3D.Common.IO.EndianStackReader! reader, uint address) -> SA3D.SA2Event.Language.AudioTimestamp
+static SA3D.SA2Event.Language.EventLanguageTimestamps.Read(SA3D.Common.IO.EndianStackReader! reader) -> SA3D.SA2Event.Language.EventLanguageTimestamps!
+static SA3D.SA2Event.Language.SubtitleFile.Read(SA3D.Common.IO.EndianStackReader! reader, uint address, System.Text.Encoding! encoding) -> SA3D.SA2Event.Language.SubtitleFile!
+static SA3D.SA2Event.Language.SubtitleFile.ReadFromData(byte[]! data, uint imagebase, bool bigEndian, bool compressed, System.Text.Encoding! encoding) -> SA3D.SA2Event.Language.SubtitleFile!
+static SA3D.SA2Event.Language.SubtitleFile.ReadFromFile(string! path, uint imagebase, bool bigEndian, bool compressed, System.Text.Encoding! encoding) -> SA3D.SA2Event.Language.SubtitleFile!
+static SA3D.SA2Event.Language.SubtitleText.operator !=(SA3D.SA2Event.Language.SubtitleText left, SA3D.SA2Event.Language.SubtitleText right) -> bool
+static SA3D.SA2Event.Language.SubtitleText.operator ==(SA3D.SA2Event.Language.SubtitleText left, SA3D.SA2Event.Language.SubtitleText right) -> bool
+static SA3D.SA2Event.Language.SubtitleTimestamp.operator !=(SA3D.SA2Event.Language.SubtitleTimestamp left, SA3D.SA2Event.Language.SubtitleTimestamp right) -> bool
+static SA3D.SA2Event.Language.SubtitleTimestamp.operator ==(SA3D.SA2Event.Language.SubtitleTimestamp left, SA3D.SA2Event.Language.SubtitleTimestamp right) -> bool
+static SA3D.SA2Event.Language.SubtitleTimestamp.Read(SA3D.Common.IO.EndianStackReader! reader, uint address) -> SA3D.SA2Event.Language.SubtitleTimestamp
+static SA3D.SA2Event.Model.BigTheCatEntry.ReadDC(SA3D.Common.IO.EndianStackReader! reader, uint address, SA3D.Modeling.Structs.PointerLUT! lut) -> SA3D.SA2Event.Model.BigTheCatEntry!
+static SA3D.SA2Event.Model.BigTheCatEntry.ReadGC(SA3D.Common.IO.EndianStackReader! reader, uint address, SA3D.SA2Event.Animation.EventMotion[]! motions, SA3D.Modeling.Structs.PointerLUT! lut) -> SA3D.SA2Event.Model.BigTheCatEntry!
+static SA3D.SA2Event.Model.EventEntry.ReadDC(SA3D.Common.IO.EndianStackReader! reader, ref uint address, SA3D.Modeling.Structs.PointerLUT! lut) -> SA3D.SA2Event.Model.EventEntry!
+static SA3D.SA2Event.Model.EventEntry.ReadGC(SA3D.Common.IO.EndianStackReader! reader, ref uint address, SA3D.SA2Event.Animation.EventMotion[]! motions, SA3D.Modeling.Structs.PointerLUT! lut) -> SA3D.SA2Event.Model.EventEntry!
+static SA3D.SA2Event.Model.ModelData.EvaluateEventType(SA3D.Common.IO.EndianStackReader! reader) -> SA3D.SA2Event.EventType
+static SA3D.SA2Event.Model.ModelData.Read(SA3D.Common.IO.EndianStackReader! reader, SA3D.Common.IO.EndianStackReader? motionReader, SA3D.Modeling.Structs.PointerLUT? lut = null) -> SA3D.SA2Event.Model.ModelData!
+static SA3D.SA2Event.Model.ModelData.Read(SA3D.SA2Event.EventSource! source) -> SA3D.SA2Event.Model.ModelData!
+static SA3D.SA2Event.Model.OverlayUpgrade.operator !=(SA3D.SA2Event.Model.OverlayUpgrade left, SA3D.SA2Event.Model.OverlayUpgrade right) -> bool
+static SA3D.SA2Event.Model.OverlayUpgrade.operator ==(SA3D.SA2Event.Model.OverlayUpgrade left, SA3D.SA2Event.Model.OverlayUpgrade right) -> bool
+static SA3D.SA2Event.Model.OverlayUpgrade.Read(SA3D.Common.IO.EndianStackReader! reader, uint address, SA3D.Modeling.Structs.PointerLUT! lut) -> SA3D.SA2Event.Model.OverlayUpgrade
+static SA3D.SA2Event.Model.Reflection.operator !=(SA3D.SA2Event.Model.Reflection left, SA3D.SA2Event.Model.Reflection right) -> bool
+static SA3D.SA2Event.Model.Reflection.operator ==(SA3D.SA2Event.Model.Reflection left, SA3D.SA2Event.Model.Reflection right) -> bool
+static SA3D.SA2Event.Model.ReflectionData.Read(SA3D.Common.IO.EndianStackReader! reader, uint address) -> SA3D.SA2Event.Model.ReflectionData!
+static SA3D.SA2Event.Model.Scene.ReadDC(SA3D.Common.IO.EndianStackReader! reader, uint address, SA3D.Modeling.Structs.PointerLUT! lut) -> SA3D.SA2Event.Model.Scene!
+static SA3D.SA2Event.Model.Scene.ReadGC(SA3D.Common.IO.EndianStackReader! reader, uint address, SA3D.SA2Event.Animation.EventMotion[]! motions, SA3D.Modeling.Structs.PointerLUT! lut) -> SA3D.SA2Event.Model.Scene!
+static SA3D.SA2Event.Model.Scene.WriteMotionArrays(System.Collections.Generic.IEnumerable<SA3D.SA2Event.Model.Scene!>! scenes, SA3D.Common.IO.EndianStackWriter! writer, System.Collections.Generic.Dictionary<SA3D.SA2Event.Animation.EventMotion, uint>! motionLUT, SA3D.Modeling.Structs.PointerLUT! lut) -> void

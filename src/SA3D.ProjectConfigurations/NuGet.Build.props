@@ -1,0 +1,47 @@
+<Project>
+
+	<!-- Import a Directory.Build.props file located in the parent directory -->
+	<Import Project="$(MSBuildThisFileDirectory)./Directory.Build.props" />
+
+	<PropertyGroup>
+		<WarningsAsErrors>Nullable;CS1591</WarningsAsErrors>
+		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+		<WarningsNotAsErrors>$(WarningsNotAsErrors);RS0016</WarningsNotAsErrors>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+
+		<Authors>X-Hax</Authors>
+
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<PackageIcon>SA3D-Icon.png</PackageIcon>
+		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="$(MSBuildThisFileDirectory)LICENSE">
+		  <Pack>True</Pack>
+		  <PackagePath>/</PackagePath>
+		</None>
+		<None Include="$(MSBuildThisFileDirectory)SA3D-Icon.png">
+		  <Pack>True</Pack>
+		  <PackagePath>/</PackagePath>
+		</None>
+	  </ItemGroup>
+
+	<ItemGroup>
+		<AdditionalFiles Include="PublicAPI/$(TargetFramework)/PublicAPI.Shipped.txt" />
+		<AdditionalFiles Include="PublicAPI/$(TargetFramework)/PublicAPI.Unshipped.txt" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="3.3.4">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+</Project>
