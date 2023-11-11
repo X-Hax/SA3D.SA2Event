@@ -11,7 +11,7 @@
 		<Title>Sonic adventure 2 event data handling library.</Title>
 		<Product>Sonic adventure 2 event data handling library.</Product>
 		<Description>Reading, writing and processing library for Sonic Adventure 2 event files.</Description>
-		<Version>1.0.0</Version>
+		<Version>1.0.1</Version>
 		<RepositoryUrl>https://github.com/X-Hax/SA3D.SA2Event</RepositoryUrl>
 		<PackageProjectUrl>https://github.com/X-Hax/SA3D.SA2Event</PackageProjectUrl>
 		<PackageId>SA3D.SA2Event</PackageId>
