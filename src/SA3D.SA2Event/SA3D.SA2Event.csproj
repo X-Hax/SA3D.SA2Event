@@ -25,7 +25,7 @@
 	<ItemGroup>
 	  <PackageReference Include="SA3D.Archival" Version="1.0.4" />
 	  <PackageReference Include="SA3D.Common" Version="1.4.2" />
-	  <PackageReference Include="SA3D.Modeling" Version="1.0.2" />
+	  <PackageReference Include="SA3D.Modeling" Version="1.0.3" />
 	</ItemGroup>
 
 </Project>
