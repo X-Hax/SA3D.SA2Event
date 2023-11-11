@@ -98,7 +98,7 @@ namespace SA3D.SA2Event.Language
 		/// <param name="bigEndian">Whether to encode in big endian.</param>
 		/// <param name="compress">Whether to compress the data with PRS.</param>
 		/// <returns>The written out byte data.</returns>
-		public byte[] WriteToData(uint imageBase, bool bigEndian, bool compress = true)
+		public byte[] WriteToBytes(uint imageBase, bool bigEndian, bool compress = true)
 		{
 			byte[] result;
 
@@ -128,7 +128,7 @@ namespace SA3D.SA2Event.Language
 		/// <returns>The written out byte data.</returns>
 		public void WriteToFile(string file, uint imageBase, bool bigEndian, bool compress = true)
 		{
-			File.WriteAllBytes(file, WriteToData(imageBase, bigEndian));
+			File.WriteAllBytes(file, WriteToBytes(imageBase, bigEndian));
 		}
 
 
@@ -179,7 +179,7 @@ namespace SA3D.SA2Event.Language
 		/// <param name="compressed">Whether the data needs to be decompressed with PRS.</param>
 		/// <param name="encoding">Text encoding to decode texts with.</param>
 		/// <returns>The subtitle file that was read.</returns>
-		public static SubtitleFile ReadFromData(byte[] data, uint imagebase, bool bigEndian, bool compressed, Encoding encoding)
+		public static SubtitleFile ReadFromBytes(byte[] data, uint imagebase, bool bigEndian, bool compressed, Encoding encoding)
 		{
 			if(compressed)
 			{
@@ -203,7 +203,7 @@ namespace SA3D.SA2Event.Language
 		/// <returns>The subtitle file that was read.</returns>
 		public static SubtitleFile ReadFromFile(string path, uint imagebase, bool bigEndian, bool compressed, Encoding encoding)
 		{
-			return ReadFromData(File.ReadAllBytes(path), imagebase, bigEndian, compressed, encoding);
+			return ReadFromBytes(File.ReadAllBytes(path), imagebase, bigEndian, compressed, encoding);
 		}
 	
 	}

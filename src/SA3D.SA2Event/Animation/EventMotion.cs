@@ -251,7 +251,7 @@ namespace SA3D.SA2Event.Animation
 		/// </summary>
 		/// <param name="motions">The event motions to write.</param>
 		/// <returns>The written byte data.</returns>
-		public static byte[] WriteMotionsToData(EventMotion[] motions)
+		public static byte[] WriteMotionsToBytes(EventMotion[] motions)
 		{
 			using(MemoryStream stream = new())
 			{

@@ -480,7 +480,7 @@ namespace SA3D.SA2Event.Model
 		/// </summary>
 		/// <param name="motions">The resulting event motion array. For dc types, it gets written to the same file, otherwise it needs to be stored in an e####_motion.bin file.</param>
 		/// <returns>The written byte data.</returns>
-		public byte[] WriteToData(out EventMotion[] motions)
+		public byte[] WriteToBytes(out EventMotion[] motions)
 		{
 			using(MemoryStream stream = new())
 			{
@@ -496,13 +496,13 @@ namespace SA3D.SA2Event.Model
 		/// <param name="filepath">Path to the file to write to.</param>
 		public void WriteToFiles(string filepath)
 		{
-			byte[] modeldata = PRS.CompressPRS(WriteToData(out EventMotion[] motions));
+			byte[] modeldata = PRS.CompressPRS(WriteToBytes(out EventMotion[] motions));
 
 			File.WriteAllBytes(filepath, modeldata);
 
 			if(Type == EventType.gc)
 			{
-				byte[] motionData = EventMotion.WriteMotionsToData(motions);
+				byte[] motionData = EventMotion.WriteMotionsToBytes(motions);
 
 				string motionFilepath = Path.Join(
 					Path.GetDirectoryName(filepath),

@@ -196,7 +196,6 @@ SA3D.SA2Event.Effects.EventEffects.Particles.get -> SA3D.SA2Event.Effects.Simple
 SA3D.SA2Event.Effects.EventEffects.ScreenEffects.get -> SA3D.SA2Event.Effects.ScreenEffect[]!
 SA3D.SA2Event.Effects.EventEffects.VideoOverlayEffects.get -> SA3D.SA2Event.Effects.VideoOverlayEffect[]!
 SA3D.SA2Event.Effects.EventEffects.Write(SA3D.Common.IO.EndianStackWriter! writer) -> void
-SA3D.SA2Event.Effects.EventEffects.WriteToData(bool bigEndian) -> byte[]!
 SA3D.SA2Event.Effects.ObjectLighting
 SA3D.SA2Event.Effects.ObjectLighting.Ambient.get -> SA3D.Modeling.Structs.Color
 SA3D.SA2Event.Effects.ObjectLighting.Ambient.set -> void
@@ -359,14 +358,12 @@ SA3D.SA2Event.Language.EventLanguageTimestamps.AudioTimestamps.get -> SA3D.SA2Ev
 SA3D.SA2Event.Language.EventLanguageTimestamps.EventLanguageTimestamps() -> void
 SA3D.SA2Event.Language.EventLanguageTimestamps.SubtitlesTimestamps.get -> SA3D.SA2Event.Language.SubtitleTimestamp[]!
 SA3D.SA2Event.Language.EventLanguageTimestamps.Write(SA3D.Common.IO.EndianStackWriter! writer) -> void
-SA3D.SA2Event.Language.EventLanguageTimestamps.WriteToData(bool bigEndian) -> byte[]!
 SA3D.SA2Event.Language.SubtitleFile
 SA3D.SA2Event.Language.SubtitleFile.SubtitleFile(System.Text.Encoding! encoding) -> void
 SA3D.SA2Event.Language.SubtitleFile.TextEncoding.get -> System.Text.Encoding!
 SA3D.SA2Event.Language.SubtitleFile.TextEncoding.set -> void
 SA3D.SA2Event.Language.SubtitleFile.Texts.get -> System.Collections.Generic.SortedDictionary<uint, System.Collections.Generic.List<SA3D.SA2Event.Language.SubtitleText>!>!
 SA3D.SA2Event.Language.SubtitleFile.Write(SA3D.Common.IO.EndianStackWriter! writer) -> void
-SA3D.SA2Event.Language.SubtitleFile.WriteToData(uint imageBase, bool bigEndian, bool compress = true) -> byte[]!
 SA3D.SA2Event.Language.SubtitleFile.WriteToFile(string! file, uint imageBase, bool bigEndian, bool compress = true) -> void
 SA3D.SA2Event.Language.SubtitleText
 SA3D.SA2Event.Language.SubtitleText.Centered.get -> bool
@@ -460,7 +457,6 @@ SA3D.SA2Event.Model.ModelData.TextureNameList.set -> void
 SA3D.SA2Event.Model.ModelData.Type.get -> SA3D.SA2Event.EventType
 SA3D.SA2Event.Model.ModelData.Type.set -> void
 SA3D.SA2Event.Model.ModelData.Write(SA3D.Common.IO.EndianStackWriter! writer, out SA3D.SA2Event.Animation.EventMotion[]! motions) -> void
-SA3D.SA2Event.Model.ModelData.WriteToData(out SA3D.SA2Event.Animation.EventMotion[]! motions) -> byte[]!
 SA3D.SA2Event.Model.ModelData.WriteToFiles(string! filepath) -> void
 SA3D.SA2Event.Model.OverlayUpgrade
 SA3D.SA2Event.Model.OverlayUpgrade.Model1.get -> SA3D.Modeling.ObjectData.Node?
@@ -518,7 +514,6 @@ static SA3D.SA2Event.Animation.EventMotion.ReadDCCameraMotion(SA3D.Common.IO.End
 static SA3D.SA2Event.Animation.EventMotion.ReadMotions(SA3D.Common.IO.EndianStackReader! reader, ref uint address, SA3D.Modeling.Structs.PointerLUT! lut) -> SA3D.SA2Event.Animation.EventMotion[]!
 static SA3D.SA2Event.Animation.EventMotion.WriteMotionContents(SA3D.Common.IO.EndianStackWriter! writer, SA3D.SA2Event.Animation.EventMotion[]! motions, SA3D.Modeling.Structs.PointerLUT! lut) -> System.Collections.Generic.Dictionary<SA3D.SA2Event.Animation.EventMotion, uint>!
 static SA3D.SA2Event.Animation.EventMotion.WriteMotions(SA3D.Common.IO.EndianStackWriter! writer, SA3D.SA2Event.Animation.EventMotion[]! motions) -> void
-static SA3D.SA2Event.Animation.EventMotion.WriteMotionsToData(SA3D.SA2Event.Animation.EventMotion[]! motions) -> byte[]!
 static SA3D.SA2Event.Animation.SurfaceAnimation.Read(SA3D.Common.IO.EndianStackReader! reader, uint address, SA3D.Modeling.Structs.PointerLUT! lut) -> SA3D.SA2Event.Animation.SurfaceAnimation!
 static SA3D.SA2Event.Animation.SurfaceAnimationBlock.Read(SA3D.Common.IO.EndianStackReader! reader, uint address, SA3D.Modeling.Structs.PointerLUT! lut) -> SA3D.SA2Event.Animation.SurfaceAnimationBlock?
 static SA3D.SA2Event.Animation.SurfaceAnimationBlock.ReadArray(SA3D.Common.IO.EndianStackReader! reader, uint address, SA3D.Modeling.Structs.PointerLUT! lut) -> System.Collections.Generic.List<SA3D.SA2Event.Animation.SurfaceAnimationBlock!>!
@@ -533,7 +528,6 @@ static SA3D.SA2Event.Effects.BlareEffect.operator !=(SA3D.SA2Event.Effects.Blare
 static SA3D.SA2Event.Effects.BlareEffect.operator ==(SA3D.SA2Event.Effects.BlareEffect left, SA3D.SA2Event.Effects.BlareEffect right) -> bool
 static SA3D.SA2Event.Effects.BlareEffect.Read(SA3D.Common.IO.EndianStackReader! reader, uint address) -> SA3D.SA2Event.Effects.BlareEffect
 static SA3D.SA2Event.Effects.EventEffects.Read(SA3D.Common.IO.EndianStackReader! reader) -> SA3D.SA2Event.Effects.EventEffects!
-static SA3D.SA2Event.Effects.EventEffects.ReadFromData(byte[]! data, bool bigEndian) -> SA3D.SA2Event.Effects.EventEffects!
 static SA3D.SA2Event.Effects.EventEffects.ReadFromEventSource(SA3D.SA2Event.EventSource! source, bool bigEndian) -> SA3D.SA2Event.Effects.EventEffects?
 static SA3D.SA2Event.Effects.ObjectLighting.operator !=(SA3D.SA2Event.Effects.ObjectLighting left, SA3D.SA2Event.Effects.ObjectLighting right) -> bool
 static SA3D.SA2Event.Effects.ObjectLighting.operator ==(SA3D.SA2Event.Effects.ObjectLighting left, SA3D.SA2Event.Effects.ObjectLighting right) -> bool
@@ -563,7 +557,6 @@ static SA3D.SA2Event.Language.AudioTimestamp.operator ==(SA3D.SA2Event.Language.
 static SA3D.SA2Event.Language.AudioTimestamp.Read(SA3D.Common.IO.EndianStackReader! reader, uint address) -> SA3D.SA2Event.Language.AudioTimestamp
 static SA3D.SA2Event.Language.EventLanguageTimestamps.Read(SA3D.Common.IO.EndianStackReader! reader) -> SA3D.SA2Event.Language.EventLanguageTimestamps!
 static SA3D.SA2Event.Language.SubtitleFile.Read(SA3D.Common.IO.EndianStackReader! reader, uint address, System.Text.Encoding! encoding) -> SA3D.SA2Event.Language.SubtitleFile!
-static SA3D.SA2Event.Language.SubtitleFile.ReadFromData(byte[]! data, uint imagebase, bool bigEndian, bool compressed, System.Text.Encoding! encoding) -> SA3D.SA2Event.Language.SubtitleFile!
 static SA3D.SA2Event.Language.SubtitleFile.ReadFromFile(string! path, uint imagebase, bool bigEndian, bool compressed, System.Text.Encoding! encoding) -> SA3D.SA2Event.Language.SubtitleFile!
 static SA3D.SA2Event.Language.SubtitleText.operator !=(SA3D.SA2Event.Language.SubtitleText left, SA3D.SA2Event.Language.SubtitleText right) -> bool
 static SA3D.SA2Event.Language.SubtitleText.operator ==(SA3D.SA2Event.Language.SubtitleText left, SA3D.SA2Event.Language.SubtitleText right) -> bool

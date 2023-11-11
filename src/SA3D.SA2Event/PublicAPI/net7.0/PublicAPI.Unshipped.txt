@@ -1,1 +1,7 @@
-﻿
+﻿SA3D.SA2Event.Effects.EventEffects.WriteToBytes(bool bigEndian) -> byte[]!
+SA3D.SA2Event.Language.EventLanguageTimestamps.WriteToBytes(bool bigEndian) -> byte[]!
+SA3D.SA2Event.Language.SubtitleFile.WriteToBytes(uint imageBase, bool bigEndian, bool compress = true) -> byte[]!
+SA3D.SA2Event.Model.ModelData.WriteToBytes(out SA3D.SA2Event.Animation.EventMotion[]! motions) -> byte[]!
+static SA3D.SA2Event.Animation.EventMotion.WriteMotionsToBytes(SA3D.SA2Event.Animation.EventMotion[]! motions) -> byte[]!
+static SA3D.SA2Event.Effects.EventEffects.ReadFromBytes(byte[]! data, bool bigEndian) -> SA3D.SA2Event.Effects.EventEffects!
+static SA3D.SA2Event.Language.SubtitleFile.ReadFromBytes(byte[]! data, uint imagebase, bool bigEndian, bool compressed, System.Text.Encoding! encoding) -> SA3D.SA2Event.Language.SubtitleFile!

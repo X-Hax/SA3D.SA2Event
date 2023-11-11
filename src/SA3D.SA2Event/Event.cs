@@ -118,16 +118,16 @@ namespace SA3D.SA2Event
 		{
 			bool bigEndian = Type.GetBigEndian();
 
-			byte[] mainData = ModelData.WriteToData(out EventMotion[] motions);
-			byte[]? effects = Effects?.WriteToData(bigEndian);
+			byte[] mainData = ModelData.WriteToBytes(out EventMotion[] motions);
+			byte[]? effects = Effects?.WriteToBytes(bigEndian);
 			byte[]? textures = TextureArchive?.WriteArchiveToBytes();
 			byte[]? texList = WriteTexList();
-			byte[]? motionData = Type == EventType.gc ? EventMotion.WriteMotionsToData(motions) : null;
+			byte[]? motionData = Type == EventType.gc ? EventMotion.WriteMotionsToBytes(motions) : null;
 
 			Dictionary<EventLanguage, byte[]> languageInfo = new();
 			foreach(KeyValuePair<EventLanguage, EventLanguageTimestamps> item in LanguageTimestamps)
 			{
-				languageInfo.Add(item.Key, item.Value.WriteToData(bigEndian));
+				languageInfo.Add(item.Key, item.Value.WriteToBytes(bigEndian));
 			}
 
 			return new EventSource(null, mainData, motionData, textures, texList, effects, languageInfo);

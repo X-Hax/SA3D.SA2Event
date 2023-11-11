@@ -115,7 +115,7 @@ namespace SA3D.SA2Event.Effects
 		/// </summary>
 		/// <param name="bigEndian">Whether to write using big endian.</param>
 		/// <returns>The written data.</returns>
-		public byte[] WriteToData(bool bigEndian)
+		public byte[] WriteToBytes(bool bigEndian)
 		{
 			using(MemoryStream stream = new())
 			{
@@ -158,7 +158,7 @@ namespace SA3D.SA2Event.Effects
 		/// <param name="data">The data to read.</param>
 		/// <param name="bigEndian">Whether to read using big endian.</param>
 		/// <returns>The event effects that were read.</returns>
-		public static EventEffects ReadFromData(byte[] data, bool bigEndian)
+		public static EventEffects ReadFromBytes(byte[] data, bool bigEndian)
 		{
 			using(EndianStackReader reader = new(data, bigEndian: bigEndian))
 			{
@@ -179,7 +179,7 @@ namespace SA3D.SA2Event.Effects
 				return null;
 			}
 
-			return ReadFromData(source.Effects, bigEndian);
+			return ReadFromBytes(source.Effects, bigEndian);
 		}
 	}
 }

@@ -51,7 +51,7 @@ namespace SA3D.SA2Event.Language
 		/// </summary>
 		/// <param name="bigEndian">Whether to write in big endian.</param>
 		/// <returns>The written byte data.</returns>
-		public byte[] WriteToData(bool bigEndian)
+		public byte[] WriteToBytes(bool bigEndian)
 		{
 			using(MemoryStream stream = new())
 			{
