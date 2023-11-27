@@ -240,7 +240,7 @@ namespace SA3D.SA2Event.Animation
 				}
 
 				writer.WriteUInt(pointer);
-				writer.WriteUInt(motion.Animation?.ModelCount ?? 0u);
+				writer.WriteUInt(motion.Animation?.NodeCount ?? 0u);
 			}
 
 			writer.SeekEnd();
