@@ -1,15 +1,1 @@
-﻿SA3D.SA2Event.Model.EventEntry.Attributes.get -> SA3D.SA2Event.Model.EventEntryAttribute
-SA3D.SA2Event.Model.EventEntry.AutoAnimationAttributes() -> void
-SA3D.SA2Event.Model.EventEntryAttribute
-SA3D.SA2Event.Model.EventEntryAttribute.Blare = 256 -> SA3D.SA2Event.Model.EventEntryAttribute
-SA3D.SA2Event.Model.EventEntryAttribute.Reflection = 128 -> SA3D.SA2Event.Model.EventEntryAttribute
-SA3D.SA2Event.Model.EventEntryAttribute.Root_DisableShadows = 8 -> SA3D.SA2Event.Model.EventEntryAttribute
-SA3D.SA2Event.Model.EventEntryAttribute.Root_EnableLighting = 2 -> SA3D.SA2Event.Model.EventEntryAttribute
-SA3D.SA2Event.Model.EventEntryAttribute.Scene_NoNodeAnimation = 8 -> SA3D.SA2Event.Model.EventEntryAttribute
-SA3D.SA2Event.Model.EventEntryAttribute.Scene_NoShapeAnimation = 2 -> SA3D.SA2Event.Model.EventEntryAttribute
-SA3D.SA2Event.Model.EventEntryAttribute.Unk0 = 1 -> SA3D.SA2Event.Model.EventEntryAttribute
-SA3D.SA2Event.Model.EventEntryAttribute.Unk2 = 4 -> SA3D.SA2Event.Model.EventEntryAttribute
-SA3D.SA2Event.Model.EventEntryAttribute.Unk4 = 16 -> SA3D.SA2Event.Model.EventEntryAttribute
-SA3D.SA2Event.Model.EventEntryAttribute.Unk5 = 32 -> SA3D.SA2Event.Model.EventEntryAttribute
-SA3D.SA2Event.Model.EventEntryAttribute.Unk6 = 64 -> SA3D.SA2Event.Model.EventEntryAttribute
-SA3D.SA2Event.Model.EventEntryAttribute.Unk9 = 512 -> SA3D.SA2Event.Model.EventEntryAttribute
+﻿
