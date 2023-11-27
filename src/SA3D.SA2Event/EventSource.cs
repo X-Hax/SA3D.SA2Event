@@ -112,7 +112,7 @@ namespace SA3D.SA2Event
 
 			WriteFile(Model, ".prs", true);
 			WriteFile(Motion, "motion.bin", false);
-			WriteFile(Textures, "textures.prs", true);
+			WriteFile(Textures, "texture.prs", true);
 			WriteFile(Texlist, "texlist.prs", true);
 			WriteFile(Effects, "_0.prs", true);
 
