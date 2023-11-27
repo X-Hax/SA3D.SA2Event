@@ -397,13 +397,9 @@ SA3D.SA2Event.Model.BigTheCatEntry.WriteMotionArray(SA3D.Common.IO.EndianStackWr
 SA3D.SA2Event.Model.EventEntry
 SA3D.SA2Event.Model.EventEntry.Animation.get -> SA3D.Modeling.Animation.Motion?
 SA3D.SA2Event.Model.EventEntry.Animation.set -> void
-SA3D.SA2Event.Model.EventEntry.Attributes.get -> uint
 SA3D.SA2Event.Model.EventEntry.Attributes.set -> void
-SA3D.SA2Event.Model.EventEntry.AutoGCAnimationAttributes() -> void
 SA3D.SA2Event.Model.EventEntry.DisplayModel.get -> SA3D.Modeling.ObjectData.Node!
 SA3D.SA2Event.Model.EventEntry.EventEntry() -> void
-SA3D.SA2Event.Model.EventEntry.GCAttributes.get -> SA3D.SA2Event.Model.GCEventEntryAttribute
-SA3D.SA2Event.Model.EventEntry.GCAttributes.set -> void
 SA3D.SA2Event.Model.EventEntry.GCModel.get -> SA3D.Modeling.ObjectData.Node?
 SA3D.SA2Event.Model.EventEntry.GCModel.set -> void
 SA3D.SA2Event.Model.EventEntry.Layer.get -> uint
@@ -420,19 +416,6 @@ SA3D.SA2Event.Model.EventEntry.Unknown.get -> uint
 SA3D.SA2Event.Model.EventEntry.Unknown.set -> void
 SA3D.SA2Event.Model.EventEntry.WriteDC(SA3D.Common.IO.EndianStackWriter! writer, SA3D.Modeling.Structs.PointerLUT! lut) -> void
 SA3D.SA2Event.Model.EventEntry.WriteGC(SA3D.Common.IO.EndianStackWriter! writer, System.Collections.Generic.Dictionary<SA3D.SA2Event.Animation.EventMotion, uint>! motionLUT, SA3D.Modeling.Structs.PointerLUT! lut) -> void
-SA3D.SA2Event.Model.GCEventEntryAttribute
-SA3D.SA2Event.Model.GCEventEntryAttribute.Blare = 256 -> SA3D.SA2Event.Model.GCEventEntryAttribute
-SA3D.SA2Event.Model.GCEventEntryAttribute.Reflection = 128 -> SA3D.SA2Event.Model.GCEventEntryAttribute
-SA3D.SA2Event.Model.GCEventEntryAttribute.Root_DisableShadows = 8 -> SA3D.SA2Event.Model.GCEventEntryAttribute
-SA3D.SA2Event.Model.GCEventEntryAttribute.Root_EnableLighting = 2 -> SA3D.SA2Event.Model.GCEventEntryAttribute
-SA3D.SA2Event.Model.GCEventEntryAttribute.Scene_NoNodeAnimation = 8 -> SA3D.SA2Event.Model.GCEventEntryAttribute
-SA3D.SA2Event.Model.GCEventEntryAttribute.Scene_NoShapeAnimation = 2 -> SA3D.SA2Event.Model.GCEventEntryAttribute
-SA3D.SA2Event.Model.GCEventEntryAttribute.Unk0 = 1 -> SA3D.SA2Event.Model.GCEventEntryAttribute
-SA3D.SA2Event.Model.GCEventEntryAttribute.Unk2 = 4 -> SA3D.SA2Event.Model.GCEventEntryAttribute
-SA3D.SA2Event.Model.GCEventEntryAttribute.Unk4 = 16 -> SA3D.SA2Event.Model.GCEventEntryAttribute
-SA3D.SA2Event.Model.GCEventEntryAttribute.Unk5 = 32 -> SA3D.SA2Event.Model.GCEventEntryAttribute
-SA3D.SA2Event.Model.GCEventEntryAttribute.Unk6 = 64 -> SA3D.SA2Event.Model.GCEventEntryAttribute
-SA3D.SA2Event.Model.GCEventEntryAttribute.Unk9 = 512 -> SA3D.SA2Event.Model.GCEventEntryAttribute
 SA3D.SA2Event.Model.ModelData
 SA3D.SA2Event.Model.ModelData.BlareModels.get -> SA3D.Modeling.ObjectData.Node?[]!
 SA3D.SA2Event.Model.ModelData.EnableDropShadows.get -> bool

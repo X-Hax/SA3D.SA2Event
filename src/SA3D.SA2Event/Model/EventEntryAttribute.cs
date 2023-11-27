@@ -5,7 +5,7 @@ namespace SA3D.SA2Event.Model
 	/// <summary>
 	/// Event entry attributes
 	/// </summary>
-	public enum GCEventEntryAttribute : uint
+	public enum EventEntryAttribute : uint
 	{
 		/// <summary>
 		/// Unknown functionality.

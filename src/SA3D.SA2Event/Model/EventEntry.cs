@@ -65,16 +65,7 @@ namespace SA3D.SA2Event.Model
 		/// <summary>
 		/// Attributes storing various rendering and behavior properties.
 		/// </summary>
-		public uint Attributes { get; set; }
-
-		/// <summary>
-		/// GC specific flag enum of <see cref="Attributes"/>.
-		/// </summary>
-		public GCEventEntryAttribute GCAttributes
-		{
-			get => (GCEventEntryAttribute)Attributes;
-			set => Attributes = (uint)value;
-		}
+		public EventEntryAttribute Attributes { get; set; }
 
 		/// <summary>
 		/// Rendering layer. Used for advanced transparency sorting.
@@ -91,24 +82,24 @@ namespace SA3D.SA2Event.Model
 		/// <summary>
 		/// Automatically assigns animation attributes for animated scene entries.
 		/// </summary>
-		public void AutoGCAnimationAttributes()
+		public void AutoAnimationAttributes()
 		{
 			if(Animation == null)
 			{
-				GCAttributes |= GCEventEntryAttribute.Scene_NoNodeAnimation;
+				Attributes |= EventEntryAttribute.Scene_NoNodeAnimation;
 			}
 			else
 			{
-				GCAttributes &= ~GCEventEntryAttribute.Scene_NoNodeAnimation;
+				Attributes &= ~EventEntryAttribute.Scene_NoNodeAnimation;
 			}
 
 			if(ShapeAnimation == null)
 			{
-				GCAttributes |= GCEventEntryAttribute.Scene_NoShapeAnimation;
+				Attributes |= EventEntryAttribute.Scene_NoShapeAnimation;
 			}
 			else
 			{
-				GCAttributes &= ~GCEventEntryAttribute.Scene_NoShapeAnimation;
+				Attributes &= ~EventEntryAttribute.Scene_NoShapeAnimation;
 			}
 		}
 
@@ -144,7 +135,7 @@ namespace SA3D.SA2Event.Model
 
 			result.Unknown = reader.ReadUInt(address + 0x0C);
 			result.Position = reader.ReadVector3(address + 0x10);
-			result.Attributes = reader.ReadUInt(address + 0x1C);
+			result.Attributes = (EventEntryAttribute)reader.ReadUInt(address + 0x1C);
 
 			address += StructSizeDC;
 			return result;
@@ -181,7 +172,7 @@ namespace SA3D.SA2Event.Model
 			result.ShadowModel = ReadNode(0x10, ModelFormat.SA2);
 			result.Unknown = reader.ReadUInt(address + 0x14);
 			result.Position = reader.ReadVector3(address + 0x18);
-			result.Attributes = reader.ReadUInt(address + 0x24);
+			result.Attributes = (EventEntryAttribute)reader.ReadUInt(address + 0x24);
 			result.Layer = reader.ReadUInt(address + 0x28);
 
 			address += StructSizeGC;
@@ -217,7 +208,7 @@ namespace SA3D.SA2Event.Model
 			writer.WriteUInt(shapeAnimAddr);
 			writer.WriteUInt(Unknown);
 			writer.WriteVector3(Position);
-			writer.WriteUInt(Attributes);
+			writer.WriteUInt((uint)Attributes);
 		}
 
 		/// <summary>
@@ -250,7 +241,7 @@ namespace SA3D.SA2Event.Model
 			writer.WriteUInt(shadowModelAddr);
 			writer.WriteUInt(Unknown);
 			writer.WriteVector3(Position);
-			writer.WriteUInt(Attributes);
+			writer.WriteUInt((uint)Attributes);
 			writer.WriteUInt(Layer);
 		}
 
