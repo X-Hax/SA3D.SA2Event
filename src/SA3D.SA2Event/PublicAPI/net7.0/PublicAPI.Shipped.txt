@@ -107,7 +107,6 @@ SA3D.SA2Event.Animation.SurfaceAnimationData
 SA3D.SA2Event.Animation.SurfaceAnimationData.AnimationBlocks.get -> System.Collections.Generic.List<SA3D.SA2Event.Animation.SurfaceAnimationBlock!>!
 SA3D.SA2Event.Animation.SurfaceAnimationData.SurfaceAnimationData() -> void
 SA3D.SA2Event.Animation.SurfaceAnimationData.TextureSequences.get -> System.Collections.Generic.List<SA3D.SA2Event.Animation.TextureAnimSequence>!
-SA3D.SA2Event.Animation.SurfaceAnimationData.Write(SA3D.Common.IO.EndianStackWriter! writer, SA3D.Modeling.Structs.PointerLUT! lut) -> uint
 SA3D.SA2Event.Animation.TexcoordFrame
 SA3D.SA2Event.Animation.TexcoordFrame.CornerIndex.get -> int
 SA3D.SA2Event.Animation.TexcoordFrame.CornerIndex.set -> void
@@ -521,7 +520,6 @@ static SA3D.SA2Event.Animation.SurfaceAnimation.Read(SA3D.Common.IO.EndianStackR
 static SA3D.SA2Event.Animation.SurfaceAnimationBlock.Read(SA3D.Common.IO.EndianStackReader! reader, uint address, SA3D.Modeling.Structs.PointerLUT! lut) -> SA3D.SA2Event.Animation.SurfaceAnimationBlock?
 static SA3D.SA2Event.Animation.SurfaceAnimationBlock.ReadArray(SA3D.Common.IO.EndianStackReader! reader, uint address, SA3D.Modeling.Structs.PointerLUT! lut) -> System.Collections.Generic.List<SA3D.SA2Event.Animation.SurfaceAnimationBlock!>!
 static SA3D.SA2Event.Animation.SurfaceAnimationBlock.WriteBlockArray(SA3D.Common.IO.EndianStackWriter! writer, System.Collections.Generic.IEnumerable<SA3D.SA2Event.Animation.SurfaceAnimationBlock!>! blocks, SA3D.Modeling.Structs.PointerLUT! lut) -> uint
-static SA3D.SA2Event.Animation.SurfaceAnimationData.Read(SA3D.Common.IO.EndianStackReader! reader, uint address, SA3D.Modeling.Structs.PointerLUT! lut) -> SA3D.SA2Event.Animation.SurfaceAnimationData!
 static SA3D.SA2Event.Animation.TexcoordFrame.operator !=(SA3D.SA2Event.Animation.TexcoordFrame left, SA3D.SA2Event.Animation.TexcoordFrame right) -> bool
 static SA3D.SA2Event.Animation.TexcoordFrame.operator ==(SA3D.SA2Event.Animation.TexcoordFrame left, SA3D.SA2Event.Animation.TexcoordFrame right) -> bool
 static SA3D.SA2Event.Animation.TextureAnimSequence.operator !=(SA3D.SA2Event.Animation.TextureAnimSequence left, SA3D.SA2Event.Animation.TextureAnimSequence right) -> bool

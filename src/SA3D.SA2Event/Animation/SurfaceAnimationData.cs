@@ -39,15 +39,16 @@ namespace SA3D.SA2Event.Animation
 		/// Writes the surface animation data to an endian stack writer.
 		/// </summary>
 		/// <param name="writer">The writer to write to.</param>
+		/// <param name="textureSequenceArray">Whether to write all texture sequences as an array, otherwise only the first one is written.</param>
 		/// <param name="lut">Pointer refernces to utilize.</param>
 		/// <returns>The pointer at which the data was written.</returns>
 		/// <exception cref="InvalidOperationException"></exception>
-		public uint Write(EndianStackWriter writer, PointerLUT lut)
+		public uint Write(EndianStackWriter writer, bool textureSequenceArray, PointerLUT lut)
 		{
 			uint blockAddress = SurfaceAnimationBlock.WriteBlockArray(writer, AnimationBlocks, lut);
 
 			uint sequenceAddress = 0;
-			if(TextureSequences.Count > 0)
+			if(textureSequenceArray && TextureSequences.Count > 0)
 			{
 				sequenceAddress = writer.PointerPosition;
 				foreach(TextureAnimSequence item in TextureSequences)
@@ -58,8 +59,16 @@ namespace SA3D.SA2Event.Animation
 
 			uint address = writer.PointerPosition;
 			writer.WriteUInt(blockAddress);
-			writer.WriteUInt(sequenceAddress);
-			writer.WriteInt(TextureSequences.Count);
+
+			if(textureSequenceArray)
+			{
+				writer.WriteUInt(sequenceAddress);
+				writer.WriteInt(TextureSequences.Count);
+			}
+			else if(TextureSequences.Count > 0)
+			{
+				TextureSequences[0].Write(writer);
+			}
 
 			return address;
 		}
@@ -69,9 +78,10 @@ namespace SA3D.SA2Event.Animation
 		/// </summary>
 		/// <param name="reader">The reader to read from.</param>
 		/// <param name="address">Address at which to start reading.</param>
+		/// <param name="textureSequenceArray">Whether the surface animations are stored in an array.</param>
 		/// <param name="lut">Pointer references to utilize.</param>
 		/// <returns>The data that was read.</returns>
-		public static SurfaceAnimationData Read(EndianStackReader reader, uint address, PointerLUT lut)
+		public static SurfaceAnimationData Read(EndianStackReader reader, uint address, bool textureSequenceArray, PointerLUT lut)
 		{
 			SurfaceAnimationData result = new();
 
@@ -82,10 +92,18 @@ namespace SA3D.SA2Event.Animation
 				animBlockAddr += SurfaceAnimationBlock.StructSize;
 			}
 
-			uint tsAddr = reader.ReadPointer(address + 4);
-			uint tsCount = reader.ReadUInt(address + 8);
-			for(int i = 0; i < tsCount; i++)
+			if(textureSequenceArray)
 			{
+				uint tsAddr = reader.ReadPointer(address + 4);
+				uint tsCount = reader.ReadUInt(address + 8);
+				for(int i = 0; i < tsCount; i++)
+				{
+					result.TextureSequences.Add(TextureAnimSequence.Read(reader, ref tsAddr));
+				}
+			}
+			else
+			{
+				uint tsAddr = address + 4;
 				result.TextureSequences.Add(TextureAnimSequence.Read(reader, ref tsAddr));
 			}
 

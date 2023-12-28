@@ -391,7 +391,7 @@ namespace SA3D.SA2Event.Model
 
 				if(type != EventType.dcbeta && reader.TryReadPointer(0x24, out uint uvAnimAddr))
 				{
-					result.SurfaceAnimations = SurfaceAnimationData.Read(reader, uvAnimAddr, lut);
+					result.SurfaceAnimations = SurfaceAnimationData.Read(reader, uvAnimAddr, type != EventType.dc, lut);
 				}
 
 				if(type == EventType.gc)
@@ -653,7 +653,7 @@ namespace SA3D.SA2Event.Model
 
 			if(SurfaceAnimations != null && Type != EventType.dcbeta)
 			{
-				eventData[9] = SurfaceAnimations.Write(writer, lut);
+				eventData[9] = SurfaceAnimations.Write(writer, Type != EventType.dc, lut);
 			}
 
 			WriteEntries(writer, motionLUT, lut);
