@@ -79,7 +79,7 @@ namespace SA3D.SA2Event
 			string absolutePath = Path.GetFullPath(modelFilepath);
 			string? dir = Path.GetDirectoryName(absolutePath);
 			string filename = Path.GetFileNameWithoutExtension(absolutePath);
-			return dir == null ? filename : $"{dir}\\{filename}";
+			return dir == null ? filename : Path.Join(dir, filename);
 		}
 
 
