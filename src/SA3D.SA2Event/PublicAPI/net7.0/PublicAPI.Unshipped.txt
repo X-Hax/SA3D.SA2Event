@@ -1,2 +1,1 @@
-﻿SA3D.SA2Event.Animation.SurfaceAnimationData.Write(SA3D.Common.IO.EndianStackWriter! writer, bool textureSequenceArray, SA3D.Modeling.Structs.PointerLUT! lut) -> uint
-static SA3D.SA2Event.Animation.SurfaceAnimationData.Read(SA3D.Common.IO.EndianStackReader! reader, uint address, bool textureSequenceArray, SA3D.Modeling.Structs.PointerLUT! lut) -> SA3D.SA2Event.Animation.SurfaceAnimationData!
+﻿
