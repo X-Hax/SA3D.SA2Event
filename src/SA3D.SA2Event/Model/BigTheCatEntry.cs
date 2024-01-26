@@ -50,19 +50,21 @@ namespace SA3D.SA2Event.Model
 		/// <returns>Pointer to the written array.</returns>
 		public uint WriteMotionArray(EndianStackWriter writer, Dictionary<EventMotion, uint> motionLUT, PointerLUT lut)
 		{
-			if(Motions.Count == 0)
-			{
-				return 0;
-			}
-
 			uint onWrite()
 			{
 				uint result = writer.PointerPosition;
 
-				foreach((Motion? nodeAnim, Motion? shapeAnim) in Motions)
+				if(Motions.Count == 0)
 				{
-					writer.WriteUInt(motionLUT.GetMotionKey(nodeAnim));
-					writer.WriteUInt(motionLUT.GetMotionKey(shapeAnim));
+					writer.WriteEmpty(4);
+				}
+				else
+				{
+					foreach((Motion? nodeAnim, Motion? shapeAnim) in Motions)
+					{
+						writer.WriteUInt(motionLUT.GetMotionKey(nodeAnim));
+						writer.WriteUInt(motionLUT.GetMotionKey(shapeAnim));
+					}
 				}
 
 				return result;
@@ -84,9 +86,8 @@ namespace SA3D.SA2Event.Model
 		public void Write(EndianStackWriter writer, PointerLUT lut)
 		{
 			uint modelAddr = 0;
-			uint motionAddr = 0;
 			if((Model != null && !lut.Nodes.TryGetAddress(Model, out modelAddr))
-				|| (Motions.Count > 0 && !lut.All.TryGetAddress(Motions, out motionAddr)))
+				|| !lut.All.TryGetAddress(Motions, out uint motionAddr))
 			{
 				throw new InvalidOperationException("Big the Cat content has not been written yet");
 			}

@@ -555,15 +555,22 @@ namespace SA3D.SA2Event.Model
 				{
 					uint result = writer.PointerPosition;
 
-					foreach(EventEntry entity in array)
+					if(scene.Entries.Count == 0)
 					{
-						if(Type == EventType.gc)
+						writer.WriteEmpty(4);
+					}
+					else
+					{
+						foreach(EventEntry entity in array)
 						{
-							entity.WriteGC(writer, motionLUT, lut);
-						}
-						else
-						{
-							entity.WriteDC(writer, lut);
+							if(Type == EventType.gc)
+							{
+								entity.WriteGC(writer, motionLUT, lut);
+							}
+							else
+							{
+								entity.WriteDC(writer, lut);
+							}
 						}
 					}
 

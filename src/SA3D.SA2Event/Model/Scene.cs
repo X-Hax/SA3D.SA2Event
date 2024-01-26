@@ -65,18 +65,19 @@ namespace SA3D.SA2Event.Model
 		/// <returns>Pointer to where the array was written.</returns>
 		public uint WriteCameraMotionArray(EndianStackWriter writer, Dictionary<EventMotion, uint> motionLUT, PointerLUT lut)
 		{
-			if(CameraAnimations.Count == 0)
-			{
-				return 0;
-			}
-
 			uint onWrite()
 			{
 				uint result = writer.PointerPosition;
-
-				foreach(EventMotion motion in CameraAnimations)
+				if(CameraAnimations.Count == 0)
 				{
-					writer.WriteUInt(motionLUT.GetMotionKey(motion));
+					writer.WriteEmpty(4);
+				}
+				else
+				{
+					foreach(EventMotion motion in CameraAnimations)
+					{
+						writer.WriteUInt(motionLUT.GetMotionKey(motion));
+					}
 				}
 
 				return result;
@@ -94,18 +95,20 @@ namespace SA3D.SA2Event.Model
 		/// <returns>Pointer to where the array was written.</returns>
 		public uint WriteParticleMotionArray(EndianStackWriter writer, Dictionary<EventMotion, uint> motionLUT, PointerLUT lut)
 		{
-			if(ParticleMotions.Count == 0)
-			{
-				return 0;
-			}
-
 			uint onWrite()
 			{
 				uint result = writer.PointerPosition;
 
-				foreach(Motion? motion in ParticleMotions)
+				if(ParticleMotions.Count == 0)
 				{
-					writer.WriteUInt(motionLUT.GetMotionKey(motion));
+					writer.WriteEmpty(4);
+				}
+				else
+				{
+					foreach(Motion? motion in ParticleMotions)
+					{
+						writer.WriteUInt(motionLUT.GetMotionKey(motion));
+					}
 				}
 
 				return result;
@@ -148,14 +151,11 @@ namespace SA3D.SA2Event.Model
 		/// <exception cref="InvalidOperationException"></exception>
 		public void Write(EndianStackWriter writer, PointerLUT lut)
 		{
-			uint entityAddr = 0;
-			uint camAnimAddr = 0;
-			uint particleAddr = 0;
 			uint bigAddr = 0;
 
-			if((Entries.Count > 0 && !lut.All.TryGetAddress(Entries, out entityAddr))
-				|| (CameraAnimations.Count > 0 && !lut.All.TryGetAddress(CameraAnimations, out camAnimAddr))
-				|| (ParticleMotions.Count > 0 && !lut.All.TryGetAddress(ParticleMotions, out particleAddr))
+			if((!lut.All.TryGetAddress(Entries, out uint entityAddr))
+				|| !lut.All.TryGetAddress(CameraAnimations, out uint camAnimAddr)
+				|| !lut.All.TryGetAddress(ParticleMotions, out uint particleAddr)
 				|| (BigTheCat != null && !lut.All.TryGetAddress(BigTheCat, out bigAddr)))
 			{
 				throw new InvalidOperationException("Scene Content has not yet been written!");
