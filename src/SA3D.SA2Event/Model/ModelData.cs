@@ -546,12 +546,7 @@ namespace SA3D.SA2Event.Model
 		{
 			foreach(Scene scene in Scenes)
 			{
-				if(scene.Entries.Count == 0)
-				{
-					continue;
-				}
-
-				lut.GetAddAddress(scene.Entries, (array) =>
+				_ = lut.GetAddAddress(scene.Entries, (array) =>
 				{
 					uint result = writer.PointerPosition;
 
@@ -585,7 +580,7 @@ namespace SA3D.SA2Event.Model
 					continue;
 				}
 
-				lut.GetAddAddress(scene.BigTheCat, (big) =>
+				_ = lut.GetAddAddress(scene.BigTheCat, (big) =>
 				{
 					uint result = writer.PointerPosition;
 					scene.BigTheCat.Write(writer, lut);
