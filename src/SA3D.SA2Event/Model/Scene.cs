@@ -49,9 +49,9 @@ namespace SA3D.SA2Event.Model
 		/// <param name="frameCount">Number of frames (at 30 fps) that the scene takes to play.</param>
 		public Scene(int frameCount)
 		{
-			Entries = new();
-			CameraAnimations = new();
-			ParticleMotions = new();
+			Entries = [];
+			CameraAnimations = [];
+			ParticleMotions = [];
 			FrameCount = frameCount;
 		}
 

@@ -167,7 +167,7 @@ namespace SA3D.SA2Event
 			byte[]? texlist = GetFile("texlist.prs");
 			byte[]? effects = GetFile("_0.prs");
 
-			Dictionary<EventLanguage, byte[]> languageSource = new();
+			Dictionary<EventLanguage, byte[]> languageSource = [];
 
 			foreach(EventLanguage language in Enum.GetValues<EventLanguage>())
 			{

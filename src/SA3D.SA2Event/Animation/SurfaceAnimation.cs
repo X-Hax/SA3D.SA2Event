@@ -48,7 +48,7 @@ namespace SA3D.SA2Event.Animation
 			TextureID = textureID;
 			TextureChunk = textureChunk;
 			StripChunk = polygonChunk;
-			TexcoordFrames = new();
+			TexcoordFrames = [];
 		}
 
 
@@ -112,7 +112,7 @@ namespace SA3D.SA2Event.Animation
 
 					if(!result.TexcoordFrames.TryGetValue(strip, out List<TexcoordFrame>? uvList))
 					{
-						uvList = new();
+						uvList = [];
 						result.TexcoordFrames.Add(strip, uvList);
 					}
 
@@ -190,7 +190,7 @@ namespace SA3D.SA2Event.Animation
 				+ (chunk.HasColors ? 4u : 0u))
 				+ triAttribSize;
 
-			Dictionary<uint, (int strip, int corner)> indexLut = new();
+			Dictionary<uint, (int strip, int corner)> indexLut = [];
 			for(int i = 0; i < chunk.Strips.Length; i++)
 			{
 				stripAddr += 2; // skip strip header

@@ -141,7 +141,7 @@ namespace SA3D.SA2Event.Animation
 		/// <returns>The event motions that were read.</returns>
 		public static EventMotion[] ReadMotions(EndianStackReader reader, ref uint address, PointerLUT lut)
 		{
-			List<EventMotion> motions = new();
+			List<EventMotion> motions = [];
 
 			while(reader.ReadULong(address) != 0)
 			{
@@ -176,7 +176,7 @@ namespace SA3D.SA2Event.Animation
 				motion.Camera?.Write(writer, lut);
 			}
 
-			Dictionary<EventMotion, uint> result = new();
+			Dictionary<EventMotion, uint> result = [];
 
 			foreach(EventMotion eventMotion in motions)
 			{

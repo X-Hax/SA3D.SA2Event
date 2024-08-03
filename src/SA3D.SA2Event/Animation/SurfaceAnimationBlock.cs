@@ -34,7 +34,7 @@ namespace SA3D.SA2Event.Animation
 		public SurfaceAnimationBlock(Node model)
 		{
 			Model = model;
-			Animations = new();
+			Animations = [];
 		}
 
 
@@ -189,7 +189,7 @@ namespace SA3D.SA2Event.Animation
 		/// <returns>The surface animation blocks that were read.</returns>
 		public static List<SurfaceAnimationBlock> ReadArray(EndianStackReader reader, uint address, PointerLUT lut)
 		{
-			List<SurfaceAnimationBlock> result = new();
+			List<SurfaceAnimationBlock> result = [];
 			while(Read(reader, address, lut) is SurfaceAnimationBlock block)
 			{
 				result.Add(block);

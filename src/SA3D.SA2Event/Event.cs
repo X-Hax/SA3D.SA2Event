@@ -57,7 +57,7 @@ namespace SA3D.SA2Event
 		{
 			ModelData = modelData;
 			Effects = effects;
-			LanguageTimestamps = new();
+			LanguageTimestamps = [];
 			TextureArchive = textureArchive;
 			ExternalTexlist = externalTexList;
 		}
@@ -124,7 +124,7 @@ namespace SA3D.SA2Event
 			byte[]? texList = WriteTexList();
 			byte[]? motionData = Type == EventType.gc ? EventMotion.WriteMotionsToBytes(motions) : null;
 
-			Dictionary<EventLanguage, byte[]> languageInfo = new();
+			Dictionary<EventLanguage, byte[]> languageInfo = [];
 			foreach(KeyValuePair<EventLanguage, EventLanguageTimestamps> item in LanguageTimestamps)
 			{
 				languageInfo.Add(item.Key, item.Value.WriteToBytes(bigEndian));

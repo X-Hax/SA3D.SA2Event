@@ -83,7 +83,7 @@ namespace SA3D.SA2Event.Model
 		public ModelData(EventType type)
 		{
 			Type = type;
-			Scenes = new();
+			Scenes = [];
 			Reflections = new();
 			TextureNameList = new("TEXLIST", new LabeledArray<TextureName>("TEXNAMEARRAY", 0));
 			TextureDimensions = Array.Empty<(short, short)>();
@@ -119,7 +119,7 @@ namespace SA3D.SA2Event.Model
 		/// <returns>The models.</returns>
 		public HashSet<Node> GetModels(bool includeOverlayUpgrades)
 		{
-			HashSet<Node> nodes = new();
+			HashSet<Node> nodes = [];
 
 			void AddModel(Node? node)
 			{
@@ -200,10 +200,10 @@ namespace SA3D.SA2Event.Model
 		/// <returns>The event motions.</returns>
 		public EventMotion[] GetEventMotions()
 		{
-			HashSet<EventMotion> result = new()
-			{
+			HashSet<EventMotion> result =
+			[
 				new(null, null)
-			};
+			];
 
 			void AddMotion(Motion? motion)
 			{
@@ -450,7 +450,7 @@ namespace SA3D.SA2Event.Model
 			}
 			else
 			{
-				motionLUT = new();
+				motionLUT = [];
 				uint index = 0;
 				foreach(EventMotion motion in motions)
 				{

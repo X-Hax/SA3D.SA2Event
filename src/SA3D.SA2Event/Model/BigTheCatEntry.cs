@@ -37,7 +37,7 @@ namespace SA3D.SA2Event.Model
 		public BigTheCatEntry(Node? model, int unknown)
 		{
 			Model = model;
-			Motions = new();
+			Motions = [];
 			Unknown = unknown;
 		}
 

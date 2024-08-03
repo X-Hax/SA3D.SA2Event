@@ -27,7 +27,7 @@ namespace SA3D.SA2Event.Language
 		/// <param name="encoding">The encoding to use.</param>
 		public SubtitleFile(Encoding encoding)
 		{
-			Texts = new();
+			Texts = [];
 			TextEncoding = encoding;
 		}
 
@@ -146,7 +146,7 @@ namespace SA3D.SA2Event.Language
 			uint index = reader.ReadUInt(address);
 			while(index != uint.MaxValue)
 			{
-				List<SubtitleText> subtitles = new();
+				List<SubtitleText> subtitles = [];
 				result.Texts.Add(index, subtitles);
 
 				uint stringListPtr = reader.ReadPointer(address + 4);

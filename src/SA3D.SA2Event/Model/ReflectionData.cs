@@ -26,7 +26,7 @@ namespace SA3D.SA2Event.Model
 		/// </summary>
 		public ReflectionData()
 		{
-			Reflections = new();
+			Reflections = [];
 		}
 
 

@@ -30,8 +30,8 @@ namespace SA3D.SA2Event.Animation
 		/// </summary>
 		public SurfaceAnimationData()
 		{
-			AnimationBlocks = new();
-			TextureSequences = new();
+			AnimationBlocks = [];
+			TextureSequences = [];
 		}
 
 
