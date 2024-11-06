@@ -78,32 +78,6 @@ namespace SA3D.SA2Event.Model
 		/// </summary>
 		public Node DisplayModel => (Model ?? GCModel) ?? throw new InvalidOperationException("No display model!");
 
-
-		/// <summary>
-		/// Automatically assigns animation attributes for animated scene entries.
-		/// </summary>
-		public void AutoAnimationAttributes()
-		{
-			if(Animation == null)
-			{
-				Attributes |= EventEntryAttribute.Scene_NoNodeAnimation;
-			}
-			else
-			{
-				Attributes &= ~EventEntryAttribute.Scene_NoNodeAnimation;
-			}
-
-			if(ShapeAnimation == null)
-			{
-				Attributes |= EventEntryAttribute.Scene_NoShapeAnimation;
-			}
-			else
-			{
-				Attributes &= ~EventEntryAttribute.Scene_NoShapeAnimation;
-			}
-		}
-
-
 		/// <summary>
 		/// Reads a dreamcast formatted event entry off an endian stack reader. Advances the address by the number of bytes read.
 		/// </summary>

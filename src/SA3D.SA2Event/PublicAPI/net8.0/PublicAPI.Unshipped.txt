@@ -1,1 +1,8 @@
-﻿
+﻿SA3D.SA2Event.Model.EventEntryAttribute.HasEnvironment = 1 -> SA3D.SA2Event.Model.EventEntryAttribute
+SA3D.SA2Event.Model.EventEntryAttribute.Light1 = 4 -> SA3D.SA2Event.Model.EventEntryAttribute
+SA3D.SA2Event.Model.EventEntryAttribute.Light2 = 8 -> SA3D.SA2Event.Model.EventEntryAttribute
+SA3D.SA2Event.Model.EventEntryAttribute.Light3 = 16 -> SA3D.SA2Event.Model.EventEntryAttribute
+SA3D.SA2Event.Model.EventEntryAttribute.Light4 = 32 -> SA3D.SA2Event.Model.EventEntryAttribute
+SA3D.SA2Event.Model.EventEntryAttribute.ModifierVolume = 64 -> SA3D.SA2Event.Model.EventEntryAttribute
+SA3D.SA2Event.Model.EventEntryAttribute.NoFogAndEasyDraw = 2 -> SA3D.SA2Event.Model.EventEntryAttribute
+SA3D.SA2Event.Model.EventEntryAttribute.UseSimple = 512 -> SA3D.SA2Event.Model.EventEntryAttribute

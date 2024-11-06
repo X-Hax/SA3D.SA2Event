@@ -8,49 +8,39 @@ namespace SA3D.SA2Event.Model
 	public enum EventEntryAttribute : uint
 	{
 		/// <summary>
-		/// Unknown functionality.
+		/// Has environment mapped materials, use Simple variant of draw function.
 		/// </summary>
-		Unk0 = Flag32.B0,
+		HasEnvironment = Flag32.B0,
 
 		/// <summary>
-		/// Animated scene: Entry has no morph motion.
+		/// Draw with fog disabled and use EasyDraw.
 		/// </summary>
-		Scene_NoShapeAnimation = Flag32.B1,
+		NoFogAndEasyDraw = Flag32.B1,
 
 		/// <summary>
-		/// Root scene: Enables light rendering on the surface.
+		/// Use multi-light 1.
 		/// </summary>
-		Root_EnableLighting = Flag32.B1,
+		Light1 = Flag32.B2,
 
 		/// <summary>
-		/// Unknown functionality.
+		/// Use multi-light 2.
 		/// </summary>
-		Unk2 = Flag32.B2,
+		Light2 = Flag32.B3,
 
 		/// <summary>
-		/// Animated scene: Entry has no node motion.
+		/// Use multi-light 3.
 		/// </summary>
-		Scene_NoNodeAnimation = Flag32.B3,
+		Light3 = Flag32.B4,
 
 		/// <summary>
-		/// Root scene: Disables shadow rendering on the surface.
+		/// Use multi-light 4.
 		/// </summary>
-		Root_DisableShadows = Flag32.B3,
+		Light4 = Flag32.B5,
 
 		/// <summary>
-		/// Unknown functionality.
+		/// Is a modifier volume and should use ModDraw.
 		/// </summary>
-		Unk4 = Flag32.B4,
-
-		/// <summary>
-		/// Unknown functionality.
-		/// </summary>
-		Unk5 = Flag32.B5,
-
-		/// <summary>
-		/// Unknown functionality.
-		/// </summary>
-		Unk6 = Flag32.B6,
+		ModifierVolume = Flag32.B6,
 
 		/// <summary>
 		/// Renders the entry in reflections.
@@ -63,8 +53,8 @@ namespace SA3D.SA2Event.Model
 		Blare = Flag32.B8,
 
 		/// <summary>
-		/// Unknown functionality.
+		/// Use regular Simple over any Multi or Easy variant
 		/// </summary>
-		Unk9 = Flag32.B9
+		UseSimple = Flag32.B9
 	}
 }
