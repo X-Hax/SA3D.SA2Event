@@ -57,7 +57,7 @@ namespace SA3D.SA2Event.Animation
 				camera = new(
 					frame.Position ?? default,
 					frame.Roll ?? 0,
-					frame.Angle ?? MathF.Tau / 4,
+					frame.Angle ?? (MathF.Tau / 4),
 					1,
 					100000,
 					dirX,

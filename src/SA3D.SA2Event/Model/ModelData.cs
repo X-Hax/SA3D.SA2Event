@@ -340,7 +340,7 @@ namespace SA3D.SA2Event.Model
 
 				ReflectionData reflectionControl = ReflectionData.Read(reader, reader.ReadPointer(0x10));
 
-				ModelData result = new(type, new(scenes), reflectionControl, textureNameList, textureDimensions);
+				ModelData result = new(type, [.. scenes], reflectionControl, textureNameList, textureDimensions);
 
 
 				uint blareAddr = reader.ReadPointer(0x14);
