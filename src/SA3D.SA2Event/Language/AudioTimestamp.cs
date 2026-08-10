@@ -1,4 +1,4 @@
-﻿using SA3D.Common.IO;
+﻿using Amicitia.IO.Binary;
 using System;
 
 namespace SA3D.SA2Event.Language
@@ -6,13 +6,8 @@ namespace SA3D.SA2Event.Language
 	/// <summary>
 	/// Audio replay timestamp.
 	/// </summary>
-	public struct AudioTimestamp : IFrame, IEquatable<AudioTimestamp>
+	public struct AudioTimestamp : IFrame, IEquatable<AudioTimestamp>, IBinarySerializable
 	{
-		/// <summary>
-		/// Size of the structure in bytes.
-		/// </summary>
-		public const uint StructSize = 72;
-
 		/// <summary>
 		/// Frame at which the audio shoul start playing.
 		/// </summary>
@@ -51,44 +46,30 @@ namespace SA3D.SA2Event.Language
 		}
 
 
-		/// <summary>
-		/// Writes the audio timestamp to an endian stack writer.
-		/// </summary>
-		/// <param name="writer">The writer to write to.</param>
-		/// <exception cref="InvalidOperationException"></exception>
-		public readonly void Write(EndianStackWriter writer)
+		/// <inheritdoc/>
+		public void Read(BinaryObjectReader reader)
 		{
-			writer.WriteUInt(Frame);
-			writer.WriteUShort(MasterListVoiceIndex);
-			writer.WriteUShort(AFSVoiceIndex);
+			Frame = reader.ReadUInt32();
+			MasterListVoiceIndex = reader.ReadUInt16();
+			AFSVoiceIndex = reader.ReadUInt16();
+			MusicName = reader.ReadString(StringBinaryFormat.FixedLength, 64);
+		}
+
+		/// <inheritdoc/>
+		public readonly void Write(BinaryObjectWriter writer)
+		{
+			writer.WriteUInt32(Frame);
+			writer.WriteUInt16(MasterListVoiceIndex);
+			writer.WriteUInt16(AFSVoiceIndex);
 
 			string musicname = MusicName ?? string.Empty;
 
 			if(musicname.Length > 64)
 			{
-				throw new InvalidOperationException("Filename too long! must be <= 16 characters long");
+				throw new InvalidOperationException("Music name too long! must be <= 64 characters long");
 			}
 
-			writer.WriteString(musicname);
-			if(musicname.Length < 64)
-			{
-				writer.WriteEmpty((uint)(64 - musicname.Length));
-			}
-		}
-
-		/// <summary>
-		/// Reads an audio timestamp off an endian stack reader.
-		/// </summary>
-		/// <param name="reader">The reader to read from.</param>
-		/// <param name="address">Address at which to start reading.</param>
-		/// <returns>The audio timestamp that was read.</returns>
-		public static AudioTimestamp Read(EndianStackReader reader, uint address)
-		{
-			return new(
-				reader.ReadUInt(address),
-				reader.ReadUShort(address + 4),
-				reader.ReadUShort(address + 6),
-				reader.ReadStringLimited(address + 8, 64, out _));
+			writer.WriteString(StringBinaryFormat.FixedLength, musicname, 64);
 		}
 
 

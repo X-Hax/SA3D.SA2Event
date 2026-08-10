@@ -22,9 +22,9 @@ namespace SA3D.SA2Event
 		public byte[] Model { get; }
 
 		/// <summary>
-		/// Motion data. Used in gamecube and ports. Vanilla filename is usually formatted like "e####motion.bin".
+		/// Animation data. Used in gamecube and ports. Vanilla filename is usually formatted like "e####motion.bin".
 		/// </summary>
-		public byte[]? Motion { get; }
+		public byte[]? Animations { get; }
 
 		/// <summary>
 		/// Decompressed texture archive. Vanilla filename is usually formatted like "e####texture.prs".
@@ -61,7 +61,7 @@ namespace SA3D.SA2Event
 		{
 			BaseFilepath = baseFilePath;
 			Model = model;
-			Motion = motion;
+			Animations = motion;
 			Textures = textures;
 			Texlist = texlist;
 			Effects = effects;
@@ -104,14 +104,14 @@ namespace SA3D.SA2Event
 
 				if(compress && compressfile)
 				{
-					data = PRS.CompressPRS(data);
+					data = PRS.Compress(data);
 				}
 
 				File.WriteAllBytes(filepath + append, data);
 			}
 
 			WriteFile(Model, ".prs", true);
-			WriteFile(Motion, "motion.bin", false);
+			WriteFile(Animations, "motion.bin", false);
 			WriteFile(Textures, "texture.prs", true);
 			WriteFile(Texlist, "texlist.prs", true);
 			WriteFile(Effects, "_0.prs", true);
@@ -143,7 +143,7 @@ namespace SA3D.SA2Event
 				byte[] result = File.ReadAllBytes(path);
 				if(Path.GetExtension(path).ToLower() == ".prs")
 				{
-					result = PRS.DecompressPRS(result);
+					result = PRS.DecompressBytes(result);
 				}
 
 				return result;

@@ -1,114 +1,83 @@
-﻿using SA3D.Common.IO;
-using SA3D.Modeling.Structs;
-using System;
-using System.Collections.Generic;
+﻿using Amicitia.IO.Binary;
+using SA3D.Common;
+using SA3D.Common.IO;
+using SA3D.Common.Lookup;
 
-namespace SA3D.SA2Event.Animation
+namespace SA3D.SA2Event.Model.AnimationData
 {
 	/// <summary>
 	/// Contains surface animation data.
 	/// </summary>
-	public class SurfaceAnimationData
+	public class SurfaceAnimationData : ILabel, IBinarySerializable<EventModelIOContext>
 	{
 		/// <summary>
-		/// Size of the structure in bytes.
+		/// Label prefix for <see cref="ChunkTextureAnimations"/>
 		/// </summary>
-		public const uint StructSize = 0xC;
+		public const string ChunkTextureAnimationsLabelPrefix = "ChunkTextureAnimations_";
+
+		/// <summary>
+		/// Label prefix for <see cref="TextureAnimationSequences"/>
+		/// </summary>
+		public const string TextureAnimationSequencesLabelPrefix = "TextureAnimationSequences_";
+
+
+		/// <inheritdoc/>
+		public string LabelPrefix => "SurfaceAnimationData_";
+
+		/// <inheritdoc/>
+		public string Label { get; set; }
 
 		/// <summary>
 		/// Animation blocks, one per model, in the data.
 		/// </summary>
-		public List<SurfaceAnimationBlock> AnimationBlocks { get; }
+		public LabeledArray<ChunkTextureAnimation>? ChunkTextureAnimations { get; set; }
 
 		/// <summary>
 		/// Texture animation sequences.
 		/// </summary>
-		public List<TextureAnimSequence> TextureSequences { get; }
+		public LabeledArray<TextureAnimationSequence>? TextureAnimationSequences { get; set; }
+
 
 		/// <summary>
-		/// Creates new surface animation data.
+		/// Creates a new, empty set of surface animation data
 		/// </summary>
 		public SurfaceAnimationData()
 		{
-			AnimationBlocks = [];
-			TextureSequences = [];
+			Label = LabelPrefix.GenerateIdentifier();
 		}
 
 
-		/// <summary>
-		/// Writes the surface animation data to an endian stack writer.
-		/// </summary>
-		/// <param name="writer">The writer to write to.</param>
-		/// <param name="textureSequenceArray">Whether to write all texture sequences as an array, otherwise only the first one is written.</param>
-		/// <param name="lut">Pointer refernces to utilize.</param>
-		/// <returns>The pointer at which the data was written.</returns>
-		/// <exception cref="InvalidOperationException"></exception>
-		public uint Write(EndianStackWriter writer, bool textureSequenceArray, PointerLUT lut)
+		/// <inheritdoc/>
+		public void Read(BinaryObjectReader reader, EventModelIOContext context)
 		{
-			uint blockAddress = SurfaceAnimationBlock.WriteBlockArray(writer, AnimationBlocks, lut);
+			ChunkTextureAnimations = reader.ReadLUTItemAtOffset<LabeledArray<ChunkTextureAnimation>>(reader.ReadOffsetValue(), context.OffsetLUT, ChunkTextureAnimationsLabelPrefix, (r, dst) => ChunkTextureAnimation.ReadArray(r, dst, context));
 
-			uint sequenceAddress = 0;
-			if(textureSequenceArray && TextureSequences.Count > 0)
+			if(context.EventType > EventType.dc)
 			{
-				sequenceAddress = writer.PointerPosition;
-				foreach(TextureAnimSequence item in TextureSequences)
-				{
-					item.Write(writer);
-				}
-			}
-
-			uint address = writer.PointerPosition;
-			writer.WriteUInt(blockAddress);
-
-			if(textureSequenceArray)
-			{
-				writer.WriteUInt(sequenceAddress);
-				writer.WriteInt(TextureSequences.Count);
-			}
-			else if(TextureSequences.Count > 0)
-			{
-				TextureSequences[0].Write(writer);
-			}
-
-			return address;
-		}
-
-		/// <summary>
-		/// Reads surface animation data off an endian stack reader.
-		/// </summary>
-		/// <param name="reader">The reader to read from.</param>
-		/// <param name="address">Address at which to start reading.</param>
-		/// <param name="textureSequenceArray">Whether the surface animations are stored in an array.</param>
-		/// <param name="lut">Pointer references to utilize.</param>
-		/// <returns>The data that was read.</returns>
-		public static SurfaceAnimationData Read(EndianStackReader reader, uint address, bool textureSequenceArray, PointerLUT lut)
-		{
-			SurfaceAnimationData result = new();
-
-			uint animBlockAddr = reader.ReadPointer(address);
-			while(SurfaceAnimationBlock.Read(reader, animBlockAddr, lut) is SurfaceAnimationBlock block)
-			{
-				result.AnimationBlocks.Add(block);
-				animBlockAddr += SurfaceAnimationBlock.StructSize;
-			}
-
-			if(textureSequenceArray)
-			{
-				uint tsAddr = reader.ReadPointer(address + 4);
-				uint tsCount = reader.ReadUInt(address + 8);
-				for(int i = 0; i < tsCount; i++)
-				{
-					result.TextureSequences.Add(TextureAnimSequence.Read(reader, ref tsAddr));
-				}
+				int textureAnimationSequences = reader.ReadInt32();
+				TextureAnimationSequences = reader.ReadLabeledObjectArrayOffset<TextureAnimationSequence>(textureAnimationSequences, TextureAnimationSequencesLabelPrefix, context.OffsetLUT);
 			}
 			else
 			{
-				uint tsAddr = address + 4;
-				result.TextureSequences.Add(TextureAnimSequence.Read(reader, ref tsAddr));
+				TextureAnimationSequences = new([reader.ReadObject<TextureAnimationSequence>()]);
 			}
-
-			return result;
 		}
 
+		/// <inheritdoc/>
+		public void Write(BinaryObjectWriter writer, EventModelIOContext context)
+		{
+			writer.WriteObjectOffset(ChunkTextureAnimations.EmptyNull(), (w, v) => ChunkTextureAnimation.WriteArray(w, v, context), context.OffsetLUT);
+
+			if(context.EventType > EventType.dc)
+			{
+				writer.WriteInt32(TextureAnimationSequences?.Length ?? 0);
+				writer.WriteObjectArrayOffset(TextureAnimationSequences, context.OffsetLUT);
+			}
+			else
+			{
+				TextureAnimationSequence sequence = TextureAnimationSequences?.Length > 0 ? TextureAnimationSequences[0] : default;
+				writer.WriteObject(sequence);
+			}
+		}
 	}
 }

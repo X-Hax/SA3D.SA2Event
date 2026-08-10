@@ -1,21 +1,32 @@
-﻿using SA3D.Common.IO;
+﻿using Amicitia.IO.Binary;
+using SA3D.Common;
+using SA3D.Common.IO;
+using SA3D.Common.Lookup;
 using SA3D.Modeling.Mesh.Chunk;
 using SA3D.Modeling.Mesh.Chunk.PolyChunks;
-using SA3D.Modeling.Mesh.Chunk.Structs;
-using SA3D.Modeling.Structs;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Numerics;
 
-namespace SA3D.SA2Event.Animation
+namespace SA3D.SA2Event.Model.AnimationData
 {
 	/// <summary>
-	/// Surface animation structures.
+	/// A single surface animation frame
 	/// </summary>
-	public class SurfaceAnimation
+	public class ChunkTextureAnimationFrame : ILabel, IBinarySerializable<EventModelIOContext>
 	{
+		/// <summary>
+		/// Label prefix for <see cref="TexcoordFrames"/>
+		/// </summary>
+		public const string TexcoordFramesLabelPrefix = "TexCoordFrames_";
+
+		/// <inheritdoc/>
+		public string LabelPrefix => "ChunkTextureAnimationFrame_";
+
+		/// <inheritdoc/>
+		public string Label { get; set; }
+
+
 		/// <summary>
 		/// Initial texture ID used. Determines which texture sequence to use.
 		/// </summary>
@@ -24,7 +35,7 @@ namespace SA3D.SA2Event.Animation
 		/// <summary>
 		/// Texture chunk that gets animated by texture sequences.
 		/// </summary>
-		public TextureChunk TextureChunk { get; set; }
+		public TextureChunk? TextureChunk { get; set; }
 
 		/// <summary>
 		/// Stripchunk of which the texture coordinates were animated.
@@ -34,227 +45,89 @@ namespace SA3D.SA2Event.Animation
 		/// <summary>
 		/// Texture coordinate frames. Key is the strip index.
 		/// </summary>
-		public Dictionary<int, List<TexcoordFrame>> TexcoordFrames { get; }
+		public LabeledArray<TexCoordFrame>? TexcoordFrames { get; set; }
 
 
 		/// <summary>
-		/// Creates a new surface animation.
+		/// Creates a new, empty frame
 		/// </summary>
-		/// <param name="textureID">Initial texture ID used. Determines which texture sequence to use.</param>
-		/// <param name="textureChunk">Texture chunk that gets animated by texture sequences.</param>
-		/// <param name="polygonChunk">Stripchunk of which the texture coordinates were animated.</param>
-		public SurfaceAnimation(int textureID, TextureChunk textureChunk, StripChunk? polygonChunk)
+		public ChunkTextureAnimationFrame()
 		{
-			TextureID = textureID;
-			TextureChunk = textureChunk;
-			StripChunk = polygonChunk;
-			TexcoordFrames = [];
+			Label = LabelPrefix.GenerateIdentifier();
 		}
 
 
-		/// <summary>
-		/// Reads surface animations off an endian stack reader.
-		/// </summary>
-		/// <param name="reader">The reader to read from.</param>
-		/// <param name="address">Address at which to start reading.</param>
-		/// <param name="lut">Pointer references to utilize.</param>
-		/// <returns></returns>
-		/// <exception cref="InvalidOperationException"></exception>
-		/// <exception cref="InvalidDataException"></exception>
-		public static SurfaceAnimation Read(EndianStackReader reader, uint address, PointerLUT lut)
+		/// <inheritdoc/>
+		public void Read(BinaryObjectReader reader, EventModelIOContext context)
 		{
-			int textureID = reader.ReadInt(address);
-			uint targetTexIDAddr = reader.ReadPointer(address + 4);
-			TextureChunk textureChunk =
-				(TextureChunk)(lut.PolyChunks.GetValue(targetTexIDAddr - 2)
-					?? throw new InvalidOperationException("Could not find uv animation texture chunk!"));
+			TextureID = reader.ReadInt32();
+			TextureChunk = (TextureChunk?)context.OffsetLUT.PolyChunks.GetValue(reader.ReadOffsetValue() - 2);
 
-			StripChunk? polyChunk = null;
-			uint polyChunkAddr = 0;
-			int uvDataLength = reader.ReadInt(address + 8);
-
-			if(reader.TryReadPointer(address + 0xC, out uint uvDataAddr) && uvDataLength > 0)
+			int texCoordFramesLength = reader.ReadInt32();
+			long uvDataOffset = reader.ReadOffsetValue();
+			if(texCoordFramesLength == 0 || uvDataOffset == reader.OffsetHandler.NullOffset)
 			{
-				// find the poly chunk
-				uint uvAddr = reader.ReadPointer(uvDataAddr);
-				Dictionary<uint, PolyChunk> dict = lut.PolyChunks.GetDictFrom();
-
-				polyChunkAddr = dict.Keys.Where(x => x < uvAddr).Max();
-				PolyChunk chunk = dict[polyChunkAddr];
-
-				if(polyChunkAddr + chunk.ByteSize < uvAddr)
-				{
-					throw new InvalidOperationException("The chunk used by the uv animation is not yet read!");
-				}
-				else if(chunk is not Modeling.Mesh.Chunk.PolyChunks.StripChunk)
-				{
-					throw new InvalidDataException("The poly chunk used by the surface animation is not a strip chunk!");
-				}
-
-				polyChunk = (StripChunk)chunk;
+				return;
 			}
 
-			SurfaceAnimation result = new(textureID, textureChunk, polyChunk);
-
-			if(polyChunk != null)
+			long stripChunkOffset;
+			using(reader.AtOffset(uvDataOffset))
 			{
-				Dictionary<uint, (int strip, int corner)> indexLut = GetUVIndexLut(polyChunkAddr, reader.ImageBase, polyChunk);
-
-				// reading the data
-				float multiplier = polyChunk.HasHDTexcoords ? 1f / 1023f : 1f / 255f;
-				for(int i = 0; i < uvDataLength; i++)
+				Dictionary<long, PolyChunk> dict = context.OffsetLUT.PolyChunks.GetDictFrom();
+				IEnumerable<long> offetsBefore = dict.Keys.Where(x => x < uvDataOffset);
+				if(!offetsBefore.Any())
 				{
-					uint uvAddr = reader.ReadUInt(uvDataAddr);
-					uvDataAddr += 4;
-					Vector2 texcoords = reader.ReadVector2(ref uvDataAddr, FloatIOType.Short) * multiplier;
-
-					(int strip, int corner) = indexLut[uvAddr];
-
-					if(!result.TexcoordFrames.TryGetValue(strip, out List<TexcoordFrame>? uvList))
-					{
-						uvList = [];
-						result.TexcoordFrames.Add(strip, uvList);
-					}
-
-					uvList.Add(new TexcoordFrame(corner, texcoords));
+					throw new InvalidOperationException("A surface animation references an either invalid or yet-to-be-read strip chunk!");
 				}
+
+				stripChunkOffset = offetsBefore.Max();
+				StripChunk = dict[stripChunkOffset] is StripChunk stripChunk
+					? stripChunk
+					: throw new InvalidOperationException("A surface animation references an either invalid or yet-to-be-read strip chunk!");
 			}
 
-			return result;
+			TexCoordFrameIOContext texcoordFrameContext = TexCoordFrameIOContext.CalculateFromChunk(StripChunk, stripChunkOffset);
+			TexcoordFrames = reader.ReadLabeledObjectArrayAtOffset<TexCoordFrame, TexCoordFrameIOContext>(uvDataOffset, texCoordFramesLength, TexcoordFramesLabelPrefix, texcoordFrameContext, context.OffsetLUT)
+				?? throw reader.ReadNullReference(nameof(ChunkTextureAnimationFrame), nameof(TexcoordFrames), uvDataOffset);
+
 		}
 
-		/// <summary>
-		/// Writes the surface animation to an endian stack writer.
-		/// </summary>
-		/// <param name="writer">The writer to write to.</param>
-		/// <param name="lut">Pointer references to utilize.</param>
-		/// <returns>Address at which the animations were written</returns>
-		/// <exception cref="InvalidOperationException"></exception>
-		public uint Write(EndianStackWriter writer, PointerLUT lut)
+		/// <inheritdoc/>
+		public void Write(BinaryObjectWriter writer, EventModelIOContext context)
 		{
-			uint onWrite()
+			writer.WriteInt32(TextureID);
+
+			if(TextureChunk == null)
 			{
-				uint uvDataAddr = 0;
-				if(StripChunk != null && TexcoordFrames.Count > 0)
-				{
-					if(!lut.PolyChunks.TryGetAddress(StripChunk, out uint polyChunkAddr))
-					{
-						throw new InvalidOperationException("Referenced UV animation data has not been written!");
-					}
-
-					uint[][] uvAddrLut = GetUVAddrLut(polyChunkAddr, StripChunk);
-
-					uvDataAddr = writer.PointerPosition;
-					float multiplier = StripChunk.HasHDTexcoords ? 1023f : 255f;
-
-					foreach(KeyValuePair<int, List<TexcoordFrame>> uvList in TexcoordFrames)
-					{
-						uint[] stripAddrLut = uvAddrLut[uvList.Key];
-						foreach(TexcoordFrame uv in uvList.Value)
-						{
-							writer.WriteUInt(stripAddrLut[uv.CornerIndex]);
-							writer.WriteVector2(uv.TexCoord * multiplier, FloatIOType.Short);
-						}
-					}
-				}
-
-				if(!lut.PolyChunks.TryGetAddress(TextureChunk, out uint textureChunkAddr))
-				{
-					throw new InvalidOperationException("Referenced UV animation data has not been written!");
-				}
-
-				uint result = writer.PointerPosition;
-
-				writer.WriteInt(TextureID);
-				writer.WriteUInt(textureChunkAddr + 2);
-				writer.WriteInt(TexcoordFrames.Count);
-				writer.WriteUInt(uvDataAddr);
-
-				return result;
+				writer.WriteOffsetValue(writer.OffsetHandler.NullOffset);
+			}
+			else if(!context.OffsetLUT.PolyChunks.TryGetOffset(TextureChunk, out long textureChunkOffset))
+			{
+				throw new InvalidOperationException("Referenced texture chunk has not been written!");
+			}
+			else
+			{
+				writer.WriteOffsetValue(textureChunkOffset + 2);
 			}
 
-			return lut.GetAddAddress(this, onWrite);
-		}
-
-
-		private static Dictionary<uint, (int strip, int corner)> GetUVIndexLut(uint chunkAddress, uint imageBase, StripChunk chunk)
-		{
-			// address + chunk header + texcoord offset
-			uint stripAddr = imageBase + chunkAddress + 6 + 2;
-
-			uint triAttribSize = 2u * (uint)chunk.TriangleAttributeCount;
-
-			uint structSize = (uint)(2u
-				+ (chunk.TexcoordCount * 4u)
-				+ (chunk.HasNormals ? 12u : 0u)
-				+ (chunk.HasColors ? 4u : 0u))
-				+ triAttribSize;
-
-			Dictionary<uint, (int strip, int corner)> indexLut = [];
-			for(int i = 0; i < chunk.Strips.Length; i++)
+			if(TexcoordFrames == null)
 			{
-				stripAddr += 2; // skip strip header
-				ChunkStrip strip = chunk.Strips[i];
-				int uvIndex = 0;
-
-				for(int j = 0; j < strip.Corners.Length; j++)
-				{
-					indexLut.Add(stripAddr, (i, uvIndex));
-
-					uvIndex++;
-					stripAddr += structSize;
-
-					if(j < 2)
-					{
-						stripAddr -= triAttribSize;
-					}
-				}
+				writer.WriteInt32(0);
+				writer.WriteOffsetValue(writer.OffsetHandler.NullOffset);
 			}
-
-			return indexLut;
-		}
-
-		private static uint[][] GetUVAddrLut(uint chunkAddress, StripChunk chunk)
-		{
-			if(chunk.TexcoordCount == 0)
+			else if(StripChunk == null)
 			{
-				throw new FormatException("Stripchunk has no texture coordinates!");
+				throw new InvalidOperationException("Cannot write texcoord frames without strip chunk!");
 			}
-
-			// address + chunk header + texcoord offset
-			uint stripAddr = chunkAddress + 6 + 2;
-
-			uint triAttribSize = 2u * (uint)chunk.TriangleAttributeCount;
-
-			uint structSize = (uint)(2u
-				+ (chunk.TexcoordCount * 4u)
-				+ (chunk.HasNormals ? 12u : 0u)
-				+ (chunk.HasColors ? 4u : 0u))
-				+ triAttribSize;
-
-			uint[][] result = new uint[chunk.Strips.Length][];
-			for(int i = 0; i < chunk.Strips.Length; i++)
+			else if(!context.OffsetLUT.PolyChunks.TryGetOffset(StripChunk, out long stripChunkOffset))
 			{
-				ChunkStrip strip = chunk.Strips[i];
-				stripAddr += 2; // skip strip header
-
-				uint[] addresses = new uint[strip.Corners.Length];
-
-				for(int j = 0; j < strip.Corners.Length; j++)
-				{
-					addresses[j] = stripAddr;
-					stripAddr += structSize;
-
-					if(j < 2)
-					{
-						stripAddr -= triAttribSize;
-					}
-				}
-
-				result[i] = addresses;
+				throw new InvalidOperationException("Referenced strip chunk has not been written!");
 			}
-
-			return result.ToArray();
+			else
+			{
+				TexCoordFrameIOContext texcoordFrameContext = TexCoordFrameIOContext.CalculateFromChunk(StripChunk, stripChunkOffset);
+				writer.WriteObjectArray(TexcoordFrames, texcoordFrameContext, context.OffsetLUT);
+			}
 		}
 	}
 }

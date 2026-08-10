@@ -1,24 +1,31 @@
-﻿using SA3D.Common.IO;
-using SA3D.Modeling.Structs;
+﻿using Amicitia.IO.Binary;
+using SA3D.Common;
+using SA3D.Common.IO;
+using SA3D.Common.Lookup;
 using System;
-using System.Collections.Generic;
 
 namespace SA3D.SA2Event.Model
 {
 	/// <summary>
 	/// Handles reflection planes.
 	/// </summary>
-	public class ReflectionData
+	public class ReflectionData : ILabel, IBinarySerializable<EventModelIOContext>
 	{
 		/// <summary>
-		/// Size of the structure in bytes.
+		/// Label prefix for <see cref="Reflections"/>
 		/// </summary>
-		public const uint StructSize = 0x88;
+		public const string ReflectionsLabelPrefix = "Reflections_";
+
+		/// <inheritdoc/>
+		public string LabelPrefix => "ReflectionData_";
+
+		/// <inheritdoc/>
+		public string Label { get; set; }
 
 		/// <summary>
 		/// All reflection planes part of the data.
 		/// </summary>
-		public List<Reflection> Reflections { get; set; }
+		public LabeledArray<Reflection> Reflections { get; set; }
 
 
 		/// <summary>
@@ -26,79 +33,55 @@ namespace SA3D.SA2Event.Model
 		/// </summary>
 		public ReflectionData()
 		{
-			Reflections = [];
+			Label = LabelPrefix.GenerateIdentifier();
+			Reflections = new(ReflectionsLabelPrefix.GenerateIdentifier(), 0);
 		}
 
 
-		/// <summary>
-		/// Writes the reflection data to an endian stack writer.
-		/// </summary>
-		/// <param name="writer">The writer to write to.</param>
-		/// <returns>The pointer to the written reflection data.</returns>
-		public uint Write(EndianStackWriter writer)
+		/// <inheritdoc/>
+		public void Read(BinaryObjectReader reader, EventModelIOContext context)
 		{
-			uint count = (uint)Math.Min(Reflections.Count, 32);
+			int reflectionCount = reader.ReadInt32();
 
-			uint quadAddr = 0;
-			if(count > 0)
-			{
-				quadAddr = writer.PointerPosition;
+			long transparencyOffset = reader.GetPositionOffset();
+			reader.Skip(0x80);
+			long reflectionsOffset = reader.ReadOffsetValue();
 
-				foreach(Reflection reflection in Reflections)
-				{
-					writer.WriteVector3(reflection.Vertex1);
-					writer.WriteVector3(reflection.Vertex2);
-					writer.WriteVector3(reflection.Vertex3);
-					writer.WriteVector3(reflection.Vertex4);
-				}
-			}
-
-			uint address = writer.PointerPosition;
-			writer.WriteUInt(count);
-			for(int i = 0; i < count; i++)
-			{
-				writer.WriteInt(Reflections[i].Transparency);
-			}
-
-			writer.WriteEmpty(4 * (32 - count));
-			writer.WriteUInt(quadAddr);
-
-			return address;
-		}
-
-		/// <summary>
-		/// Reads reflection data off an endian stack reader.
-		/// </summary>
-		/// <param name="reader">Reader to read from.</param>
-		/// <param name="address">Address at which to start reading.</param>
-		/// <returns>The reflection data that was read.</returns>
-		public static ReflectionData Read(EndianStackReader reader, uint address)
-		{
-			ReflectionData result = new();
-
-			uint reflectionCount = reader.ReadUInt(address);
 			if(reflectionCount == 0)
 			{
-				return result;
+				return;
 			}
 
-			uint quadAddr = reader.ReadPointer(address + 0x84);
-			uint transparencyAddr = address + 4;
-			for(int i = 0; i < reflectionCount; i++)
+			Reflections = reader.ReadLabeledObjectArrayAtOffset<Reflection, Reflection.IOMode>(reflectionsOffset, reflectionCount, ReflectionsLabelPrefix, Reflection.IOMode.Vertices, context.OffsetLUT)
+				?? throw reader.ReadNullReference(nameof(ReflectionData), nameof(Reflections));
+
+			using(reader.AtOffset(transparencyOffset))
 			{
-				Reflection reflection = new(
-					reader.ReadInt(transparencyAddr),
-					reader.ReadVector3(ref quadAddr),
-					reader.ReadVector3(ref quadAddr),
-					reader.ReadVector3(ref quadAddr),
-					reader.ReadVector3(ref quadAddr));
-
-				result.Reflections.Add(reflection);
-				transparencyAddr += 4;
+				for(int i = 0; i < Reflections.Length; i++)
+				{
+					// TODO: verify if this actually works
+					Reflections[i].Read(reader, Reflection.IOMode.Transparency);
+				}
 			}
-
-			return result;
 		}
 
+		/// <inheritdoc/>
+		public void Write(BinaryObjectWriter writer, EventModelIOContext context)
+		{
+			if(Reflections.Length > 32)
+			{
+				throw new InvalidOperationException("Breached the reflection plane limit of 32!");
+			}
+
+			writer.WriteInt32(Reflections.Length);
+			writer.WriteObjectArray(Reflections, Reflection.IOMode.Transparency);
+
+			if(Reflections.Length < 32)
+			{
+				writer.Skip((32 - Reflections.Length) * sizeof(float));
+			}
+
+			writer.WriteObjectArrayOffset(Reflections, context.OffsetLUT);
+		}
 	}
 }

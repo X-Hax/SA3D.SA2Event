@@ -1,6 +1,6 @@
-﻿using SA3D.Common.IO;
+﻿using Amicitia.IO.Binary;
+using SA3D.Common.IO;
 using SA3D.Modeling.ObjectData;
-using SA3D.Modeling.ObjectData.Enums;
 using SA3D.Modeling.Structs;
 using System;
 using System.Collections.Generic;
@@ -10,18 +10,13 @@ namespace SA3D.SA2Event.Model
 	/// <summary>
 	/// Upgrade model information. Renders a specific node on top of a target node.
 	/// </summary>
-	public struct OverlayUpgrade : IEquatable<OverlayUpgrade>
+	public struct OverlayUpgrade : IEquatable<OverlayUpgrade>, IBinarySerializable<EventModelIOContext>
 	{
-		/// <summary>
-		/// Size of the structure in bytes.
-		/// </summary>
-		public const uint StructSize = 20;
-
 		/// <summary>
 		/// Upgrade structure index to actual upgrade index.
 		/// </summary>
-		public static readonly int[] UpgradeEventLUT = new int[]
-		{
+		public static readonly int[] UpgradeEventLUT =
+		[
 			0, // sonic light shoes
             3, // sonic flame ring
             4, // sonic bounce bracelet
@@ -40,7 +35,7 @@ namespace SA3D.SA2Event.Model
             -2, // unused
             -2, // unused
             -2, // unused
-        };
+        ];
 
 		/// <summary>
 		/// Root node of the target nodes.
@@ -68,78 +63,36 @@ namespace SA3D.SA2Event.Model
 		public Node? Model2 { get; set; }
 
 
-		/// <summary>
-		/// Creates a new overlay upgrade.
-		/// </summary>
-		/// <param name="root">Root node of the target nodes.</param>
-		/// <param name="target1">First node at which a model should be rendered.</param>
-		/// <param name="model1">First model that should be rendered at the (first) target.</param>
-		/// <param name="target2">Second node at which a model should be rendered.</param>
-		/// <param name="model2">Second model that should be rendered at the (Second) target.</param>
-		public OverlayUpgrade(Node? root, Node? target1, Node? model1, Node? target2, Node? model2)
+		/// <inheritdoc/>
+		public void Read(BinaryObjectReader reader, EventModelIOContext context)
 		{
-			Root = root;
-			Target1 = target1;
-			Model1 = model1;
-			Target2 = target2;
-			Model2 = model2;
-		}
-
-
-		/// <summary>
-		/// Writes the models of the upgrade to an endian stack writer.
-		/// </summary>
-		/// <param name="writer">Writer to write to.</param>
-		/// <param name="lut">Pointer references to utilize.</param>
-		public readonly void WriteModels(EndianStackWriter writer, PointerLUT lut)
-		{
-			Model1?.Write(writer, ModelFormat.SA2, lut);
-			Model2?.Write(writer, ModelFormat.SA2, lut);
-		}
-
-
-		/// <summary>
-		/// Writes the overlay upgrade struct to an endian stack writer.
-		/// </summary>
-		/// <remarks>
-		/// Models needs to be written manually beforehand, optimally via <see cref="WriteModels"/>
-		/// </remarks>
-		/// <param name="writer">The writer to write to.</param>
-		/// <param name="lut">Pointer references to utilize.</param>
-		public readonly void Write(EndianStackWriter writer, PointerLUT lut)
-		{
-			writer.WriteUInt(Root.GetAddress(lut));
-			writer.WriteUInt(Target1.GetAddress(lut));
-			writer.WriteUInt(Model1.GetAddress(lut));
-			writer.WriteUInt(Target2.GetAddress(lut));
-			writer.WriteUInt(Model2.GetAddress(lut));
-		}
-
-		/// <summary>
-		/// Reads an overlay upgrade structure off an endian stack reader.
-		/// </summary>
-		/// <param name="reader">Reader to read from.</param>
-		/// <param name="address">Address at which to start reading.</param>
-		/// <param name="lut">Pointer references to utilize.</param>
-		/// <returns>The overlay upgrade that was read.</returns>
-		public static OverlayUpgrade Read(EndianStackReader reader, uint address, PointerLUT lut)
-		{
-			Node? ReadNode(uint offset)
+			IOContext modelContext = new()
 			{
-				if(reader.TryReadPointer(address + offset, out uint nodeAddr))
-				{
-					return Node.Read(reader, nodeAddr, ModelFormat.SA2, lut);
-				}
+				MeshFormat = Format.Chunk,
+				OffsetLUT = context.OffsetLUT
+			};
 
-				return null;
-			}
+			Root = reader.ReadObjectOffset<Node, IOContext>(modelContext, context.OffsetLUT);
+			Target1 = reader.ReadObjectOffset<Node, IOContext>(modelContext, context.OffsetLUT);
+			Model1 = reader.ReadObjectOffset<Node, IOContext>(modelContext, context.OffsetLUT);
+			Target2 = reader.ReadObjectOffset<Node, IOContext>(modelContext, context.OffsetLUT);
+			Model2 = reader.ReadObjectOffset<Node, IOContext>(modelContext, context.OffsetLUT);
+		}
 
-			return new(
-			   ReadNode(0),
-			   ReadNode(4),
-			   ReadNode(8),
-			   ReadNode(12),
-			   ReadNode(16));
+		/// <inheritdoc/>
+		public void Write(BinaryObjectWriter writer, EventModelIOContext context)
+		{
+			IOContext modelContext = new()
+			{
+				MeshFormat = Format.Chunk,
+				OffsetLUT = context.OffsetLUT
+			};
+
+			writer.WriteObjectOffset(Root, modelContext, context.OffsetLUT);
+			writer.WriteObjectOffset(Target1, modelContext, context.OffsetLUT);
+			writer.WriteObjectOffset(Model1, modelContext, context.OffsetLUT);
+			writer.WriteObjectOffset(Target2, modelContext, context.OffsetLUT);
+			writer.WriteObjectOffset(Model2, modelContext, context.OffsetLUT);
 		}
 
 
@@ -198,5 +151,6 @@ namespace SA3D.SA2Event.Model
 
 			return "" + GetChar(Root) + GetChar(Target1) + GetChar(Model1) + GetChar(Target2) + GetChar(Model2);
 		}
+
 	}
 }

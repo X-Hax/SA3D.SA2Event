@@ -1,18 +1,13 @@
-﻿using SA3D.Common.IO;
+﻿using Amicitia.IO.Binary;
 using System;
 
-namespace SA3D.SA2Event.Animation
+namespace SA3D.SA2Event.Model.AnimationData
 {
 	/// <summary>
 	/// Texture sequence specification for looping through a specific number of textures.
 	/// </summary>
-	public struct TextureAnimSequence : IEquatable<TextureAnimSequence>
+	public struct TextureAnimationSequence : IEquatable<TextureAnimationSequence>, IBinarySerializable
 	{
-		/// <summary>
-		/// Size of the structure in bytes.
-		/// </summary>
-		public const uint StructSize = 8;
-
 		/// <summary>
 		/// Texture index to start at.
 		/// </summary>
@@ -23,49 +18,26 @@ namespace SA3D.SA2Event.Animation
 		/// </summary>
 		public int TextureCount { get; set; }
 
-		/// <summary>
-		/// Creates a new sequence.
-		/// </summary>
-		/// <param name="textureID">Texture index to start at.</param>
-		/// <param name="textureCount">Number of textures in the sequence.</param>
-		public TextureAnimSequence(int textureID, int textureCount)
+
+		/// <inheritdoc/>
+		public void Read(BinaryObjectReader reader)
 		{
-			TextureID = textureID;
-			TextureCount = textureCount;
+			TextureID = reader.ReadInt32();
+			TextureCount = reader.ReadInt32();
 		}
 
-
-		/// <summary>
-		/// Writes a texture anim sequence to an endian stack writer.
-		/// </summary>
-		/// <param name="writer">The writer to write to.</param>
-		public readonly void Write(EndianStackWriter writer)
+		/// <inheritdoc/>
+		public readonly void Write(BinaryObjectWriter writer)
 		{
-			writer.WriteInt(TextureID);
-			writer.WriteInt(TextureCount);
-		}
-
-		/// <summary>
-		/// Reads a texture anim sequence off an endian stack reader. Advances the address by the number of bytes read.
-		/// </summary>
-		/// <param name="reader">The reader to read from.</param>
-		/// <param name="address">Address at which to start reading.</param>
-		/// <returns>The texture anim sequence that was read.</returns>
-		public static TextureAnimSequence Read(EndianStackReader reader, ref uint address)
-		{
-			TextureAnimSequence result = new(
-				reader.ReadInt(address),
-				reader.ReadInt(address + 4));
-
-			address += 8;
-			return result;
+			writer.WriteInt32(TextureID);
+			writer.WriteInt32(TextureCount);
 		}
 
 
 		/// <inheritdoc/>
 		public override readonly bool Equals(object? obj)
 		{
-			return obj is TextureAnimSequence sequence &&
+			return obj is TextureAnimationSequence sequence &&
 				   TextureID == sequence.TextureID &&
 				   TextureCount == sequence.TextureCount;
 		}
@@ -76,7 +48,7 @@ namespace SA3D.SA2Event.Animation
 			return HashCode.Combine(TextureID, TextureCount);
 		}
 
-		readonly bool IEquatable<TextureAnimSequence>.Equals(TextureAnimSequence other)
+		readonly bool IEquatable<TextureAnimationSequence>.Equals(TextureAnimationSequence other)
 		{
 			return Equals(other);
 		}
@@ -87,7 +59,7 @@ namespace SA3D.SA2Event.Animation
 		/// <param name="left">Lefthand texture sequence.</param>
 		/// <param name="right">Righthand texture sequence.</param>
 		/// <returns>Whether the two texture sequences are equal</returns>
-		public static bool operator ==(TextureAnimSequence left, TextureAnimSequence right)
+		public static bool operator ==(TextureAnimationSequence left, TextureAnimationSequence right)
 		{
 			return left.Equals(right);
 		}
@@ -98,7 +70,7 @@ namespace SA3D.SA2Event.Animation
 		/// <param name="left">Lefthand texture sequence.</param>
 		/// <param name="right">Righthand texture sequence.</param>
 		/// <returns>Whether the two texture sequences are inequal</returns>
-		public static bool operator !=(TextureAnimSequence left, TextureAnimSequence right)
+		public static bool operator !=(TextureAnimationSequence left, TextureAnimationSequence right)
 		{
 			return !(left == right);
 		}

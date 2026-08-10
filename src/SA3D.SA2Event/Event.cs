@@ -1,10 +1,12 @@
-﻿using SA3D.Archival;
+﻿using Amicitia.IO.Binary;
+using Amicitia.IO.Streams;
+using SA3D.Archival;
 using SA3D.Common.IO;
-using SA3D.SA2Event.Animation;
+using SA3D.Modeling.TexName;
 using SA3D.SA2Event.Effects;
 using SA3D.SA2Event.Language;
 using SA3D.SA2Event.Model;
-using SA3D.Texturing.Texname;
+using SA3D.SA2Event.Model.AnimationData;
 using System.Collections.Generic;
 using System.IO;
 
@@ -18,7 +20,7 @@ namespace SA3D.SA2Event
 		/// <summary>
 		/// Type of the event.
 		/// </summary>
-		public EventType Type => ModelData.Type;
+		public EventType Type => ModelData.EventType;
 
 		/// <summary>
 		/// Model, animation and more data.
@@ -38,7 +40,7 @@ namespace SA3D.SA2Event
 		/// <summary>
 		/// Texture archive. Should be either PAK, PVM or GVM.
 		/// </summary>
-		public Archive? TextureArchive { get; set; }
+		public IArchive? TextureArchive { get; set; }
 
 		/// <summary>
 		/// External texture name list.
@@ -53,7 +55,7 @@ namespace SA3D.SA2Event
 		/// <param name="effects">Effect data, such as particles, lights, timestamps, etc.</param>
 		/// <param name="textureArchive">Archive storing texture files.</param>
 		/// <param name="externalTexList">External texture name list.</param>
-		public Event(ModelData modelData, EventEffects? effects, Archive? textureArchive, TextureNameList? externalTexList)
+		public Event(ModelData modelData, EventEffects? effects, IArchive? textureArchive, TextureNameList? externalTexList)
 		{
 			ModelData = modelData;
 			Effects = effects;
@@ -70,30 +72,25 @@ namespace SA3D.SA2Event
 		/// <returns>The event that was read.</returns>
 		public static Event ReadFromSource(EventSource source)
 		{
-			ModelData mainData = ModelData.Read(source);
-			bool bigEndian = mainData.Type.GetBigEndian();
+			using MemoryStream? animationStream = source.Animations == null ? null : new(source.Animations);
+			BinaryObjectReader? animationReader = animationStream == null ? null : new(animationStream, StreamOwnership.Retain, Endianness.Big);
+			EventModelIOContext context = EventModelIOContext.CreateForReading(animationReader);
+			ModelData modelData = FileUtil.ReadFile<ModelData, EventModelIOContext>(source.Model, context);
 
-			Archive? archive = source.Textures == null ? null : Archive.ReadArchive(source.Textures, 0);
-			EventEffects? effects = EventEffects.ReadFromEventSource(source, bigEndian);
-
-			TextureNameList? externalTexList = null;
-			if(source.Texlist != null)
+			IArchive? archive = null;
+			if(source.Textures != null && !IArchive.TryReadArchiveFromBytes(source.Textures, out archive, PRSDetectionMode.Never))
 			{
-				using(EndianStackReader texListReader = new(source.Texlist, mainData.Type.GetTextureImageBase(), bigEndian))
-				{
-					externalTexList = TextureNameList.Read(texListReader, texListReader.ReadPointer(0), new());
-				}
+				throw new InvalidDataException("Failed to read texture data!");
 			}
 
-			Event result = new(mainData, effects, archive, externalTexList);
+			EventEffects? effects = source.Effects?.ReadFile<EventEffects, EventType>(context.EventType);
+			TextureNameList? externalTexList = source.Texlist?.ReadFile<EventTextureNameListFile, EventType>(context.EventType)?.TextureNames;
+			Event result = new(modelData, effects, archive, externalTexList);
 
 			foreach(KeyValuePair<EventLanguage, byte[]> item in source.LanguageTimestamps)
 			{
-				// language and effect files have no pointers, so no need for an image base
-				using(EndianStackReader reader = new(item.Value, 0, bigEndian))
-				{
-					result.LanguageTimestamps.Add(item.Key, EventLanguageTimestamps.Read(reader));
-				}
+				EventLanguageTimestamps timestamps = FileUtil.ReadFile<EventLanguageTimestamps, EventType>(item.Value, context.EventType);
+				result.LanguageTimestamps.Add(item.Key, timestamps);
 			}
 
 			return result;
@@ -116,67 +113,33 @@ namespace SA3D.SA2Event
 		/// <returns>The written event source.</returns>
 		public EventSource WriteToSource()
 		{
-			bool bigEndian = Type.GetBigEndian();
+			EventModelIOContext context = EventModelIOContext.CreateForWriting();
+			context.EventType = Type;
 
-			byte[] mainData = ModelData.WriteToBytes(out EventMotion[] motions);
-			byte[]? effects = Effects?.WriteToBytes(bigEndian);
-			byte[]? textures = TextureArchive?.WriteArchiveToBytes();
-			byte[]? texList = WriteTexList();
-			byte[]? motionData = Type == EventType.gc ? EventMotion.WriteMotionsToBytes(motions) : null;
+			byte[] modelData = ModelData.WriteFileToBytes(context);
+			byte[]? effects = Effects?.WriteFileToBytes(context.EventType);
+			byte[]? textures = TextureArchive?.WriteToBytes();
+
+			byte[]? texList = ExternalTexlist == null ? null : new EventTextureNameListFile(ExternalTexlist).WriteFileToBytes(context.EventType);
+			byte[]? motionData = context.EventType == EventType.gc ? new EventAnimationFile([.. context.OutputAnimations!]).WriteToBytes() : null;
 
 			Dictionary<EventLanguage, byte[]> languageInfo = [];
 			foreach(KeyValuePair<EventLanguage, EventLanguageTimestamps> item in LanguageTimestamps)
 			{
-				languageInfo.Add(item.Key, item.Value.WriteToBytes(bigEndian));
+				languageInfo.Add(item.Key, item.Value.WriteFileToBytes(context.EventType));
 			}
 
-			return new EventSource(null, mainData, motionData, textures, texList, effects, languageInfo);
+			return new EventSource(null, modelData, motionData, textures, texList, effects, languageInfo);
 		}
 
 		/// <summary>
-		/// Writes the event out as multiple files.
+		/// Write the event out as files
 		/// </summary>
-		/// <param name="filepath">Path to the model file or the base file path.</param>
-		public void WriteToFiles(string filepath)
+		/// <param name="filepath">The file path to the main file</param>
+		/// <param name="compress">Whether to compress the event data</param>
+		public void WriteToFiles(string filepath, bool compress = true)
 		{
-			WriteToSource().WriteToFiles(filepath);
-		}
-
-		private byte[]? WriteTexList()
-		{
-			if(ExternalTexlist == null)
-			{
-				return null;
-			}
-
-			using(MemoryStream stream = new())
-			{
-				EndianStackWriter writer = new(stream);
-
-				switch(Type)
-				{
-					case EventType.dcbeta:
-					case EventType.dc:
-						writer.ImageBase = 0xCBC0000;
-						break;
-					case EventType.dcgc:
-						writer.PushBigEndian(true);
-						writer.ImageBase = 0x818BFE60;
-						break;
-					default:
-					case EventType.gc:
-						writer.PushBigEndian(true);
-						break;
-				}
-
-				writer.WriteEmpty(4);
-				uint addr = ExternalTexlist.Write(writer, new());
-				writer.SeekStart();
-				writer.WriteUInt(addr);
-				writer.SeekEnd();
-
-				return stream.ToArray();
-			}
+			WriteToSource().WriteToFiles(filepath, compress);
 		}
 	}
 }

@@ -1,13 +1,32 @@
-﻿using System;
+﻿using Amicitia.IO.Binary;
+using SA3D.Common.IO;
+using System;
 using System.Numerics;
+using static SA3D.SA2Event.Model.Reflection;
 
 namespace SA3D.SA2Event.Model
 {
 	/// <summary>
 	/// A single reflection plane.
 	/// </summary>
-	public struct Reflection : IEquatable<Reflection>
+	public struct Reflection : IEquatable<Reflection>, IBinarySerializable<IOMode>
 	{
+		/// <summary>
+		/// What part of the reflection should be read/written
+		/// </summary>
+		public enum IOMode
+		{
+			/// <summary>
+			/// <see cref="Transparency"/>
+			/// </summary>
+			Transparency,
+
+			/// <summary>
+			/// <see cref="Vertex1"/>, <see cref="Vertex2"/>, <see cref="Vertex3"/> and <see cref="Vertex4"/>
+			/// </summary>
+			Vertices
+		}
+
 		/// <summary>
 		/// Transparency of the reflection.
 		/// </summary>
@@ -34,21 +53,36 @@ namespace SA3D.SA2Event.Model
 		public Vector3 Vertex4 { get; set; }
 
 
-		/// <summary>
-		/// Creates a new reflection
-		/// </summary>
-		/// <param name="transparency">Transparency of the reflection.</param>
-		/// <param name="vertex1">First world space position of the reflection plane.</param>
-		/// <param name="vertex2">Second world space position of the reflection plane.</param>
-		/// <param name="vertex3">Third world space position of the reflection plane.</param>
-		/// <param name="vertex4">Fourth world space position of the reflection plane.</param>
-		public Reflection(int transparency, Vector3 vertex1, Vector3 vertex2, Vector3 vertex3, Vector3 vertex4)
+		/// <inheritdoc/>
+		public void Read(BinaryObjectReader reader, IOMode mode)
 		{
-			Transparency = transparency;
-			Vertex1 = vertex1;
-			Vertex2 = vertex2;
-			Vertex3 = vertex3;
-			Vertex4 = vertex4;
+			if(mode == IOMode.Transparency)
+			{
+				Transparency = reader.ReadInt32();
+			}
+			else
+			{
+				Vertex1 = reader.ReadVector3();
+				Vertex2 = reader.ReadVector3();
+				Vertex3 = reader.ReadVector3();
+				Vertex4 = reader.ReadVector3();
+			}
+		}
+
+		/// <inheritdoc/>
+		public readonly void Write(BinaryObjectWriter writer, IOMode mode)
+		{
+			if(mode == IOMode.Transparency)
+			{
+				writer.WriteInt32(Transparency);
+			}
+			else
+			{
+				writer.WriteVector3(Vertex1);
+				writer.WriteVector3(Vertex2);
+				writer.WriteVector3(Vertex3);
+				writer.WriteVector3(Vertex4);
+			}
 		}
 
 

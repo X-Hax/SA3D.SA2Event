@@ -1,203 +1,99 @@
-﻿using SA3D.Common.IO;
+﻿using Amicitia.IO.Binary;
+using SA3D.Common;
+using SA3D.Common.IO;
+using SA3D.Common.Lookup;
 using SA3D.Modeling.ObjectData;
-using SA3D.Modeling.Structs;
-using System;
 using System.Collections.Generic;
 
-namespace SA3D.SA2Event.Animation
+namespace SA3D.SA2Event.Model.AnimationData
 {
 	/// <summary>
 	/// A block of surface animations targetting a specific model.
 	/// </summary>
-	public class SurfaceAnimationBlock
+	public class ChunkTextureAnimation : ILabel, IBinarySerializable<EventModelIOContext>
 	{
 		/// <summary>
-		/// Size of the structure in bytes.
+		/// Label prefix for <see cref="Frames"/>
 		/// </summary>
-		public const uint StructSize = 0xC;
+		public const string FramesLabelPrefix = "Frames_";
+
+		/// <inheritdoc/>
+		public string LabelPrefix => "ChunkTextureAnimation_";
+
+		/// <inheritdoc/>
+		public string Label { get; set; }
 
 		/// <summary>
 		/// The targeted model.
 		/// </summary>
-		public Node Model { get; set; }
+		public Node? Model { get; set; }
 
 		/// <summary>
 		/// Animations contained in the block.
 		/// </summary>
-		public List<SurfaceAnimation?> Animations { get; }
+		public LabeledArray<ChunkTextureAnimationFrame?>? Frames { get; set; }
 
 
 		/// <summary>
-		/// Creates new surface animations.
+		/// Creates a new, empty chunk texture animation
 		/// </summary>
-		/// <param name="model">The targeted model.</param>
-		public SurfaceAnimationBlock(Node model)
+		public ChunkTextureAnimation()
 		{
-			Model = model;
-			Animations = [];
+			Label = LabelPrefix.GenerateIdentifier();
 		}
 
 
-		/// <summary>
-		/// Writes the animations to an endian stack writer.
-		/// </summary>
-		/// <param name="writer">The writer to write to.</param>
-		/// <param name="lut">Pointer references to utilize.</param>
-		public void WriteAnimations(EndianStackWriter writer, PointerLUT lut)
+		/// <inheritdoc/>
+		public void Read(BinaryObjectReader reader, EventModelIOContext context)
 		{
-			foreach(SurfaceAnimation? anim in Animations)
+			Modeling.Structs.IOContext modelContext = new()
 			{
-				anim?.Write(writer, lut);
-			}
+				MeshFormat = Modeling.Structs.Format.Chunk,
+				OffsetLUT = context.OffsetLUT
+			};
+
+			Model = reader.ReadObjectOffset<Node, Modeling.Structs.IOContext>(modelContext);
+
+			int frameCount = reader.ReadInt32();
+			Frames = reader.ReadLabeledObjectArrayOffset(
+				r => r.ReadObjectOffset<ChunkTextureAnimationFrame, EventModelIOContext>(context, context.OffsetLUT),
+				frameCount, FramesLabelPrefix, context.OffsetLUT
+			);
 		}
 
-		/// <summary>
-		/// Write the animation list to an endian stack writer.
-		/// </summary>
-		/// <param name="writer">The writer to write to.</param>
-		/// <param name="lut">Pointer references to utilize.</param>
-		/// <returns>The address at which the animations were written.</returns>
-		/// <exception cref="InvalidOperationException"></exception>
-		public uint WriteAnimationList(EndianStackWriter writer, PointerLUT lut)
+		internal static void ReadArray(BinaryObjectReader reader, LabeledArray<ChunkTextureAnimation> result, EventModelIOContext context)
 		{
-			uint onWrite()
+			List<ChunkTextureAnimation> animations = [];
+			while(reader.ReadObjectOffset<ChunkTextureAnimation, EventModelIOContext>(context, context.OffsetLUT) is ChunkTextureAnimation animation)
 			{
-				uint result = writer.PointerPosition;
-
-				foreach(SurfaceAnimation? anim in Animations)
-				{
-					if(anim == null)
-					{
-						writer.WriteEmpty(4);
-					}
-					else if(lut.All.TryGetAddress(anim, out uint animAddr))
-					{
-						writer.WriteUInt(animAddr);
-					}
-					else
-					{
-						throw new InvalidOperationException("Surface animation has not been written(?)");
-					}
-				}
-
-				return result;
+				animations.Add(animation);
 			}
 
-			return lut.GetAddAddress(Animations, onWrite);
+			result.Array = [.. animations];
 		}
 
-		/// <summary>
-		/// Writes the block header to an endian stack writer.
-		/// </summary>
-		/// <param name="writer">The writer to write to.</param>
-		/// <param name="lut">Pointer references to utilize.</param>
-		/// <exception cref="InvalidOperationException"></exception>
-		public void WriteBlock(EndianStackWriter writer, PointerLUT lut)
+		/// <inheritdoc/>
+		public void Write(BinaryObjectWriter writer, EventModelIOContext context)
 		{
-			if(!lut.Nodes.TryGetAddress(Model, out uint modelAddr))
+			Modeling.Structs.IOContext modelContext = new()
 			{
-				throw new InvalidOperationException("Animation block model has not been written!");
-			}
+				MeshFormat = Modeling.Structs.Format.Chunk,
+				OffsetLUT = context.OffsetLUT
+			};
 
-			if(!lut.All.TryGetAddress(Animations, out uint animAddr))
-			{
-				throw new InvalidOperationException("UV animation list has not been written!");
-			}
-
-			writer.WriteUInt(modelAddr);
-			writer.WriteInt(Animations.Count);
-			writer.WriteUInt(animAddr);
+			writer.WriteObjectOffset(Model, modelContext, context.OffsetLUT);
+			writer.WriteInt32(Frames?.Length ?? 0);
+			writer.WriteObjectArrayOffset((w, v) => w.WriteObjectOffset(v, context, context.OffsetLUT), Frames, context.OffsetLUT);
 		}
 
-		/// <summary>
-		/// Writes an array of surface animation blocks to an endian stack writer.
-		/// </summary>
-		/// <param name="writer">The writer to write to.</param>
-		/// <param name="blocks">The blocks to write.</param>
-		/// <param name="lut">Pointer references to utilize.</param>
-		/// <returns></returns>
-		public static uint WriteBlockArray(EndianStackWriter writer, IEnumerable<SurfaceAnimationBlock> blocks, PointerLUT lut)
+		internal static void WriteArray(BinaryObjectWriter writer, IEnumerable<ChunkTextureAnimation> animations, EventModelIOContext context)
 		{
-			foreach(SurfaceAnimationBlock? block in blocks)
+			foreach(ChunkTextureAnimation animation in animations)
 			{
-				block?.WriteAnimations(writer, lut);
+				writer.WriteObjectOffset(animation, context, context.OffsetLUT);
 			}
 
-			foreach(SurfaceAnimationBlock? block in blocks)
-			{
-				block?.WriteAnimationList(writer, lut);
-			}
-
-			uint result = writer.PointerPosition;
-			foreach(SurfaceAnimationBlock block in blocks)
-			{
-				block.WriteBlock(writer, lut);
-			}
-
-			writer.WriteEmpty(StructSize);
-
-			return result;
+			writer.WriteOffsetValue(writer.OffsetHandler.NullOffset);
 		}
-
-
-		/// <summary>
-		/// Reads a surface animation block off an endian stack reader. Returns null if empty/marks end.
-		/// </summary>
-		/// <param name="reader">The reader to read from.</param>
-		/// <param name="address">Address at which to start reading.</param>
-		/// <param name="lut">Pointer references to utilize.</param>
-		/// <returns>The surface animation block that was read.</returns>
-		public static SurfaceAnimationBlock? Read(EndianStackReader reader, uint address, PointerLUT lut)
-		{
-			if(!reader.TryReadPointer(address, out uint modelAddr))
-			{
-				return null;
-			}
-
-			if(!lut.Nodes.TryGetValue(modelAddr, out Node? animModel))
-			{
-				throw new InvalidOperationException("Animation block model has not been read!");
-			}
-
-			SurfaceAnimationBlock result = new(animModel);
-
-			if(reader.TryReadPointer(address + 8, out uint animationAddr))
-			{
-				int animCount = reader.ReadInt(address + 4);
-				for(int i = 0; i < animCount; i++)
-				{
-					SurfaceAnimation? anim = null;
-					if(reader.TryReadPointer(animationAddr, out uint animEntryAddr))
-					{
-						anim = SurfaceAnimation.Read(reader, animEntryAddr, lut);
-					}
-
-					result.Animations.Add(anim);
-					animationAddr += 4;
-				}
-			}
-
-			return result;
-		}
-
-		/// <summary>
-		/// Reads an array of surface animation blocks off an endian stack reader.
-		/// </summary>
-		/// <param name="reader">The reader to read from.</param>
-		/// <param name="address">Address at which to start reading.</param>
-		/// <param name="lut">Pointer references to utilize.</param>
-		/// <returns>The surface animation blocks that were read.</returns>
-		public static List<SurfaceAnimationBlock> ReadArray(EndianStackReader reader, uint address, PointerLUT lut)
-		{
-			List<SurfaceAnimationBlock> result = [];
-			while(Read(reader, address, lut) is SurfaceAnimationBlock block)
-			{
-				result.Add(block);
-				address += StructSize;
-			}
-
-			return result;
-		}
-
 	}
 }

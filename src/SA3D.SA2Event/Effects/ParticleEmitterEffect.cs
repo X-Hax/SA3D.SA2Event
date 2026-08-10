@@ -1,4 +1,5 @@
-﻿using SA3D.Common.IO;
+﻿using Amicitia.IO.Binary;
+using SA3D.Common.IO;
 using SA3D.Modeling.Structs;
 using System;
 using System.Numerics;
@@ -8,13 +9,8 @@ namespace SA3D.SA2Event.Effects
 	/// <summary>
 	/// Particle emitter effect.
 	/// </summary>
-	public struct ParticleEmitterEffect : IFrame, IEquatable<ParticleEmitterEffect>
+	public struct ParticleEmitterEffect : IFrame, IEquatable<ParticleEmitterEffect>, IBinarySerializable
 	{
-		/// <summary>
-		/// Size of the structure in bytes.
-		/// </summary>
-		public const uint StructSize = 64;
-
 		/// <summary>
 		/// World space position of the emitter.
 		/// </summary>
@@ -73,91 +69,39 @@ namespace SA3D.SA2Event.Effects
 		/// </summary>
 		public int Unknown11 { get; set; }
 
-		/// <summary>
-		/// Creates a new particle emitter effect.
-		/// </summary>
-		/// <param name="position">World space position of the emitter.</param>
-		/// <param name="unknown2">Unknown.</param>
-		/// <param name="unknown3">Unknown.</param>
-		/// <param name="unknown4">Unknown.</param>
-		/// <param name="unknown5">Unknown.</param>
-		/// <param name="unknown6">Unknown.</param>
-		/// <param name="frame">Frame at which the emitter starts playing.</param>
-		/// <param name="spread">Direction in which the particles spread (?)</param>
-		/// <param name="count">Count (?).</param>
-		/// <param name="unknown9">Unknown.</param>
-		/// <param name="type">Type (?).</param>
-		/// <param name="unknown11">Unknown.</param>
-		public ParticleEmitterEffect(
-			Vector3 position,
-			Vector3 unknown2,
-			ushort unknown3,
-			ushort unknown4,
-			ushort unknown5,
-			ushort unknown6,
-			uint frame,
-			Vector3 spread,
-			int count,
-			int unknown9,
-			int type,
-			int unknown11)
+
+		/// <inheritdoc/>
+		public void Read(BinaryObjectReader reader)
 		{
-			Position = position;
-			Unknown2 = unknown2;
-			Unknown3 = unknown3;
-			Unknown4 = unknown4;
-			Unknown5 = unknown5;
-			Unknown6 = unknown6;
-			Frame = frame;
-			Spread = spread;
-			Count = count;
-			Unknown9 = unknown9;
-			Type = type;
-			Unknown11 = unknown11;
+			Position = reader.ReadVector3();
+			Unknown2 = reader.ReadVector3();
+			Unknown3 = reader.ReadUInt16();
+			Unknown4 = reader.ReadUInt16();
+			Unknown5 = reader.ReadUInt16();
+			Unknown6 = reader.ReadUInt16();
+			Frame = reader.ReadUInt32();
+			Spread = reader.ReadVector3();
+			Count = reader.ReadInt32();
+			Unknown9 = reader.ReadInt32();
+			Type = reader.ReadInt32();
+			Unknown11 = reader.ReadInt32();
 		}
 
-
-		/// <summary>
-		/// Writes the particle emitter effect to an endian stack writer.
-		/// </summary>
-		/// <param name="writer">The writer to write to.</param>
-		public readonly void Write(EndianStackWriter writer)
-		{
+		/// <inheritdoc/>
+		public readonly void Write(BinaryObjectWriter writer)
+		{ 
 			writer.WriteVector3(Position);
 			writer.WriteVector3(Unknown2);
-			writer.WriteUShort(Unknown3);
-			writer.WriteUShort(Unknown4);
-			writer.WriteUShort(Unknown5);
-			writer.WriteUShort(Unknown6);
-			writer.WriteUInt(Frame);
+			writer.WriteUInt16(Unknown3);
+			writer.WriteUInt16(Unknown4);
+			writer.WriteUInt16(Unknown5);
+			writer.WriteUInt16(Unknown6);
+			writer.WriteUInt32(Frame);
 			writer.WriteVector3(Spread);
-			writer.WriteInt(Count);
-			writer.WriteInt(Unknown9);
-			writer.WriteInt(Type);
-			writer.WriteInt(Unknown11);
-		}
-
-		/// <summary>
-		/// Reads a particle emitter effect off an endian stack reader.
-		/// </summary>
-		/// <param name="reader">The reader to read from.</param>
-		/// <param name="address">Address at which to start reading.</param>
-		/// <returns></returns>
-		public static ParticleEmitterEffect Read(EndianStackReader reader, uint address)
-		{
-			return new(
-				reader.ReadVector3(address),
-				reader.ReadVector3(address + 0xC),
-				reader.ReadUShort(address + 0x18),
-				reader.ReadUShort(address + 0x1A),
-				reader.ReadUShort(address + 0x1C),
-				reader.ReadUShort(address + 0x1E),
-				reader.ReadUInt(address + 0x20),
-				reader.ReadVector3(address + 0x24),
-				reader.ReadInt(address + 0x30),
-				reader.ReadInt(address + 0x34),
-				reader.ReadInt(address + 0x38),
-				reader.ReadInt(address + 0x3C));
+			writer.WriteInt32(Count);
+			writer.WriteInt32(Unknown9);
+			writer.WriteInt32(Type);
+			writer.WriteInt32(Unknown11);
 		}
 
 

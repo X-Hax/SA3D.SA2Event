@@ -1,19 +1,23 @@
-﻿using SA3D.Common;
+﻿using Amicitia.IO.Binary;
+using SA3D.Common;
 using SA3D.Common.IO;
+using SA3D.Common.Lookup;
 using SA3D.Modeling.Structs;
 using System.Numerics;
 
-namespace SA3D.SA2Event.Animation
+namespace SA3D.SA2Event.Model.AnimationData
 {
 	/// <summary>
 	/// Camera data container.
 	/// </summary>
-	public class CameraData
+	public class CameraData : ILabel, IBinarySerializable
 	{
-		/// <summary>
-		/// Size of the structure in bytes.
-		/// </summary>
-		public const uint StructSize = 0x40;
+		/// <inheritdoc/>
+		public string LabelPrefix => "Camera_";
+
+		/// <inheritdoc/>
+		public string Label { get; set; }
+
 
 		/// <summary>
 		/// World space position.
@@ -57,79 +61,41 @@ namespace SA3D.SA2Event.Animation
 
 
 		/// <summary>
-		/// Creates new camera data.
+		/// Creates new camera data
 		/// </summary>
-		/// <param name="position">World space position.</param>
-		/// <param name="roll">Roll angle (radians).</param>
-		/// <param name="fieldOfView">Field of view angle (radians).</param>
-		/// <param name="nearClip">Near clipping depth.</param>
-		/// <param name="farClip">Far clipping depth.</param>
-		/// <param name="dirX">Local X-Axis.</param>
-		/// <param name="dirY">Local Y-Axis.</param>
-		/// <param name="dirZ">Local Z-Axis.</param>
-		public CameraData(Vector3 position, float roll, float fieldOfView, float nearClip, float farClip, Vector3 dirX, Vector3 dirY, Vector3 dirZ)
+		public CameraData()
 		{
-			Position = position;
-			Roll = roll;
-			FieldOfView = fieldOfView;
-			NearClip = nearClip;
-			FarClip = farClip;
-			DirX = dirX;
-			DirY = dirY;
-			DirZ = dirZ;
+			DirX = Vector3.UnitX;
+			DirY = Vector3.UnitY;
+			DirZ = Vector3.UnitZ;
+			Label = LabelPrefix.GenerateIdentifier();
 		}
 
 
-		/// <summary>
-		/// Writes the camera data to an endian stack writer.
-		/// </summary>
-		/// <param name="writer">The writer to write to.</param>
-		/// <param name="lut">Pointer references to utilize.</param>
-		/// <returns>The pointer to the written data.</returns>
-		public uint Write(EndianStackWriter writer, PointerLUT lut)
+		/// <inheritdoc/>
+		public void Read(BinaryObjectReader reader)
 		{
-			uint onWrite()
-			{
-				uint result = writer.PointerPosition;
-
-				writer.WriteVector3(Position);
-				writer.WriteVector3(DirZ);
-				writer.WriteInt(MathHelper.RadToBAMS(Roll));
-				writer.WriteInt(MathHelper.RadToBAMS(FieldOfView));
-				writer.WriteFloat(NearClip);
-				writer.WriteFloat(FarClip);
-				writer.WriteVector3(DirX);
-				writer.WriteVector3(DirY);
-
-				return result;
-			}
-
-			return lut.GetAddAddress(this, onWrite);
+			Position = reader.ReadVector3();
+			DirZ = reader.ReadVector3();
+			Roll = reader.ReadSingle(FloatIOType.BAMS32);
+			FieldOfView = reader.ReadSingle(FloatIOType.BAMS32);
+			NearClip = reader.ReadSingle();
+			FarClip = reader.ReadSingle();
+			DirX = reader.ReadVector3();
+			DirY = reader.ReadVector3();
 		}
 
-		/// <summary>
-		/// Reads camera data off an endian stack reader.
-		/// </summary>
-		/// <param name="reader"></param>
-		/// <param name="address"></param>
-		/// <param name="lut"></param>
-		/// <returns></returns>
-		public static CameraData Read(EndianStackReader reader, uint address, PointerLUT lut)
+		/// <inheritdoc/>
+		public void Write(BinaryObjectWriter writer)
 		{
-			CameraData onRead()
-			{
-				return new(
-					reader.ReadVector3(address),
-					MathHelper.BAMSToRad(reader.ReadInt(address + 0x18)),
-					MathHelper.BAMSToRad(reader.ReadInt(address + 0x1C)),
-					reader.ReadFloat(address + 0x20),
-					reader.ReadFloat(address + 0x24),
-					reader.ReadVector3(address + 0x28),
-					reader.ReadVector3(address + 0x34),
-					reader.ReadVector3(address + 0xC));
-			}
-
-			return lut.GetAddValue(address, onRead);
+			writer.WriteVector3(Position);
+			writer.WriteVector3(DirZ);
+			writer.WriteSingle(Roll, FloatIOType.BAMS32);
+			writer.WriteSingle(FieldOfView, FloatIOType.BAMS32);
+			writer.WriteSingle(NearClip);
+			writer.WriteSingle(FarClip);
+			writer.WriteVector3(DirX);
+			writer.WriteVector3(DirY);
 		}
 	}
 }

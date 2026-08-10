@@ -1,4 +1,5 @@
-﻿using SA3D.Common.IO;
+﻿using Amicitia.IO.Binary;
+using SA3D.Common.IO;
 using SA3D.Modeling.Structs;
 using SA3D.SA2Event.Effects.Enums;
 using System;
@@ -9,13 +10,8 @@ namespace SA3D.SA2Event.Effects
 	/// <summary>
 	/// Scene wide lighting affecting 3D models.
 	/// </summary>
-	public struct ObjectLighting : IFrame, IEquatable<ObjectLighting>
+	public struct ObjectLighting : IFrame, IEquatable<ObjectLighting>, IBinarySerializable
 	{
-		/// <summary>
-		/// Struct size in bytes.
-		/// </summary>
-		public const uint StructSize = 68;
-
 		/// <inheritdoc/>
 		public uint Frame { get; set; }
 
@@ -45,60 +41,12 @@ namespace SA3D.SA2Event.Effects
 		public Color Ambient { get; set; }
 
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="frame">Frame at which the effect starts playing.</param>
-		/// <param name="fade">The way in which the lighting should fade in.</param>
-		/// <param name="direction">Direction of the light.</param>
-		/// <param name="diffuse">Diffuse color of the light</param>
-		/// <param name="intensity">Ambient color intensity</param>
-		/// <param name="ambient">Ambient color.</param>
-		public ObjectLighting(uint frame, LightFadeMode fade, Vector3 direction, Color diffuse, float intensity, Color ambient)
+		/// <inheritdoc/>
+		public void Read(BinaryObjectReader reader)
 		{
-			Frame = frame;
-			Fade = fade;
-			Direction = direction;
-			Diffuse = diffuse;
-			Intensity = intensity;
-			Ambient = ambient;
-		}
-
-
-		/// <summary>
-		/// Writes the object lighting to an endian stack writer.
-		/// </summary>
-		/// <param name="writer">The writer to write to.</param>
-		public readonly void Write(EndianStackWriter writer)
-		{
-			writer.WriteUInt(Frame);
-			writer.WriteUInt((uint)Fade);
-			writer.WriteVector3(Direction);
-
-			writer.WriteFloat(Diffuse.RedF);
-			writer.WriteFloat(Diffuse.GreenF);
-			writer.WriteFloat(Diffuse.BlueF);
-
-			writer.WriteFloat(Intensity);
-
-			writer.WriteFloat(Ambient.RedF);
-			writer.WriteFloat(Ambient.GreenF);
-			writer.WriteFloat(Ambient.BlueF);
-
-			writer.WriteEmpty(20);
-		}
-
-		/// <summary>
-		/// Reads object lighting off an endian stack reader.
-		/// </summary>
-		/// <param name="reader">The reader to read from.</param>
-		/// <param name="address">Address at which to start reading.</param>
-		/// <returns>The object lighting that was read.</returns>
-		public static ObjectLighting Read(EndianStackReader reader, uint address)
-		{
-			Color ReadColor(uint addr)
+			Color ReadColor()
 			{
-				Vector3 values = reader.ReadVector3(addr);
+				Vector3 values = reader.ReadVector3();
 				return new()
 				{
 					RedF = values.X,
@@ -107,13 +55,33 @@ namespace SA3D.SA2Event.Effects
 				};
 			}
 
-			return new(
-				reader.ReadUInt(address),
-				(LightFadeMode)reader.ReadUInt(address + 4),
-				reader.ReadVector3(address + 8),
-				ReadColor(address + 0x14),
-				reader.ReadFloat(address + 0x20),
-				ReadColor(address + 0x24));
+			Frame = reader.ReadUInt32();
+			Fade = (LightFadeMode)reader.ReadUInt32();
+			Direction = reader.ReadVector3();
+			Diffuse = ReadColor();
+			Intensity = reader.ReadSingle();
+			Ambient = ReadColor();
+			reader.Skip(20);
+		}
+
+		/// <inheritdoc/>
+		public readonly void Write(BinaryObjectWriter writer)
+		{
+			writer.WriteUInt32(Frame);
+			writer.WriteUInt32((uint)Fade);
+			writer.WriteVector3(Direction);
+
+			writer.WriteSingle(Diffuse.RedF);
+			writer.WriteSingle(Diffuse.GreenF);
+			writer.WriteSingle(Diffuse.BlueF);
+
+			writer.WriteSingle(Intensity);
+
+			writer.WriteSingle(Ambient.RedF);
+			writer.WriteSingle(Ambient.GreenF);
+			writer.WriteSingle(Ambient.BlueF);
+
+			writer.Skip(20);
 		}
 
 

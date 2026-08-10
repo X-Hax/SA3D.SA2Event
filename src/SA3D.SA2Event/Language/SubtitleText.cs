@@ -1,11 +1,13 @@
-﻿using System;
+﻿using Amicitia.IO.Binary;
+using SA3D.Common.IO;
+using System;
 
 namespace SA3D.SA2Event.Language
 {
 	/// <summary>
 	/// A single subtitle text line.
 	/// </summary>
-	public struct SubtitleText : IEquatable<SubtitleText>
+	public struct SubtitleText : IEquatable<SubtitleText>, IBinarySerializable
 	{
 		/// <summary>
 		/// ID of the character that the text belongs to.
@@ -22,17 +24,31 @@ namespace SA3D.SA2Event.Language
 		/// </summary>
 		public string Text { get; set; }
 
-		/// <summary>
-		/// Creates a new subtitle text.
-		/// </summary>
-		/// <param name="character">ID of the character that the text belongs to.</param>
-		/// <param name="centered">Whether the text is centered on the screen (?).</param>
-		/// <param name="text">The text.</param>
-		public SubtitleText(int character, bool centered, string text)
+
+		/// <inheritdoc/>
+		public void Read(BinaryObjectReader reader)
 		{
-			Character = character;
-			Centered = centered;
-			Text = text;
+			Character = reader.ReadInt32();
+			Text = reader.ReadStringOffsetOrEmpty(StringBinaryFormat.NullTerminated);
+			if(Text.Length >= 1 && Text[0] == 7)
+			{
+				Centered = true;
+				Text = Text[1..];
+			}
+		}
+
+		/// <inheritdoc/>
+		public readonly void Write(BinaryObjectWriter writer)
+		{
+			writer.WriteInt32(Character);
+
+			string text = Text ?? string.Empty;
+			if(Centered)
+			{
+				text = ((char)7) + text;
+			}
+
+			writer.WriteStringOffset(StringBinaryFormat.NullTerminated, text);
 		}
 
 
@@ -84,6 +100,5 @@ namespace SA3D.SA2Event.Language
 		{
 			return Text;
 		}
-
 	}
 }
