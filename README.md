@@ -1,3 +1,6 @@
+[![NuGet](https://img.shields.io/nuget/v/SA3D.SA2Event)](https://www.nuget.org/packages/SA3D.SA2Event) 
+[![downloads](https://img.shields.io/nuget/dt/SA3D.SA2Event)](https://www.nuget.org/packages/SA3D.SA2Event)
+
 # SA3D.SA2Event
 A Sonic adventure 2 event data handling library.
 
