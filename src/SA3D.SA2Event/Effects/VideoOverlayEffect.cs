@@ -1,4 +1,4 @@
-﻿using SA3D.Common.IO;
+﻿using Amicitia.IO.Binary;
 using SA3D.SA2Event.Effects.Enums;
 using System;
 
@@ -7,13 +7,8 @@ namespace SA3D.SA2Event.Effects
 	/// <summary>
 	/// Effect for playing a video over the .
 	/// </summary>
-	public struct VideoOverlayEffect : IFrame, IEquatable<VideoOverlayEffect>
+	public struct VideoOverlayEffect : IFrame, IEquatable<VideoOverlayEffect>, IBinarySerializable
 	{
-		/// <summary>
-		/// Size of the structure in bytes.
-		/// </summary>
-		public const uint StructSize = 64;
-
 		/// <inheritdoc/>
 		public uint Frame { get; set; }
 
@@ -47,69 +42,39 @@ namespace SA3D.SA2Event.Effects
 		/// </summary>
 		public string Filename { get; set; }
 
-		/// <summary>
-		/// Creates a new video overlay effect.
-		/// </summary>
-		/// <param name="frame">Frame at which the effect starts playing.</param>
-		/// <param name="positionX">Horizontal position of the overlay.</param>
-		/// <param name="positionY">Vertical position of the overlay.</param>
-		/// <param name="depth">Z-Depth at which the overlay should be rendered.</param>
-		/// <param name="type">Type of overlay.</param>
-		/// <param name="targetTextureID">Texture ID to render out to. Used for <see cref="VideoOverlayType.Mesh"/>.</param>
-		/// <param name="filename">Name of the file to play.</param>
-		public VideoOverlayEffect(uint frame, short positionX, short positionY, float depth, VideoOverlayType type, byte targetTextureID, string filename)
+
+		/// <inheritdoc/>
+		public void Read(BinaryObjectReader reader)
 		{
-			Frame = frame;
-			PositionX = positionX;
-			PositionY = positionY;
-			Depth = depth;
-			Type = type;
-			TargetTextureID = targetTextureID;
-			Filename = filename;
+			Frame = reader.ReadUInt32();
+			PositionX = reader.ReadInt16();
+			PositionY = reader.ReadInt16();
+			Depth = reader.ReadSingle();
+			Type = (VideoOverlayType)reader.ReadByte();
+			TargetTextureID = reader.ReadByte();
+			reader.Skip(2);
+			Filename = reader.ReadString(StringBinaryFormat.FixedLength, 48);
 		}
 
-		/// <summary>
-		/// Writes the video overlay to an endian stack writer.
-		/// </summary>
-		/// <param name="writer"></param>
-		/// <exception cref="InvalidOperationException"></exception>
-		public readonly void Write(EndianStackWriter writer)
+		/// <inheritdoc/>
+		public readonly void Write(BinaryObjectWriter writer)
 		{
-			writer.WriteUInt(Frame);
-			writer.WriteShort(PositionX);
-			writer.WriteShort(PositionY);
-			writer.WriteFloat(Depth);
+			writer.WriteUInt32(Frame);
+			writer.WriteInt16(PositionX);
+			writer.WriteInt16(PositionY);
+			writer.WriteSingle(Depth);
 			writer.WriteByte((byte)Type);
 			writer.WriteByte(TargetTextureID);
-			writer.WriteEmpty(2);
+			writer.Skip(2);
 
 			string filename = Filename ?? string.Empty;
 
-			if(filename.Length > 47)
+			if(filename.Length > 48)
 			{
-				throw new InvalidOperationException("Filename too long! must be < 48 characters long.");
+				throw new InvalidOperationException("Filename can be at most 48 characters long!");
 			}
 
-			writer.WriteString(filename);
-			writer.WriteEmpty((uint)(48 - filename.Length));
-		}
-
-		/// <summary>
-		/// Reads a video overlay effect off an endian stack reader.
-		/// </summary>
-		/// <param name="reader">Reader to read from.</param>
-		/// <param name="address">Address at which to start reading.</param>
-		/// <returns></returns>
-		public static VideoOverlayEffect Read(EndianStackReader reader, uint address)
-		{
-			return new(
-				reader.ReadUInt(address),
-				reader.ReadShort(address + 4),
-				reader.ReadShort(address + 6),
-				reader.ReadFloat(address + 8),
-				(VideoOverlayType)reader[address + 0xC],
-				reader[address + 0xD],
-				reader.ReadNullterminatedString(address + 0x10));
+			writer.WriteString(StringBinaryFormat.FixedLength, filename, 48);
 		}
 
 

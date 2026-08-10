@@ -1,4 +1,4 @@
-﻿using SA3D.Common.IO;
+﻿using Amicitia.IO.Binary;
 using SA3D.SA2Event.Effects.Enums;
 using System;
 
@@ -7,13 +7,8 @@ namespace SA3D.SA2Event.Effects
 	/// <summary>
 	/// Simple particle effect structure.
 	/// </summary>
-	public struct SimpleParticleEffect : IFrame, IEquatable<SimpleParticleEffect>
+	public struct SimpleParticleEffect : IFrame, IEquatable<SimpleParticleEffect>, IBinarySerializable
 	{
-		/// <summary>
-		/// Size of the structure in bytes.
-		/// </summary>
-		public const uint StructSize = 56;
-
 		/// <inheritdoc/>
 		public uint Frame { get; set; }
 
@@ -48,62 +43,32 @@ namespace SA3D.SA2Event.Effects
 		public float Scale { get; set; }
 
 
-		/// <summary>
-		/// Creates a new particle effect.
-		/// </summary>
-		/// <param name="frame">Frame at which the effect starts playing.</param>
-		/// <param name="type">Type of particle.</param>
-		/// <param name="motionID">ID of the particle motion to play this particle on.</param>
-		/// <param name="textureID">Event texture ID (used for pulse).</param>
-		/// <param name="pulseControl">Pulse control mode.</param>
-		/// <param name="unknown">Unknown.</param>
-		/// <param name="scale">Scale of the particle.</param>
-		public SimpleParticleEffect(uint frame, SimpleParticleType type, byte motionID, float textureID, float pulseControl, float unknown, float scale)
+		/// <inheritdoc/>
+		public void Read(BinaryObjectReader reader)
 		{
-			Frame = frame;
-			Type = type;
-			MotionID = motionID;
-			TextureID = textureID;
-			PulseControl = pulseControl;
-			Unknown = unknown;
-			Scale = scale;
+			Frame = reader.ReadUInt32();
+			Type = (SimpleParticleType)reader.ReadByte();
+			MotionID = reader.ReadByte();
+			reader.Skip(2);
+			TextureID = reader.ReadSingle();
+			PulseControl = reader.ReadSingle();
+			Unknown = reader.ReadSingle();
+			Scale = reader.ReadSingle();
+			reader.Skip(32);
 		}
 
-
-		/// <summary>
-		/// Writes the simple particle effect to an endian stack writer.
-		/// </summary>
-		/// <param name="writer">The writer to write to.</param>
-		public readonly void Write(EndianStackWriter writer)
+		/// <inheritdoc/>
+		public readonly void Write(BinaryObjectWriter writer)
 		{
-			writer.WriteUInt(Frame);
+			writer.WriteUInt32(Frame);
 			writer.WriteByte((byte)Type);
 			writer.WriteByte(MotionID);
-			writer.WriteEmpty(2);
-			writer.WriteFloat(TextureID);
-			writer.WriteFloat(PulseControl);
-			writer.WriteFloat(Unknown);
-			writer.WriteFloat(Scale);
-			writer.WriteEmpty(32);
-		}
-
-		/// <summary>
-		/// Reads a simple particle effect off an endian stack reader.
-		/// </summary>
-		/// <param name="reader">Reader to read from.</param>
-		/// <param name="address">Address at which to start reading.</param>
-		/// <returns>The simple particle effect that was read.</returns>
-		public static SimpleParticleEffect Read(EndianStackReader reader, uint address)
-		{
-			return new(
-				reader.ReadUInt(address),
-				(SimpleParticleType)reader[address + 4],
-				reader[address + 5],
-				reader.ReadFloat(address + 8),
-				reader.ReadFloat(address + 0xC),
-				reader.ReadFloat(address + 0x10),
-				reader.ReadFloat(address + 0x14)
-				);
+			writer.Skip(2);
+			writer.WriteSingle(TextureID);
+			writer.WriteSingle(PulseControl);
+			writer.WriteSingle(Unknown);
+			writer.WriteSingle(Scale);
+			writer.Skip(32);
 		}
 
 

@@ -1,7 +1,7 @@
-﻿using SA3D.Archival;
+﻿using Amicitia.IO.Binary;
 using SA3D.Common.IO;
+using SA3D.Common.Lookup;
 using System.Collections.Generic;
-using System.IO;
 using System.Text;
 
 namespace SA3D.SA2Event.Language
@@ -9,17 +9,23 @@ namespace SA3D.SA2Event.Language
 	/// <summary>
 	/// Data handler for subtitle files.
 	/// </summary>
-	public class SubtitleFile
+	public class SubtitleFile : IFileSerializable<EventType>
 	{
+		/// <summary>
+		/// Label prefix for arrays in <see cref="Texts"/>
+		/// </summary>
+		public const string TextArrayLabelPrefix = "TextArray_";
+
 		/// <summary>
 		/// List of subtitles for every event (by ID).
 		/// </summary>
-		public SortedDictionary<uint, List<SubtitleText>> Texts { get; }
+		public SortedDictionary<uint, LabeledArray<SubtitleText>> Texts { get; set; } = [];
 
 		/// <summary>
 		/// Encoding to use.
 		/// </summary>
 		public Encoding TextEncoding { get; set; }
+
 
 		/// <summary>
 		/// Creates a new subtitle file handler.
@@ -32,179 +38,48 @@ namespace SA3D.SA2Event.Language
 		}
 
 
-		/// <summary>
-		/// Writes the subtitle file to an endian stack writer.
-		/// </summary>
-		/// <param name="writer">The writer to write to.</param>
-		public void Write(EndianStackWriter writer)
+		void IBinarySerializable<EventType>.Read(BinaryObjectReader reader, EventType context)
 		{
-			uint tableStart = writer.Position;
-			writer.WriteEmpty((uint)(Texts.Count * 0xC));
-			writer.WriteUInt(uint.MaxValue);
-			writer.WriteEmpty(8);
+			TextEncoding = reader.Encoding;
+			OffsetLUT lut = new();
 
-			(uint index, uint addr, uint pos, int count)[] table
-				= new (uint index, uint addr, uint pos, int count)[Texts.Count];
-
-			int i = 0;
-			foreach(KeyValuePair<uint, List<SubtitleText>> collection in Texts)
+			while(reader.ReadUInt32() is uint index && index != uint.MaxValue)
 			{
-				table[i++] = (collection.Key, writer.PointerPosition, writer.Position, collection.Value.Count);
-				writer.WriteEmpty((uint)(8 * collection.Value.Count));
-			}
-
-			writer.Stream.Seek(tableStart, SeekOrigin.Begin);
-			foreach((uint index, uint addr, _, int count) in table)
-			{
-				writer.WriteUInt(index);
-				writer.WriteUInt(addr);
-				writer.WriteInt(count);
-			}
-
-			writer.Stream.Seek(0, SeekOrigin.End);
-
-			i = 0;
-			foreach(KeyValuePair<uint, List<SubtitleText>> collection in Texts)
-			{
-				uint[] stringPointers = new uint[collection.Value.Count];
-				for(int j = 0; j < stringPointers.Length; j++)
-				{
-					stringPointers[j] = writer.PointerPosition;
-					SubtitleText text = collection.Value[j];
-					if(text.Centered)
-					{
-						writer.WriteByte(7);
-					}
-
-					writer.WriteStringNullterminated(text.Text, TextEncoding);
-				}
-
-				writer.Stream.Seek(table[i++].pos, SeekOrigin.Begin);
-
-				for(int j = 0; j < stringPointers.Length; j++)
-				{
-					writer.WriteInt(collection.Value[j].Character);
-					writer.WriteUInt(stringPointers[j]);
-				}
-
-				writer.Stream.Seek(0, SeekOrigin.End);
+				long textOffset = reader.ReadOffsetValue();
+				int textCount = reader.ReadInt32();
+				LabeledArray<SubtitleText> subtitles = reader.ReadLabeledObjectArrayAtOffset<SubtitleText>(textOffset, textCount, TextArrayLabelPrefix, lut)
+					?? throw reader.ReadNullReference(nameof(SubtitleFile), "Subtitles");
+				Texts.Add(index, subtitles);
 			}
 		}
 
-		/// <summary>
-		/// Writes the subtitle file to byte data.
-		/// </summary>
-		/// <param name="imageBase">The image base to use.</param>
-		/// <param name="bigEndian">Whether to encode in big endian.</param>
-		/// <param name="compress">Whether to compress the data with PRS.</param>
-		/// <returns>The written out byte data.</returns>
-		public byte[] WriteToBytes(uint imageBase, bool bigEndian, bool compress = true)
+		void IBinarySerializable<EventType>.Write(BinaryObjectWriter writer, EventType context)
 		{
-			byte[] result;
+			OffsetLUT lut = new();
 
-			using(MemoryStream stream = new())
+			foreach(KeyValuePair<uint, LabeledArray<SubtitleText>> texts in Texts)
 			{
-				EndianStackWriter writer = new(stream, imageBase, bigEndian);
-				Write(writer);
-
-				result = stream.ToArray();
+				writer.WriteUInt32(texts.Key);
+				writer.WriteObjectArrayOffset(texts.Value, lut);
+				writer.WriteInt32(texts.Value.Length);
 			}
 
-			if(compress)
-			{
-				result = PRS.CompressPRS(result);
-			}
-
-			return result;
-		}
-
-		/// <summary>
-		/// Writes the subtitle file to a file.
-		/// </summary>
-		/// <param name="file">The path to the file to write to.</param>
-		/// <param name="imageBase">The image base to use.</param>
-		/// <param name="bigEndian">Whether to encode in big endian.</param>
-		/// <param name="compress">Whether to compress the data with PRS.</param>
-		/// <returns>The written out byte data.</returns>
-		public void WriteToFile(string file, uint imageBase, bool bigEndian, bool compress = true)
-		{
-			File.WriteAllBytes(file, WriteToBytes(imageBase, bigEndian));
+			writer.WriteUInt32(uint.MaxValue);
 		}
 
 
-		/// <summary>
-		/// Reads a subtitle file off an endian stack reader.
-		/// </summary>
-		/// <param name="reader">Reader to read from.</param>
-		/// <param name="address">Address at which to start reading.</param>
-		/// <param name="encoding">Text encoding to decode texts with.</param>
-		/// <returns>The subtitle file that was read.</returns>
-		public static SubtitleFile Read(EndianStackReader reader, uint address, Encoding encoding)
+		bool IFileSerializable<EventType>.CheckCanReadFile(BinaryObjectReader reader, EventType context, ref FileIOInfo fileInfo)
 		{
-			SubtitleFile result = new(encoding);
-
-			uint index = reader.ReadUInt(address);
-			while(index != uint.MaxValue)
-			{
-				List<SubtitleText> subtitles = [];
-				result.Texts.Add(index, subtitles);
-
-				uint stringListPtr = reader.ReadPointer(address + 4);
-				string[] strings = new string[reader.ReadInt(address + 8)];
-
-				for(int i = 0; i < strings.Length; i++)
-				{
-					int characterIndex = reader.ReadInt(stringListPtr);
-					uint stringPtr = reader.ReadPointer(stringListPtr + 4);
-					bool centered = reader[stringPtr] == 7;
-					string text = reader.ReadNullterminatedString(stringPtr + (centered ? 1u : 0), encoding);
-					subtitles.Add(new(characterIndex, centered, text));
-
-					stringListPtr += 8;
-				}
-
-				address += 0xC;
-				index = reader.ReadUInt(address);
-			}
-
-			return result;
+			fileInfo.Endianness ??= context.GetEndianness();
+			fileInfo.OffsetOrigin ??= context.GetSubtitleOffsetOrigin();
+			return true;
 		}
 
-		/// <summary>
-		/// Reads a subtitle file off byte data.
-		/// </summary>
-		/// <param name="data">Data to read.</param>
-		/// <param name="imagebase">Imagebase to use.</param>
-		/// <param name="bigEndian">Whether to decode in big endian.</param>
-		/// <param name="compressed">Whether the data needs to be decompressed with PRS.</param>
-		/// <param name="encoding">Text encoding to decode texts with.</param>
-		/// <returns>The subtitle file that was read.</returns>
-		public static SubtitleFile ReadFromBytes(byte[] data, uint imagebase, bool bigEndian, bool compressed, Encoding encoding)
+		bool IFileSerializable<EventType>.CheckCanWriteFile(EventType context, ref FileIOInfo fileInfo)
 		{
-			if(compressed)
-			{
-				data = PRS.DecompressPRS(data);
-			}
-
-			using(EndianStackReader reader = new(data, imagebase, bigEndian))
-			{
-				return Read(reader, 0, encoding);
-			}
+			fileInfo.Endianness ??= context.GetEndianness();
+			fileInfo.OffsetOrigin ??= context.GetSubtitleOffsetOrigin();
+			return true;
 		}
-
-		/// <summary>
-		/// Reads a subtitle file off byte data.
-		/// </summary>
-		/// <param name="path">Path to the file to read.</param>
-		/// <param name="imagebase">Imagebase to use.</param>
-		/// <param name="bigEndian">Whether to decode in big endian.</param>
-		/// <param name="compressed">Whether the data needs to be decompressed with PRS.</param>
-		/// <param name="encoding">Text encoding to decode texts with.</param>
-		/// <returns>The subtitle file that was read.</returns>
-		public static SubtitleFile ReadFromFile(string path, uint imagebase, bool bigEndian, bool compressed, Encoding encoding)
-		{
-			return ReadFromBytes(File.ReadAllBytes(path), imagebase, bigEndian, compressed, encoding);
-		}
-	
 	}
 }

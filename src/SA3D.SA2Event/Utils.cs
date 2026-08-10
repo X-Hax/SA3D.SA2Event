@@ -1,30 +1,15 @@
-﻿using SA3D.Common.IO;
-using System;
-using System.Collections.Generic;
+﻿using Amicitia.IO.Binary;
 
 namespace SA3D.SA2Event
 {
 	internal static class Utils
 	{
-		public static void ReplaceContents<T>(this T[] output, IEnumerable<T> newValues)
+		public static void ReadToObjectArray<T>(this T[] array, BinaryObjectReader reader) where T : IBinarySerializable, new()
 		{
-			Array.Clear(output);
-			int i = 0;
-			foreach(T screeneffect in newValues)
+			for(int i = 0; i < array.Length; i++)
 			{
-				output[i] = screeneffect;
-				i++;
+				array[i] = reader.ReadObject<T>();
 			}
 		}
-
-		public static void ReadArray<T>(this EndianStackReader data, uint address, Func<EndianStackReader, uint, T> read, uint size, T[] result)
-		{
-			for(int i = 0; i < result.Length; i++)
-			{
-				result[i] = read(data, address);
-				address += size;
-			}
-		}
-
 	}
 }

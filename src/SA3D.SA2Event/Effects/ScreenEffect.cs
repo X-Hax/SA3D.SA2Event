@@ -1,4 +1,4 @@
-﻿using SA3D.Common.IO;
+﻿using Amicitia.IO.Binary;
 using SA3D.Modeling.Structs;
 using SA3D.SA2Event.Effects.Enums;
 using System;
@@ -8,13 +8,8 @@ namespace SA3D.SA2Event.Effects
 	/// <summary>
 	/// Effect that renders a color/texture over the screen.
 	/// </summary>
-	public struct ScreenEffect : IFrame, IEquatable<ScreenEffect>
+	public struct ScreenEffect : IFrame, IEquatable<ScreenEffect>, IBinarySerializable
 	{
-		/// <summary>
-		/// Size of the structure in bytes.
-		/// </summary>
-		public const uint StructSize = 64;
-
 		/// <inheritdoc/>
 		public uint Frame { get; set; }
 
@@ -64,73 +59,40 @@ namespace SA3D.SA2Event.Effects
 		public float Height { get; set; }
 
 
-		/// <summary>
-		/// Creates a new screen effect.
-		/// </summary>
-		/// <param name="frame">Frame at which the effect starts playing.</param>
-		/// <param name="type">Type of the screen effect.</param>
-		/// <param name="color">Color of the screen effect.</param>
-		/// <param name="fadeOut">Whether to fade out.</param>
-		/// <param name="textureID">ID of the event texture to render. Used with <see cref="ScreenEffectType.TextureCutIn"/> and <see cref="ScreenEffectType.TextureFadeIn"/>.</param>
-		/// <param name="frameTime">How long the screen effect should last (in frames).</param>
-		/// <param name="positionX">Horizontal position.</param>
-		/// <param name="positionY">Vertical position.</param>
-		/// <param name="width">Width of the screen effect.</param>
-		/// <param name="height">Height of the screen effect.</param>
-		public ScreenEffect(uint frame, ScreenEffectType type, Color color, bool fadeOut, ushort textureID, uint frameTime, short positionX, short positionY, float width, float height)
+		/// <inheritdoc/>
+		public void Read(BinaryObjectReader reader)
 		{
-			Frame = frame;
-			Type = type;
-			Color = color;
-			FadeOut = fadeOut;
-			TextureID = textureID;
-			FrameTime = frameTime;
-			PositionX = positionX;
-			PositionY = positionY;
-			Width = width;
-			Height = height;
+			Frame = reader.ReadUInt32();
+			Type = (ScreenEffectType)reader.ReadByte();
+			reader.Skip(3);
+			Color= reader.ReadObject<Color, ColorIOType>(ColorIOType.ARGB8_32);
+			FadeOut = reader.ReadByte() != 0;
+			reader.Skip(1);
+			TextureID = reader.ReadUInt16();
+			FrameTime = reader.ReadUInt32();
+			PositionX = reader.ReadInt16();
+			PositionY = reader.ReadInt16();
+			Width = reader.ReadSingle();
+			Height = reader.ReadSingle();
+			reader.Skip(32);
 		}
 
-		/// <summary>
-		/// Writes the screen effect to an endian stack writer.
-		/// </summary>
-		/// <param name="writer">The writer to write to.</param>
-		public readonly void Write(EndianStackWriter writer)
+		/// <inheritdoc/>
+		public readonly void Write(BinaryObjectWriter writer)
 		{
-			writer.WriteUInt(Frame);
+			writer.WriteUInt32(Frame);
 			writer.WriteByte((byte)Type);
-			writer.WriteEmpty(3);
-			writer.WriteColor(Color, ColorIOType.ARGB8_32);
+			writer.Skip(3);
+			writer.WriteObject(Color, ColorIOType.ARGB8_32);
 			writer.WriteByte((byte)(FadeOut ? 1 : 0));
-			writer.WriteEmpty(1);
-			writer.WriteUShort(TextureID);
-			writer.WriteUInt(FrameTime);
-			writer.WriteShort(PositionX);
-			writer.WriteShort(PositionY);
-			writer.WriteFloat(Width);
-			writer.WriteFloat(Height);
-			writer.WriteEmpty(32);
-		}
-
-		/// <summary>
-		/// Reads a screen effect off an endian stack reader.
-		/// </summary>
-		/// <param name="reader">The reader to read from.</param>
-		/// <param name="address">Address at which to start reading.</param>
-		/// <returns></returns>
-		public static ScreenEffect Read(EndianStackReader reader, uint address)
-		{
-			return new(
-				reader.ReadUInt(address),
-				(ScreenEffectType)reader[address + 4],
-				reader.ReadColor(address + 8, ColorIOType.ARGB8_32),
-				reader[address + 0xC] > 0,
-				reader.ReadUShort(address + 0xE),
-				reader.ReadUInt(address + 0x10),
-				reader.ReadShort(address + 0x14),
-				reader.ReadShort(address + 0x16),
-				reader.ReadFloat(address + 0x18),
-				reader.ReadFloat(address + 0x1C));
+			writer.Skip(1);
+			writer.WriteUInt16(TextureID);
+			writer.WriteUInt32(FrameTime);
+			writer.WriteInt16(PositionX);
+			writer.WriteInt16(PositionY);
+			writer.WriteSingle(Width);
+			writer.WriteSingle(Height);
+			writer.Skip(32);
 		}
 
 
